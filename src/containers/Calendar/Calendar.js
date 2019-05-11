@@ -86,7 +86,7 @@ class FullCalender extends Component {
       view,
       selectedData,
       onSelectEvent: this.onSelectEvent,
-      onSelectSlot: this.onSelectSlot,
+      // onSelectSlot: this.onSelectSlot,
       onView: this.onView,
       onEventDrop: this.onEventDrop
     };

@@ -25,40 +25,40 @@ export class App extends Component {
     const { locale, selectedTheme } = this.props;
     const currentAppLocale = AppLocale[locale];
     return (
-      <LocaleProvider locale={currentAppLocale.antd}>
-        <IntlProvider
-          locale={currentAppLocale.locale}
-          messages={currentAppLocale.messages}>
-          <ThemeProvider theme={themes[selectedTheme]}>
-            <AppHolder>
-              <Layout style={{ height: '100vh' }}>
-                <Debounce time="1000" handler="onResize">
-                  <WindowResizeListener
-                    onResize={windowSize =>
-                      this.props.toggleAll(
-                        windowSize.windowWidth,
-                        windowSize.windowHeight
-                      )}
-                  />
-                </Debounce>
-                <Topbar url={url} />
-                <Layout style={{ flexDirection: 'row', overflowX: 'hidden' }}>
-                  <Sidebar url={url} />
-                  <Layout
-                    className="isoContentMainLayout"
-                    style={{
-                      height: '100vh',
-                    }}>
-                    <Content
-                      className="isomorphicContent"
-                      style={{
-                        padding: '70px 0 0',
-                        flexShrink: '0',
-                        background: '#f1f3f6',
-                      }}>
-                      <AppRouter url={url} />
-                    </Content>
-                    {/* <Footer
+      // <LocaleProvider locale={currentAppLocale.antd}>
+      //   <IntlProvider
+      //     locale={currentAppLocale.locale}
+      //     messages={currentAppLocale.messages}>
+      <ThemeProvider theme={themes[selectedTheme]}>
+        <AppHolder>
+          <Layout style={{ height: '100vh' }}>
+            <Debounce time="1000" handler="onResize">
+              <WindowResizeListener
+                onResize={windowSize =>
+                  this.props.toggleAll(
+                    windowSize.windowWidth,
+                    windowSize.windowHeight
+                  )}
+              />
+            </Debounce>
+            <Topbar url={url} />
+            <Layout style={{ flexDirection: 'row', overflowX: 'hidden' }}>
+              <Sidebar url={url} />
+              <Layout
+                className="isoContentMainLayout"
+                style={{
+                  height: '100vh',
+                }}>
+                <Content
+                  className="isomorphicContent"
+                  style={{
+                    padding: '70px 0 0',
+                    flexShrink: '0',
+                    background: '#f1f3f6',
+                  }}>
+                  <AppRouter url={url} />
+                </Content>
+                {/* <Footer
                       style={{
                         background: '#ffffff',
                         textAlign: 'center',
@@ -66,13 +66,13 @@ export class App extends Component {
                       }}>
                       {siteConfig.footerText}
                     </Footer> */}
-                  </Layout>
-                </Layout>
               </Layout>
-            </AppHolder>
-          </ThemeProvider>
-        </IntlProvider>
-      </LocaleProvider>
+            </Layout>
+          </Layout>
+        </AppHolder>
+      </ThemeProvider>
+      //   </IntlProvider>
+      // </LocaleProvider>
     );
   }
 }
@@ -80,7 +80,7 @@ export class App extends Component {
 export default connect(
   state => ({
     auth: state.Auth,
-    locale: state.LanguageSwitcher.toJS().language.locale,
+    // locale: state.LanguageSwitcher.toJS().language.locale,
     selectedTheme: state.ThemeSwitcher.toJS().changeThemes.themeName,
   }),
   { logout, toggleAll },

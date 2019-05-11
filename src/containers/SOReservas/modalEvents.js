@@ -10,37 +10,37 @@ const RangePicker = DateRangepicker;
 
 const localeDatePicker = {
   lang: {
-    placeholder: 'Select date',
-    rangePlaceholder: ['Start date', 'End date'],
-    today: 'Today',
-    now: 'Now',
-    backToToday: 'Back to today',
+    placeholder: 'Seleccionar fecha',
+    rangePlaceholder: ['Inicio', 'Fin'],
+    today: 'How',
+    now: 'Ahora',
+    backToToday: 'Volver a hoy',
     ok: 'Ok',
-    clear: 'Clear',
-    month: 'Month',
-    year: 'Year',
-    timeSelect: 'Select time',
-    dateSelect: 'Select date',
-    monthSelect: 'Choose a month',
-    yearSelect: 'Choose a year',
-    decadeSelect: 'Choose a decade',
+    clear: 'Limpiar',
+    month: 'Mes',
+    year: 'Año',
+    timeSelect: 'Seleccionar hora',
+    dateSelect: 'Seleccionar día',
+    monthSelect: 'Seleccionar mes',
+    yearSelect: 'Seleccionar año',
+    decadeSelect: 'Seleccionar década',
     yearFormat: 'YYYY',
     dateFormat: 'M/D/YYYY',
     dayFormat: 'D',
     dateTimeFormat: 'M/D/YYYY HH:mm:ss',
     monthFormat: 'MMMM',
     monthBeforeYear: true,
-    previousMonth: 'Previous month (PageUp)',
-    nextMonth: 'Next month (PageDown)',
-    previousYear: 'Last year (Control + left)',
-    nextYear: 'Next year (Control + right)',
-    previousDecade: 'Last decade',
-    nextDecade: 'Next decade',
-    previousCentury: 'Last century',
-    nextCentury: 'Next century',
+    previousMonth: 'Mes anterior',
+    nextMonth: 'Mes próximo',
+    previousYear: 'Año anterior',
+    nextYear: 'Año próximo',
+    previousDecade: 'Década anterior',
+    nextDecade: 'Década próxima',
+    previousCentury: 'Siglo pasado',
+    nextCentury: 'Siglo próximo',
   },
   timePickerLocale: {
-    placeholder: 'Select time',
+    placeholder: 'Seleccionar hora',
   },
 };
 export default class ModalEvent extends Component {
@@ -88,14 +88,15 @@ export default class ModalEvent extends Component {
           visible={visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          okText="ok"
-          cancelText="Cancel"
+          okText="Ok"
+          cancelText="Cancelar"
         >
           <CalendarModalBody>
             <div className="isoCalendarInputWrapper">
               <Input
                 value={title}
-                placeholder="Set Title"
+                readOnly={true}
+                placeholder="Título"
                 onChange={onChangeTitle}
               />
             </div>
@@ -103,7 +104,8 @@ export default class ModalEvent extends Component {
             <div className="isoCalendarInputWrapper">
               <Input
                 value={desc}
-                placeholder="Set DEscription"
+                readOnly={true}
+                placeholder="Descripción"
                 onChange={onChangeDesc}
               />
             </div>
@@ -113,12 +115,13 @@ export default class ModalEvent extends Component {
                 locale={localeDatePicker}
                 ranges={{
                   Today: [moment(), moment()],
-                  'This Month': [moment(), moment().endOf('month')],
+                  'Este mes': [moment(), moment().endOf('month')],
                 }}
                 value={[start, end]}
                 showTime
-                format="YYYY/MM/DD HH:mm:ss"
+                format="DD/MM/YYYY HH:mm:ss"
                 onChange={onChangeFromTimePicker}
+                disabled={true}
               />
               <DeleteButton handleDelete={this.handleDelete} />
             </div>

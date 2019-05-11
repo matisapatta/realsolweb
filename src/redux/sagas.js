@@ -9,12 +9,12 @@ import youtubeSearchSagas from './youtubeSearch/sagas';
 
 export default function* rootSaga(getState) {
   yield all([
-    authSagas(),
-    contactSagas(),
-    mailSagas(),
-    notesSagas(),
-    todosSagas(),
-    cardsSagas(),
-    youtubeSearchSagas()
+    // authSagas(),
+    // contactSagas(),
+    // mailSagas(),
+    // notesSagas(),
+    // todosSagas(),
+    // cardsSagas(),
+    // youtubeSearchSagas()
   ]);
 }

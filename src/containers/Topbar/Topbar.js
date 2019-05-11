@@ -78,7 +78,7 @@ class Topbar extends Component {
 export default connect(
   state => ({
     ...state.App.toJS(),
-    locale: state.LanguageSwitcher.toJS().language.locale,
+    // locale: state.LanguageSwitcher.toJS().language.locale,
     customizedTheme: state.ThemeSwitcher.toJS().topbarTheme,
   }),
   { toggleCollapsed }

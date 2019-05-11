@@ -2,12 +2,8 @@ import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/es'; 
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
 BigCalendar.momentLocalizer(moment);
-const Calendar = withDragAndDrop(BigCalendar);
 
 function EventAgenda({ event }) {
   return (
@@ -38,7 +34,7 @@ class FullCalender extends Component {
     const calendarOptions = {
       messages : {messages},
       popup: true,
-      selectable: true,
+      selectable: false,
       step: 60,
       timeslots: 2,
       className: 'isomorphicCalendar',
@@ -46,8 +42,7 @@ class FullCalender extends Component {
         event: EventAgenda
       }
     };
-    return <Calendar {...calendarOptions} {...this.props} />;
+    return <BigCalendar {...calendarOptions} {...this.props} />;
   }
 }
-const CalendarExample = DragDropContext(HTML5Backend)(FullCalender);
-export default CalendarExample;
+export default FullCalender;
