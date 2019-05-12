@@ -3,7 +3,7 @@ import App from './app/reducer';
 import Box from './box/reducer';
 import Calendar from './calendar/reducer'
 import Salas from './sosalas/reducers';
-import Users from './sousers/reducers';
+import User from './sousers/reducers';
 import ThemeSwitcher from './themeSwitcher/reducer'
 
 
@@ -15,5 +15,5 @@ export default {
   Box,
   ThemeSwitcher,
   Salas,
-  Users
+  User
 };

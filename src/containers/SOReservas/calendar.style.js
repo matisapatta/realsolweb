@@ -825,9 +825,11 @@ const WDCalendarModalBody = styled.div`
 
   .isoCalendarDatePicker {
     display: flex;
+    margin-bottom: 15px;
 
     .ant-calendar-picker {
-      width: calc(100% - 35px) !important;
+      // width: calc(100% - 35px) !important;
+      width: 100% !important;
 
       .ant-input {
         border-radius: ${props =>

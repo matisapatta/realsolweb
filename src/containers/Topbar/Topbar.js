@@ -12,7 +12,19 @@ const { Header } = Layout;
 const { toggleCollapsed } = appActions;
 
 class Topbar extends Component {
+
+  showUser = (user) => {
+    return (
+      user.users ?
+        <div>{(user.users.name).toUpperCase()} {(user.users.lastname).toUpperCase()}</div>
+        : null
+    )
+
+
+  }
+
   render() {
+    // console.log(this.props);
     const { toggleCollapsed, url, customizedTheme, locale } = this.props;
     const collapsed = this.props.collapsed && !this.props.openDrawer;
     const styling = {
@@ -39,30 +51,9 @@ class Topbar extends Component {
           </div>
 
           <ul className="isoRight">
-            {/* <li className="isoSearch">
-              <TopbarSearch locale={locale} />
-            </li> */}
             <li className="isoCenter">
-                JUAN PEREZ
+              {this.showUser(this.props.user)}
             </li>
-
-            {/* <li
-              onClick={() => this.setState({ selectedItem: 'notification' })}
-              className="isoNotify">
-              <TopbarNotification locale={locale} />
-            </li>
-
-            <li
-              onClick={() => this.setState({ selectedItem: 'message' })}
-              className="isoMsg">
-              <TopbarMessage locale={locale} />
-            </li>
-            <li
-              onClick={() => this.setState({ selectedItem: 'addToCart' })}
-              className="isoCart">
-              <TopbarAddtoCart url={url} locale={locale} />
-            </li> */}
-
             <li
               // onClick={() => this.setState({ selectedItem: 'user' })}
               className="isoUser">
@@ -75,11 +66,17 @@ class Topbar extends Component {
   }
 }
 
-export default connect(
-  state => ({
+const mapStateToProps = (state, ownProps) => {
+  return {
     ...state.App.toJS(),
-    // locale: state.LanguageSwitcher.toJS().language.locale,
     customizedTheme: state.ThemeSwitcher.toJS().topbarTheme,
-  }),
+    user: state.User
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  null,
+  null,
   { toggleCollapsed }
 )(Topbar);

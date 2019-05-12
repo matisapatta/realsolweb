@@ -4,8 +4,10 @@ import Input from '../../components/uielements/input';
 import { DateRangepicker } from '../../components/uielements/datePicker';
 import Modal from '../../components/feedback/modal';
 import { CalendarModalBody } from './calendar.style';
+import Button from '../../components/uielements/button';
+import Popconfirm from '../../components/feedback/popconfirm';
+import { notification } from '../../components/';
 
-import DeleteButton from './deleteButton';
 const RangePicker = DateRangepicker;
 
 const localeDatePicker = {
@@ -43,6 +45,27 @@ const localeDatePicker = {
     placeholder: 'Seleccionar hora',
   },
 };
+
+class CancelButton extends Component {
+  render() {
+    const { handleDelete } = this.props;
+
+    return (
+      <Popconfirm
+        title="¿Seguro que quiere cancelar la reserva"
+        okText="Cancelar"
+        cancelText="No"
+        onConfirm={() => {
+          notification('error', 'Cancelada', '');
+          handleDelete();
+        }}
+      >
+        <Button type="button" className="isoDeleteBtn" >Cancelar reserva</Button>
+      </Popconfirm>
+    );
+  }
+}
+
 export default class ModalEvent extends Component {
   handleOk = () => {
     this.props.setModalData('ok', this.props.selectedData);
@@ -78,13 +101,13 @@ export default class ModalEvent extends Component {
       try {
         selectedData.start = value[0].toDate();
         selectedData.end = value[1].toDate();
-      } catch (e) {}
+      } catch (e) { }
       setModalData('updateValue', selectedData);
     };
     return (
       <div>
         <Modal
-          title={modalVisible === 'update' ? 'Update Event' : 'Set Event'}
+          title="Detalles de Reserva"
           visible={visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -123,8 +146,15 @@ export default class ModalEvent extends Component {
                 onChange={onChangeFromTimePicker}
                 disabled={true}
               />
-              <DeleteButton handleDelete={this.handleDelete} />
+
             </div>
+            <div className="isoCalendarInputWrapper" style={{ textAlign: "center" }}>
+              <img src={process.env.PUBLIC_URL + "/images/qr.png"} />
+            </div>
+            <div className="isoCalendarInputWrapper" style={{ textAlign: "center" }}>
+              <CancelButton handleDelete={this.handleDelete}/>
+            </div>
+
           </CalendarModalBody>
         </Modal>
       </div>

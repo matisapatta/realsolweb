@@ -5,33 +5,85 @@ import Input from '../../components/uielements/input';
 import Checkbox from '../../components/uielements/checkbox';
 import Button from '../../components/uielements/button';
 import authAction from '../../redux/auth/actions';
+import { userRegister, getUsers } from '../../redux/sousers/actions';
 import Auth0 from '../../helpers/auth0/index';
-import Firebase from '../../helpers/firebase';
-import FirebaseLogin from '../../components/firebase';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignUpStyleWrapper from './signup.style';
-import {siteTitle} from '../../config';
+import { siteTitle } from '../../config';
 
 const { login } = authAction;
 
 class SignUp extends React.Component {
   state = {
     redirectToReferrer: false,
+    name: '',
+    lastname: '',
+    email: '',
+    password: '',
+    error: ''
   };
+
+
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
     if (
       this.props.isLoggedIn !== nextProps.isLoggedIn &&
       nextProps.isLoggedIn === true
     ) {
       this.setState({ redirectToReferrer: true });
     }
+    if (nextProps.user.register)
+      this.props.history.push('/dashboard')
   }
+
+  componentWillMount = () => {
+    // this.props.dispatch(getUsers())
+  }
+
+
   handleLogin = () => {
     const { login } = this.props;
     login();
     this.props.history.push('/dashboard');
   };
+
+  handleInputEmail = (event) => {
+    this.setState({ email: event.target.value })
+  }
+  handleInputPassword = (event) => {
+    this.setState({ password: event.target.value })
+  }
+  handleInputName = (event) => {
+    this.setState({ name: event.target.value })
+  }
+  handleInputLastname = (event) => {
+    this.setState({ lastname: event.target.value })
+  }
+
+  handleRegister = () => {
+    this.props.dispatch(userRegister({
+      email: this.state.email,
+      name: this.state.name,
+      lastname: this.state.lastname,
+      password: this.state.password
+    }))
+
+  }
+
+
+  submitForm = (e) => {
+    e.preventDefault()
+    this.setState({ error: '' });
+    this.props.dispatch(userRegister({
+      email: this.state.email,
+      name: this.state.name,
+      lastname: this.state.lastname,
+      password: this.state.password
+    }, this.props.user.users))
+  }
+
   render() {
+    let user = this.props.user;
     return (
       <SignUpStyleWrapper className="isoSignUpPage">
         <div className="isoSignUpContentWrapper">
@@ -44,8 +96,8 @@ class SignUp extends React.Component {
 
             <div className="isoSignUpForm">
               <div className="isoInputWrapper isoLeftRightComponent">
-                <Input size="large" placeholder="Nombre" />
-                <Input size="large" placeholder="Apellido" />
+                <Input size="large" placeholder="Nombre" value={this.state.name} onChange={this.handleInputName} />
+                <Input size="large" placeholder="Apellido" value={this.state.lastname} onChange={this.handleInputLastname} />
               </div>
 
               {/* <div className="isoInputWrapper">
@@ -53,11 +105,11 @@ class SignUp extends React.Component {
               </div> */}
 
               <div className="isoInputWrapper">
-                <Input size="large" placeholder="Email" />
+                <Input size="large" type="email" placeholder="Email" value={this.state.email} onChange={this.handleInputEmail} />
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Contraseña" />
+                <Input size="large" type="password" placeholder="Contraseña" value={this.state.password} onChange={this.handleInputPassword} />
               </div>
 
               <div className="isoInputWrapper">
@@ -65,6 +117,8 @@ class SignUp extends React.Component {
                   size="large"
                   type="password"
                   placeholder="Confirmar Contraseña"
+                  value={this.state.password}
+                  onChange={this.handleInputPassword}
                 />
               </div>
 
@@ -75,7 +129,7 @@ class SignUp extends React.Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Button type="primary">
+                <Button onClick={this.handleRegister} type="primary">
                   Registrarse
                 </Button>
               </div>
@@ -95,9 +149,6 @@ class SignUp extends React.Component {
                   >
                     <IntlMessages id="page.signUpAuth0" />
                   </Button>}
-
-                {Firebase.isValid &&
-                  <FirebaseLogin signup={true} login={this.handleLogin} />}
               </div>
               <div className="isoInputWrapper isoCenterComponent isoHelperWrapper">
                 <Link to="/signin">
@@ -112,9 +163,17 @@ class SignUp extends React.Component {
   }
 }
 
-export default connect(
-  state => ({
+const mapStateToProps = (state, ownProps) => {
+  return {
+    user: state.User,
     isLoggedIn: state.Auth.get('idToken') !== null ? true : false,
-  }),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  null,
+  null,
   { login }
 )(SignUp);
+// export default connect(mapStateToProps)(SignUp);

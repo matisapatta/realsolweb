@@ -185,5 +185,8 @@
     "rules": {
       "jsx-a11y/href-no-hash": "off"
     }
-  }
+  },
+
+  "proxy": "http://localhost:3008"
+
 }

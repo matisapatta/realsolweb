@@ -106,6 +106,8 @@ class Busqueda extends Component {
 
 
   render() {
+    console.log(this.state);
+    console.log(this.props);
     return (
       <div>
         <LayoutWrapper>
@@ -141,7 +143,8 @@ class Busqueda extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    salas: state.Salas
+    salas: state.Salas,
+    user: state.User
   }
 }
 
