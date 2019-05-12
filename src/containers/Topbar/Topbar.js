@@ -66,6 +66,7 @@ class Topbar extends Component {
   }
 }
 
+
 const mapStateToProps = (state, ownProps) => {
   return {
     ...state.App.toJS(),
