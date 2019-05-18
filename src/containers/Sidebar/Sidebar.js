@@ -178,8 +178,8 @@ class Sidebar extends Component {
               </Menu.Item>
 
               <Menu.Item key="logout">
-                {/* <Link to={`${url}/logout`}> */}
-                <Link to={`/`}>
+                <Link to={`${url}/logout`}>
+                {/* <Link to={`/`}> */}
                   <span className="isoMenuHolder" style={submenuColor}>
                     <i className="ion-android-exit" />
                     <span className="nav-text">

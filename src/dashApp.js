@@ -7,7 +7,7 @@ import { LocaleProvider } from 'antd';
 import { IntlProvider } from 'react-intl';
 import themes from './config/themes';
 import AppLocale from './languageProvider';
-import config, {
+import {
   getCurrentLanguage
 } from './containers/LanguageSwitcher/config';
 import { themeConfig } from './config';

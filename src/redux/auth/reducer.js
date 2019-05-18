@@ -3,8 +3,24 @@ import { getToken } from '../../helpers/utility';
 import actions from './actions';
 
 const initState = new Map({
-  idToken: 'secret token'
+  idToken: null
 });
+
+
+// export default function authReducer(
+//   state = initState.merge(getToken()),
+//   action
+// ) {
+//   switch (action.type) {
+//     case actions.LOGIN_SUCCESS:
+//       return state.set('idToken', action.token);
+//     case actions.LOGOUT:
+//       return initState;
+//     default:
+//       return state;
+//   }
+// }
+
 
 export default function authReducer(
   state = initState.merge(getToken()),
@@ -15,6 +31,9 @@ export default function authReducer(
       return state.set('idToken', action.token);
     case actions.LOGOUT:
       return initState;
+    case 'USER_AUTH':
+        console.log(action);
+        return state.set('idToken', action.token);
     default:
       return state;
   }

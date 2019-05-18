@@ -8,6 +8,8 @@ export default function reducers(state = {}, action) {
             }
         case 'USER_LOGIN':
             return { ...state, users: action.payload }
+        case 'USER_AUTH':
+            return { ...state, users: action.payload }
         default:
             return state;
     }

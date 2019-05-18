@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Layout, LocaleProvider } from 'antd';
-import { IntlProvider } from 'react-intl';
+import { Layout } from 'antd';
+// import { IntlProvider } from 'react-intl';
 import { Debounce } from 'react-throttle';
 import WindowResizeListener from 'react-window-size-listener';
 import { ThemeProvider } from 'styled-components';
@@ -10,20 +10,20 @@ import appActions from '../../redux/app/actions';
 import Sidebar from '../Sidebar/Sidebar';
 import Topbar from '../Topbar/Topbar';
 import AppRouter from './AppRouter';
-import { siteConfig } from '../../config.js';
-import { AppLocale } from '../../dashApp';
+// import { siteConfig } from '../../config.js';
+// import { AppLocale } from '../../dashApp';
 import themes from '../../config/themes';
 import AppHolder from './commonStyle';
 import './global.css';
 
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 const { logout } = authAction;
 const { toggleAll } = appActions;
 export class App extends Component {
   render() {
     const { url } = this.props.match;
-    const { locale, selectedTheme } = this.props;
-    const currentAppLocale = AppLocale[locale];
+    const { selectedTheme } = this.props;
+    // const currentAppLocale = AppLocale[locale];
     return (
       // <LocaleProvider locale={currentAppLocale.antd}>
       //   <IntlProvider
@@ -80,7 +80,6 @@ export class App extends Component {
 export default connect(
   state => ({
     auth: state.Auth,
-    // locale: state.LanguageSwitcher.toJS().language.locale,
     selectedTheme: state.ThemeSwitcher.toJS().changeThemes.themeName,
   }),
   { logout, toggleAll },

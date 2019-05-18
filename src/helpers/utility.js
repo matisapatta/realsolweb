@@ -1,17 +1,41 @@
 import { Map } from 'immutable';
+import axios from 'axios';
 
 export function clearToken() {
   localStorage.removeItem('id_token');
 }
 
-export function getToken() {
-  try {
-    const idToken = localStorage.getItem('id_token');
-    return new Map({ idToken });
-  } catch (err) {
-    clearToken();
-    return new Map();
-  }
+// export function getToken() {
+//   try {
+//     const idToken = localStorage.getItem('id_token');
+//     return new Map({ idToken });
+//   } catch (err) {
+//     clearToken();
+//     return new Map();
+//   }
+// }
+
+// export function getToken() {
+//   const request = axios.get('/api/auth');
+//   return(dispatch) => {
+//       request.then(({data})=>{
+//           let response = data;
+//           dispatch({
+//               type: 'USER_AUTH',
+//               payload: response
+//           })
+//           console.log(dispatch);
+//       })
+//   }
+// }
+
+export function getToken(){
+  const request = axios.get('/api/auth')
+  .then((response) => {
+    const idToken = response.data;
+    // console.log(idToken);
+    return new Map({idToken});
+  })
 }
 
 export function timeDifference(givenTime) {

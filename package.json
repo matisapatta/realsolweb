@@ -1,6 +1,6 @@
 {
-  "name": "isomorphic",
-  "version": "2.4.0",
+  "name": "salasonline",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "antd": "^3.0.3",

@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 
 import App from './containers/App/App';
 import asyncComponent from './helpers/AsyncFunc';
-import Auth0 from './helpers/auth0';
+import Auth from './helpers/Auth';
+// import Auth0 from './helpers/auth0';
 
 const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
   <Route
@@ -69,23 +70,36 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
             import('./containers/Page/resetPassword'))}
         />
 
-        <Route
+        {/* <Route
           path="/auth0loginCallback"
           render={props => {
             Auth0.handleAuthentication(props);
           }}
-        />
+        /> */}
         <RestrictedRoute
           path="/dashboard"
           component={App}
           isLoggedIn={isLoggedIn}
         />
+        {/* <Route
+          path="/dashboard"
+          component={Auth(App,true)}
+          // isLoggedIn={isLoggedIn}
+        /> */}
+
 
         {/* <Route component={asyncComponent(() => import('./containers/Page/404'))} /> */}
       </div>
     </ConnectedRouter>
   );
 };
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    user: state.User,
+    isLoggedIn: state.Auth.get('idToken') !== null
+  }
+}
 
 export default connect(state => ({
   isLoggedIn: state.Auth.get('idToken') !== null,

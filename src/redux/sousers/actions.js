@@ -28,13 +28,34 @@ export function getUsers() {
 }
 
 export function loginUser({ email, password }) {
-
     const request = axios.post('/api/login', { email, password })
     return (dispatch) => {
         request.then(({ data }) => {
             let response = data;
             dispatch({
                 type: 'USER_LOGIN',
+                payload: response
+            })
+        })
+    }
+}
+
+// export function auth() {
+//     const request = axios.get('/api/auth')
+//         .then(response => response.data)
+//     return {
+//         type: 'USER_AUTH',
+//         payload: request
+//     }
+// }
+
+export function auth() {
+    const request = axios.get('/api/auth');
+    return(dispatch) => {
+        request.then(({data})=>{
+            let response = data;
+            dispatch({
+                type: 'USER_AUTH',
                 payload: response
             })
         })

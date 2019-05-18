@@ -4,7 +4,7 @@ import LayoutWrapper from '../../components/utility/layoutWrapper';
 import { BigInputSearch } from '../../components/uielements/input';
 import Box from '../../components/utility/box';
 import ContentHolder from '../../components/utility/contentHolder';
-import { Col, Row, Icon } from 'antd';
+import { Col, Row } from 'antd';
 import Form from '../../components/uielements/form';
 import { getSalas } from '../../redux/sosalas/actions';
 import Card from '../../components/uielements/styles/card.style';
