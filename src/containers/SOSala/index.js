@@ -89,7 +89,6 @@ class SalaDetail extends Component {
 
     render() {
         const sala = this.props.sala.currentSala;
-        console.log(this.props.sala.currentSala);
         return (
             <div>
                 {this.showInfo(sala)}

@@ -32,7 +32,6 @@ export default function authReducer(
     case actions.LOGOUT:
       return initState;
     case 'USER_AUTH':
-        console.log(action);
         return state.set('idToken', action.token);
     default:
       return state;
