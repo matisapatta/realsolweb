@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { palette } from 'styled-theme';
+// import { palette } from 'styled-theme';
 import WithDirection from '../../config/withDirection';
 
 // height original 160px

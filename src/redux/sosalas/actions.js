@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { URL } from '../../config';
 
 // export function getSalas(value) {
 //     const request = axios.get(`${URL}/salas?name=${value.searchValue}`)

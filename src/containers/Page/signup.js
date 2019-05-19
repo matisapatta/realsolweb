@@ -5,7 +5,9 @@ import Input from '../../components/uielements/input';
 import Checkbox from '../../components/uielements/checkbox';
 import Button from '../../components/uielements/button';
 import authAction from '../../redux/auth/actions';
-import { userRegister, getUsers } from '../../redux/sousers/actions';
+import { userRegister, 
+  // getUsers 
+} from '../../redux/sousers/actions';
 import Auth0 from '../../helpers/auth0/index';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignUpStyleWrapper from './signup.style';
@@ -83,7 +85,6 @@ class SignUp extends React.Component {
   }
 
   render() {
-    let user = this.props.user;
     return (
       <SignUpStyleWrapper className="isoSignUpPage">
         <div className="isoSignUpContentWrapper">

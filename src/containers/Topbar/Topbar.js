@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import appActions from '../../redux/app/actions';
 import TopbarWrapper from './topbar.style';
-import {
-  TopbarSearch,
-  TopbarUser,
-} from '../../components/topbar';
+import { TopbarUser } from '../../components/topbar';
 
 const { Header } = Layout;
 const { toggleCollapsed } = appActions;
@@ -24,8 +21,7 @@ class Topbar extends Component {
   }
 
   render() {
-    // console.log(this.props);
-    const { toggleCollapsed, url, customizedTheme, locale } = this.props;
+    const { toggleCollapsed, customizedTheme, locale } = this.props;
     const collapsed = this.props.collapsed && !this.props.openDrawer;
     const styling = {
       background: customizedTheme.backgroundColor,
@@ -77,7 +73,7 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(
   mapStateToProps,
-  null,
-  null,
   { toggleCollapsed }
+  // null,
+  // { toggleCollapsed }
 )(Topbar);

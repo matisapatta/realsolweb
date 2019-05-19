@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Input from '../../components/uielements/input';
 import Button from '../../components/uielements/button';
-import IntlMessages from '../../components/utility/intlMessages';
 import ForgotPasswordStyleWrapper from './forgotPassword.style';
 
 class ForgotPassword extends React.Component {
@@ -13,16 +12,16 @@ class ForgotPassword extends React.Component {
           <div className="isoFormContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <IntlMessages id="page.forgetPassTitle" />
+                SALAS ONLINE
               </Link>
             </div>
 
             <div className="isoFormHeadText">
               <h3>
-                <IntlMessages id="page.forgetPassSubTitle" />
+                ¿Problemas para ingresar?
               </h3>
               <p>
-                <IntlMessages id="page.forgetPassDescription" />
+                Escribí tu correo electrónico y recibirás un enlace para reestablecer la contraseña
               </p>
             </div>
 
@@ -33,7 +32,7 @@ class ForgotPassword extends React.Component {
 
               <div className="isoInputWrapper">
                 <Button type="primary">
-                  <IntlMessages id="page.sendRequest" />
+                  Enviar correo
                 </Button>
               </div>
             </div>

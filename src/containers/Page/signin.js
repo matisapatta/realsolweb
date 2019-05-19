@@ -18,6 +18,7 @@ class SignIn extends Component {
     email: '',
     password: '',
     error: '',
+    rememberMe: false,
     success: false
   };
   componentWillReceiveProps(nextProps) {
@@ -48,9 +49,12 @@ class SignIn extends Component {
     })
   }
 
+  toggleCheckboxValue = () => {
+    this.setState({rememberMe: !this.state.rememberMe});
+  }
+
 
   render() {
-    let user = this.props.user;
     const from = { pathname: '/dashboard' };
     const { redirectToReferrer } = this.state;
     if (redirectToReferrer) {
@@ -87,7 +91,7 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper isoLeftRightComponent">
-                <Checkbox>
+                <Checkbox value={this.state.rememberMe} onChange={this.toggleCheckboxValue}>
                   Recordarme
                 </Checkbox>
                 <Button type="primary" onClick={this.handleLogin}>

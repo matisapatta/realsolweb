@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ContactCardWrapper } from './contactCard.style';
+import { DatosCardWrapper } from './datosCard.style';
 
 export default class SingleContactView extends Component {
   render() {
@@ -20,7 +20,7 @@ export default class SingleContactView extends Component {
       }
     });
     return (
-      <ContactCardWrapper className="isoContactCard">
+      <DatosCardWrapper className="isoContactCard">
         <div className="isoContactCardHead">
           <div className="isoPersonImage">
             {contact.avatar ? <img alt="#" src={contact.avatar} /> : ''}
@@ -32,7 +32,7 @@ export default class SingleContactView extends Component {
         <div className="isoContactInfoWrapper">
           {extraInfos}
         </div>
-      </ContactCardWrapper>
+      </DatosCardWrapper>
     );
   }
 }

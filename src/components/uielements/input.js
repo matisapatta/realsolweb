@@ -1,6 +1,6 @@
 import { Input } from 'antd';
 import {
-  BigInputWrapper,
+  // BigInputWrapper,
   InputWrapper,
   InputGroupWrapper,
   BigInputSearchWrapper,

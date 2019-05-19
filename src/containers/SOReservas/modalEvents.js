@@ -149,7 +149,7 @@ export default class ModalEvent extends Component {
 
             </div>
             <div className="isoCalendarInputWrapper" style={{ textAlign: "center" }}>
-              <img src={process.env.PUBLIC_URL + "/images/qr.png"} />
+              <img src={process.env.PUBLIC_URL + "/images/qr.png"} alt="img" />
             </div>
             <div className="isoCalendarInputWrapper" style={{ textAlign: "center" }}>
               <CancelButton handleDelete={this.handleDelete}/>

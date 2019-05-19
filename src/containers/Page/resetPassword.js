@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Input from '../../components/uielements/input';
 import Button from '../../components/uielements/button';
-import IntlMessages from '../../components/utility/intlMessages';
 import ResetPasswordStyleWrapper from './resetPassword.style';
 
 class ResetPassword extends React.Component {
@@ -13,16 +12,16 @@ class ResetPassword extends React.Component {
           <div className="isoFormContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <IntlMessages id="page.resetPassTitle" />
+                SALAS ONLINE
               </Link>
             </div>
 
             <div className="isoFormHeadText">
               <h3>
-                <IntlMessages id="page.resetPassSubTitle" />
+                Reestablecer la contraseña
               </h3>
               <p>
-                <IntlMessages id="page.resetPassDescription" />
+                Introducir nueva contraseña y confirmar
               </p>
             </div>
 
@@ -31,7 +30,7 @@ class ResetPassword extends React.Component {
                 <Input
                   size="large"
                   type="password"
-                  placeholder="New Password"
+                  placeholder="Nueva contraseña"
                 />
               </div>
 
@@ -39,13 +38,13 @@ class ResetPassword extends React.Component {
                 <Input
                   size="large"
                   type="password"
-                  placeholder="Confirm Password"
+                  placeholder="Confirme nueva contraseña"
                 />
               </div>
 
               <div className="isoInputWrapper">
                 <Button type="primary">
-                  <IntlMessages id="page.resetPassSave" />
+                  Modificar
                 </Button>
               </div>
             </div>

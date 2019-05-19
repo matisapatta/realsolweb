@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import App from './containers/App/App';
 import asyncComponent from './helpers/AsyncFunc';
-import Auth from './helpers/Auth';
+// import Auth from './helpers/Auth';
 // import Auth0 from './helpers/auth0';
 
 const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
@@ -94,12 +94,12 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
   );
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    user: state.User,
-    isLoggedIn: state.Auth.get('idToken') !== null
-  }
-}
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     user: state.User,
+//     isLoggedIn: state.Auth.get('idToken') !== null
+//   }
+// }
 
 export default connect(state => ({
   isLoggedIn: state.Auth.get('idToken') !== null,

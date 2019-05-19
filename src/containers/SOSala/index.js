@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import { getSalaDetail } from '../../redux/sosalas/actions';
 import { connect } from 'react-redux'
-import { Icon } from 'antd';
 import Button from '../../components/uielements/button';
 import SalaPageWrapper from './sala.style';
 import Carousels from '../../components/uielements/carousel';
 import ContentHolder from '../../components/utility/contentHolder';
 import CarouselWrapper from './carousel.style';
-import { SingleCardWrapper, SortableCardWrapper } from './room.style';
+import { SingleCardWrapper } from './room.style';
 
 const Carousel = props => (
     <CarouselWrapper>

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { URL } from '../../config';
 
 export function userRegister(user) {
     const request = axios.post(`/api/register`, user)
@@ -27,8 +26,8 @@ export function getUsers() {
     }
 }
 
-export function loginUser({ email, password }) {
-    const request = axios.post('/api/login', { email, password })
+export function loginUser({ email, password, rememberMe }) {
+    const request = axios.post('/api/login', { email, password, rememberMe })
     return (dispatch) => {
         request.then(({ data }) => {
             let response = data;

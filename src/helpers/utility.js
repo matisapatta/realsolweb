@@ -30,7 +30,7 @@ export function clearToken() {
 // }
 
 export function getToken(){
-  const request = axios.get('/api/auth')
+  axios.get('/api/auth')
   .then((response) => {
     const idToken = response.data;
     // console.log(idToken);

@@ -4,7 +4,10 @@ import LayoutWrapper from '../../components/utility/layoutWrapper';
 import { BigInputSearch } from '../../components/uielements/input';
 import Box from '../../components/utility/box';
 import ContentHolder from '../../components/utility/contentHolder';
-import { Col, Row, Button } from 'antd';
+import { Col, 
+  Row, 
+  // Button 
+} from 'antd';
 import Form from '../../components/uielements/form';
 import { getSalas, testSalaSave } from '../../redux/sosalas/actions';
 import Card from '../../components/uielements/styles/card.style';
@@ -158,7 +161,6 @@ class Busqueda extends Component {
               </Box>
             </Col>
           </Row>
-          {/* <div onClick={this.testSave()}>Save</div> */}
           {/* Resultados */}
           {this.searchPerformed(this.state.search)}
         </LayoutWrapper>

@@ -3,7 +3,7 @@ import { palette } from 'styled-theme';
 import { transition, borderRadius, boxShadow } from '../../config/style-util';
 import WithDirection from '../../config/withDirection';
 
-const WDContactCardWrapper = styled.div`
+const WDDatosCardWrapper = styled.div`
   width: 100%;
   height: calc(100% - 145px);
   padding: 0 35px;
@@ -215,6 +215,6 @@ const WDContactCardWrapper = styled.div`
   }
 `;
 
-const ContactCardWrapper = WithDirection(WDContactCardWrapper);
+const DatosCardWrapper = WithDirection(WDDatosCardWrapper);
 
-export { ContactCardWrapper };
+export { DatosCardWrapper };

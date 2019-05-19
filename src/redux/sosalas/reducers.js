@@ -1,5 +1,3 @@
-import { Map } from 'immutable';
-
 export default function reducers(state = {}, action) {
     switch (action.type) {
         case 'GET_SALAS':

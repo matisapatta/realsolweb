@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
-// import bgImage from '../../image/sign.jpg';
 import bgImage from '../../image/sala2.png';
 import WithDirection from '../../config/withDirection';
 

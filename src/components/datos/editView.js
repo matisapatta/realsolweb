@@ -3,7 +3,7 @@ import { Icon } from 'antd';
 import Input, { Textarea } from '../uielements/input';
 import Upload from '../uielements/upload';
 import notification from '../notification';
-import { ContactCardWrapper } from './contactCard.style';
+import { DatosCardWrapper } from './datosCard.style';
 import './upload.css';
 
 function beforeUpload(file) {
@@ -20,7 +20,7 @@ function beforeUpload(file) {
   notification('success', 'Image uploaded successfully!', '');
   return true;
 }
-export default class editContactView extends Component {
+export default class editDatosView extends Component {
   render() {
     const { contact, otherAttributes } = this.props;
     const name = contact.name ? contact.name : 'No Name';
@@ -31,7 +31,7 @@ export default class editContactView extends Component {
     ];
     [...names, ...otherAttributes].forEach(attribute => {
       const value = contact[attribute.value];
-      const editContact = event => {
+      const editDatos = event => {
         contact[attribute.value] = event.target.value;
         let name = '';
         if (contact.firstName) {
@@ -41,7 +41,7 @@ export default class editContactView extends Component {
           name = `${name}${contact.lastName}`;
         }
         contact.name = name;
-        this.props.editContact(contact);
+        this.props.editDatos(contact);
       };
       if (attribute.value === 'note') {
         extraInfos.push(
@@ -52,7 +52,7 @@ export default class editContactView extends Component {
               value={value}
               type="textarea"
               rows={5}
-              onChange={event => editContact(event)}
+              onChange={event => editDatos(event)}
             />
           </div>
         );
@@ -63,14 +63,14 @@ export default class editContactView extends Component {
             <Input
               placeholder={`${attribute.title}`}
               value={value}
-              onChange={event => editContact(event)}
+              onChange={event => editDatos(event)}
             />
           </div>
         );
       }
     });
     return (
-      <ContactCardWrapper className="isoContactCard">
+      <DatosCardWrapper className="isoContactCard">
         <div className="isoContactCardHead">
           <div className="isoPersonImage">
             <Upload
@@ -91,7 +91,7 @@ export default class editContactView extends Component {
           <h1 className="isoPersonName">{name}</h1>
         </div>
         <div className="isoContactInfoWrapper">{extraInfos}</div>
-      </ContactCardWrapper>
+      </DatosCardWrapper>
     );
   }
 }

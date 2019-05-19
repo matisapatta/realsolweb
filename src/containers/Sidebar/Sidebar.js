@@ -12,8 +12,8 @@ import appActions from '../../redux/app/actions';
 import Logo from '../../components/utility/logo';
 import { rtl } from '../../config/withDirection';
 
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+// const SubMenu = Menu.SubMenu;
+// const MenuItemGroup = Menu.ItemGroup;
 const { Sider } = Layout;
 
 const {
@@ -80,16 +80,20 @@ class Sidebar extends Component {
   }
 
   componentWillUnmount() {
-    this.props.app.current = null;
-    this.props.app.openKeys = null;
-    console.log(this.props);
+    // this.props.app.current = null;
+    // this.props.app.openKeys = null;
+    // console.log(this.props);
   }
-  componentWillMount(){
+  componentWillMount() {
 
   }
+
+  // showAdminTab = () => (
+
+  // )
+
 
   render() {
-  
     const { app, toggleOpenDrawer, customizedTheme } = this.props;
     const url = stripTrailingSlash(this.props.url);
     const collapsed = clone(app.collapsed) && !clone(app.openDrawer);
@@ -111,10 +115,10 @@ class Sidebar extends Component {
     const styling = {
       backgroundColor: customizedTheme.backgroundColor
     };
-    const submenuStyle = {
-      backgroundColor: 'rgba(0,0,0,0.3)',
-      color: customizedTheme.textColor
-    };
+    // const submenuStyle = {
+    //   backgroundColor: 'rgba(0,0,0,0.3)',
+    //   color: customizedTheme.textColor
+    // };
     const submenuColor = {
       color: customizedTheme.textColor
     };
@@ -144,42 +148,105 @@ class Sidebar extends Component {
               onOpenChange={this.onOpenChange}
               className="isoDashboardMenu"
             >
-              <Menu.Item key="search">
-                <Link to={`${url}/busqueda`}>
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <i className="ion-android-search" />
-                    <span className="nav-text">
-                      Búsqueda
+              {this.props.user.users.role !== 1 ?
+                <Menu.Item key="search">
+                  <Link to={`${url}/busqueda`}>
+                    <span className="isoMenuHolder" style={submenuColor}>
+                      <i className="ion-android-search" />
+                      <span className="nav-text">
+                        Búsqueda
                     </span>
-                  </span>
-                </Link>
-              </Menu.Item>
+                    </span>
+                  </Link>
+                </Menu.Item>
+                : null}
 
-              <Menu.Item key="reservas">
-                <Link to={`${url}/reservas`}>
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <i className="ion-android-list" />
-                    <span className="nav-text">
-                      Mis reservas
+              {this.props.user.users.role !== 1 ?
+                <Menu.Item key="reservas">
+                  <Link to={`${url}/reservas`}>
+                    <span className="isoMenuHolder" style={submenuColor}>
+                      <i className="ion-android-list" />
+                      <span className="nav-text">
+                        Mis reservas
                     </span>
-                  </span>
-                </Link>
-              </Menu.Item>
+                    </span>
+                  </Link>
+                </Menu.Item>
+                : null}
 
-              <Menu.Item key="datos">
-                <Link to={`${url}/datos`}>
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <i className="ion-android-person" />
-                    <span className="nav-text">
-                      Mis datos
+              {this.props.user.users.role !== 1 ?
+                <Menu.Item key="datos">
+                  <Link to={`${url}/datos`}>
+                    <span className="isoMenuHolder" style={submenuColor}>
+                      <i className="ion-android-person" />
+                      <span className="nav-text">
+                        Mis datos
                     </span>
-                  </span>
-                </Link>
-              </Menu.Item>
+                    </span>
+                  </Link>
+                </Menu.Item>
+                : null}
+
+
+              {/* Solapas del dueño de sala */}
+              {this.props.user.users.role === 1 ?
+                <Menu.Item key="gestionsalas">
+                  <Link to={`${url}/gestionsalas`}>
+                    <span className="isoMenuHolder" style={submenuColor}>
+                      <i className="ion-filing" />
+                      <span className="nav-text">
+                        Gestión de Salas
+                    </span>
+                    </span>
+                  </Link>
+                </Menu.Item>
+                : null}
+
+              {this.props.user.users.role === 1 ?
+                <Menu.Item key="gestionreservas">
+                  <Link to={`${url}/gestionreservas`}>
+                    <span className="isoMenuHolder" style={submenuColor}>
+                      <i className="ion-android-list" />
+                      <span className="nav-text">
+                        Gestión de Reservas
+                    </span>
+                    </span>
+                  </Link>
+                </Menu.Item>
+                : null}
+
+              {this.props.user.users.role === 1 ?
+                <Menu.Item key="datossala">
+                  <Link to={`${url}/datossala`}>
+                    <span className="isoMenuHolder" style={submenuColor}>
+                      <i className="ion-android-person" />
+                      <span className="nav-text">
+                        Mis datos
+                    </span>
+                    </span>
+                  </Link>
+                </Menu.Item>
+                : null}
+
+
+
+              {/* Solapas de Admin */}
+              {this.props.user.users.role === 2 ?
+                <Menu.Item key="admin">
+                  <Link to={`${url}/admin`}>
+                    <span className="isoMenuHolder" style={submenuColor}>
+                      <i className="ion-android-settings" />
+                      <span className="nav-text">
+                        Administrador
+                      </span>
+                    </span>
+                  </Link>
+                </Menu.Item>
+                : null}
 
               <Menu.Item key="logout">
                 <Link to={`${url}/logout`}>
-                {/* <Link to={`/`}> */}
+                  {/* <Link to={`/`}> */}
                   <span className="isoMenuHolder" style={submenuColor}>
                     <i className="ion-android-exit" />
                     <span className="nav-text">
@@ -188,6 +255,7 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
+
             </Menu>
           </Scrollbars>
         </Sider>
@@ -196,13 +264,33 @@ class Sidebar extends Component {
   }
 }
 
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     app: state.App.toJS(),
+//     customizedTheme: state.ThemeSwitcher.toJS().sidebarTheme
+//   }
+// }
 
-
+// const mergeProps = (stateProps, dispatchProps, ownProps) => {
+//   return {
+//     toggleOpenDrawer: toggleOpenDrawer,
+//     changeOpenKeys: changeOpenKeys,
+//     changeCurrent: changeCurrent,
+//     toggleCollapsed: toggleCollapsed
+//   }
+// }
 
 export default connect(
   state => ({
     app: state.App.toJS(),
-    customizedTheme: state.ThemeSwitcher.toJS().sidebarTheme
+    customizedTheme: state.ThemeSwitcher.toJS().sidebarTheme,
+    user: state.User
   }),
   { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed }
 )(Sidebar);
+
+// export default connect(
+//   mapStateToProps,
+//   null,
+//   { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed }
+// )(Sidebar);

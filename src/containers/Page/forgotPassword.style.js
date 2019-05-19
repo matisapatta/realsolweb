@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
-import bgImage from '../../image/image3.jpg';
+import bgImage from '../../image/mic1.png';
 import WithDirection from '../../config/withDirection';
 
 const ForgotPasswordStyleWrapper = styled.div`
