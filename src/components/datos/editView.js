@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Icon } from 'antd';
 import Input, { Textarea } from '../uielements/input';
 import Upload from '../uielements/upload';
 import notification from '../notification';
 import { DatosCardWrapper } from './datosCard.style';
+import { updateUser } from '../../redux/sousers/actions'
 import './upload.css';
 
 function beforeUpload(file) {
@@ -20,55 +22,81 @@ function beforeUpload(file) {
   notification('success', 'Image uploaded successfully!', '');
   return true;
 }
-export default class editDatosView extends Component {
-  render() {
-    const { contact, otherAttributes } = this.props;
-    const name = contact.name ? contact.name : 'No Name';
-    const extraInfos = [];
-    const names = [
-      { value: 'firstName', title: 'First Name' },
-      { value: 'lastName', title: 'Last Name' }
-    ];
-    [...names, ...otherAttributes].forEach(attribute => {
-      const value = contact[attribute.value];
-      const editDatos = event => {
-        contact[attribute.value] = event.target.value;
-        let name = '';
-        if (contact.firstName) {
-          name = `${contact.firstName} `;
-        }
-        if (contact.lastName) {
-          name = `${name}${contact.lastName}`;
-        }
-        contact.name = name;
-        this.props.editDatos(contact);
-      };
-      if (attribute.value === 'note') {
-        extraInfos.push(
-          <div className="isoContactCardInfos" key={attribute.value}>
-            <p className="isoInfoLabel">{`${attribute.title}`}</p>
-            <Textarea
-              placeholder={`${attribute.title}`}
-              value={value}
-              type="textarea"
-              rows={5}
-              onChange={event => editDatos(event)}
-            />
-          </div>
-        );
-      } else {
-        extraInfos.push(
-          <div className="isoContactCardInfos" key={attribute.value}>
-            <p className="isoInfoLabel">{`${attribute.title}`}</p>
-            <Input
-              placeholder={`${attribute.title}`}
-              value={value}
-              onChange={event => editDatos(event)}
-            />
-          </div>
-        );
+
+let save = false;
+
+class editDatosView extends Component {
+
+
+
+  state = {
+    fullName: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    note: '',
+    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/dvdwinden/128.jpg",
+    viewMode: false
+  }
+  componentWillMount() {
+    const user = this.props.user.users
+    this.setState({
+      fullName: `${user.name} ${user.lastname}`,
+      firstName: user.name,
+      lastName: user.lastname,
+      phone: user.phone,
+      note: 'Pepito nota',
+      viewMode: this.props.viewMode
+    })
+  }
+
+
+  handleInput = (type, event) => {
+    switch (type) {
+      case 'firstName':
+        this.setState({ firstName: event.target.value });
+        break;
+      case 'lastName':
+        this.setState({ lastName: event.target.value });
+        break;
+      case 'phone':
+        this.setState({ phone: event.target.value });
+        break;
+      case 'note':
+        this.setState({ note: event.target.value });
+        break;
+      default: null;
+        break;
+    }
+
+  }
+
+  saveUser = (user) => {
+    this.props.dispatch(updateUser(user));
+  }
+
+  toggleAndSave = (viewMode) => {
+    if (!viewMode && !save) {
+      save = true;
+    }
+    if (viewMode && save) {
+      save = false;
+      const data = {
+        _id: this.props.user.users.id,
+        name: this.state.firstName,
+        lastname: this.state.lastName,
+        phone: this.state.phone
       }
-    });
+      this.saveUser(data);
+    }
+  }
+
+
+  render() {
+    const user = this.state;
+    const viewMode = this.props.viewMode
+    { this.toggleAndSave(viewMode) }
+
     return (
       <DatosCardWrapper className="isoContactCard">
         <div className="isoContactCardHead">
@@ -79,19 +107,70 @@ export default class editDatosView extends Component {
               showUploadList={false}
               beforeUpload={beforeUpload}
               action=""
+              disabled={viewMode}
             >
-              {contact.avatar ? (
-                <img src={contact.avatar} alt="" className="avatar" />
+              {user.avatar ? (
+                <img src={this.state.avatar} alt="" className="avatar" />
               ) : (
-                ''
-              )}
+                  ''
+                )}
               <Icon type="plus" className="avatar-uploader-trigger" />
             </Upload>
           </div>
-          <h1 className="isoPersonName">{name}</h1>
+          <h1 className="isoPersonName">{`${this.props.user.users.name} ${this.props.user.users.lastname}`}</h1>
         </div>
-        <div className="isoContactInfoWrapper">{extraInfos}</div>
+        <div className="isoContactInfoWrapper">
+          <div className="isoContactCardInfos">
+            <p className="isoInfoLabel">Nombre</p>
+            <Input
+              placeholder="Nombre"
+              value={this.state.firstName}
+              onChange={event => this.handleInput('firstName', event)}
+              disabled={viewMode}
+            />
+          </div>
+
+          <div className="isoContactCardInfos">
+            <p className="isoInfoLabel">Apellido</p>
+            <Input
+              placeholder="Apellido"
+              value={this.state.lastName}
+              onChange={event => this.handleInput('lastName', event)}
+              disabled={viewMode}
+            />
+          </div>
+
+          <div className="isoContactCardInfos">
+            <p className="isoInfoLabel">Teléfono</p>
+            <Input
+              type="number"
+              placeholder="Teléfono"
+              value={this.state.phone}
+              onChange={event => this.handleInput('phone', event)}
+              disabled={viewMode}
+            />
+          </div>
+
+          <div className="isoContactCardInfos">
+            <p className="isoInfoLabel">Notas</p>
+            <Textarea
+              placeholder="Notas"
+              value={this.state.note}
+              type="textarea"
+              rows={5}
+              onChange={event => this.handleInput('note', event)}
+              disabled={viewMode}
+            />
+          </div>
+        </div>
+
       </DatosCardWrapper>
     );
   }
 }
+const mapStateToProps = (state, ownProps) => {
+  return {
+    user: state.User
+  }
+}
+export default connect(mapStateToProps)(editDatosView);

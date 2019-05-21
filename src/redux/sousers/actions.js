@@ -39,22 +39,27 @@ export function loginUser({ email, password, rememberMe }) {
     }
 }
 
-// export function auth() {
-//     const request = axios.get('/api/auth')
-//         .then(response => response.data)
-//     return {
-//         type: 'USER_AUTH',
-//         payload: request
-//     }
-// }
 
 export function auth() {
     const request = axios.get('/api/auth');
-    return(dispatch) => {
-        request.then(({data})=>{
+    return (dispatch) => {
+        request.then(({ data }) => {
             let response = data;
             dispatch({
                 type: 'USER_AUTH',
+                payload: response
+            })
+        })
+    }
+}
+
+export function updateUser(data) {
+    const request = axios.post(`/api/userupdate`, data);
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let response = data;
+            dispatch({
+                type: 'UPDATE_USER',
                 payload: response
             })
         })

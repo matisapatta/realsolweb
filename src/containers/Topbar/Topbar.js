@@ -8,7 +8,23 @@ import { TopbarUser } from '../../components/topbar';
 const { Header } = Layout;
 const { toggleCollapsed } = appActions;
 
+
 class Topbar extends Component {
+
+  state = {
+    topName: '',
+    topLastName: ''
+  }
+
+  componentWillMount() {
+
+    this.props.user.users ?
+      this.setState({
+        topName: this.props.user.users.name,
+        topLastName: this.props.user.users.lastname
+      })
+      : null
+  }
 
   showUser = (user) => {
     return (
@@ -16,9 +32,11 @@ class Topbar extends Component {
         <div>{(user.users.name).toUpperCase()} {(user.users.lastname).toUpperCase()}</div>
         : null
     )
-
-
   }
+
+  // showUser = () => (
+  //     <div>{(this.state.topName).toUpperCase()} {(this.state.topLastName).toUpperCase()}</div>
+  // )
 
   render() {
     const { toggleCollapsed, customizedTheme, locale } = this.props;
@@ -51,7 +69,6 @@ class Topbar extends Component {
               {this.showUser(this.props.user)}
             </li>
             <li
-              // onClick={() => this.setState({ selectedItem: 'user' })}
               className="isoUser">
               <TopbarUser locale={locale} />
             </li>

@@ -21,6 +21,7 @@ class SignUp extends React.Component {
     name: '',
     lastname: '',
     email: '',
+    phone: '',
     password: '',
     error: ''
   };
@@ -61,6 +62,9 @@ class SignUp extends React.Component {
   handleInputLastname = (event) => {
     this.setState({ lastname: event.target.value })
   }
+  handleInputPhone = (event) => {
+    this.setState({ phone: event.target.value })
+  }
 
   handleRegister = () => {
     this.props.dispatch(userRegister({
@@ -100,10 +104,9 @@ class SignUp extends React.Component {
                 <Input size="large" placeholder="Nombre" value={this.state.name} onChange={this.handleInputName} />
                 <Input size="large" placeholder="Apellido" value={this.state.lastname} onChange={this.handleInputLastname} />
               </div>
-
-              {/* <div className="isoInputWrapper">
-                <Input size="large" placeholder="Username" />
-              </div> */}
+              <div className="isoInputWrapper">
+                <Input size="large" type="number" placeholder="Teléfono" value={this.state.phone} onChange={this.handleInputPhone} />
+              </div>
 
               <div className="isoInputWrapper">
                 <Input size="large" type="email" placeholder="Email" value={this.state.email} onChange={this.handleInputEmail} />

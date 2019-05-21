@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { DatosCardWrapper } from './datosCard.style';
 
-export default class SingleContactView extends Component {
+export default class SingleDatosView extends Component {
   render() {
-    const { contact, otherAttributes } = this.props;
-    const name = contact.name ? contact.name : 'No Name';
+    const { user, otherAttributes } = this.props;
+    const name = user.name ? user.name : 'No Name';
     const extraInfos = [];
     otherAttributes.forEach(attribute => {
-      const value = contact[attribute.value];
+      const value = user[attribute.value];
       if (value) {
         extraInfos.push(
           <div className="isoContactCardInfos" key={attribute.value}>
@@ -23,7 +23,7 @@ export default class SingleContactView extends Component {
       <DatosCardWrapper className="isoContactCard">
         <div className="isoContactCardHead">
           <div className="isoPersonImage">
-            {contact.avatar ? <img alt="#" src={contact.avatar} /> : ''}
+            {user.avatar ? <img alt="#" src={user.avatar} /> : ''}
           </div>
           <h1 className="isoPersonName">
             {name}
