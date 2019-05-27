@@ -33,7 +33,6 @@ export function getToken(){
   axios.get('/api/auth')
   .then((response) => {
     const idToken = response.data;
-    // console.log(idToken);
     return new Map({idToken});
   })
 }
