@@ -29,7 +29,7 @@ class Datos extends Component {
   }
 
   render() {
-    const user = this.props.user.users;
+    // const user = this.props.user.users;
     return (
       <DatosWrapper
         className=""

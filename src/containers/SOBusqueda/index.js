@@ -4,11 +4,13 @@ import LayoutWrapper from '../../components/utility/layoutWrapper';
 import { BigInputSearch } from '../../components/uielements/input';
 import Box from '../../components/utility/box';
 import ContentHolder from '../../components/utility/contentHolder';
-import { Col, 
-  Row, 
+import {
+  Col,
+  Row,
   // Button 
 } from 'antd';
 import Form from '../../components/uielements/form';
+import Button from '../../components/uielements/button';
 import { getSalas, testSalaSave } from '../../redux/sosalas/actions';
 import Card from '../../components/uielements/styles/card.style';
 import { Link } from 'react-router-dom'
@@ -38,7 +40,7 @@ const testSala = {
       bass: "Gallien Krueger",
     },
   ],
-  ownerId:"pepito"
+  ownerId: "pepito"
 }
 
 const rowStyle = {
@@ -55,21 +57,28 @@ class Busqueda extends Component {
 
   state = {
     formdata: {
-      searchValue: ''
+      name: '',
+      location: ''
     },
     search: false
   }
 
-  componentWillMount() {
-    if (this.props.salas == null)
-      this.setState({ search: false })
-    // else
-    //   this.setState({ search: true })
-    // this.testSave();
+  constructor(props) {
+    super(props)
+    if (props.salas == null)
+      this.state = { search: false }
   }
+  // componentWillMount() {
+  //   if (this.props.salas == null)
+  //     this.setState({ search: false })
+  //   // else
+  //   //   this.setState({ search: true })
+  //   // this.testSave();
+  // }
 
   testSave = () => {
     this.props.dispatch(testSalaSave(testSala));
+
   }
 
   handleInput = (event, name) => {
@@ -85,19 +94,6 @@ class Busqueda extends Component {
     this.props.dispatch(getSalas(this.state.formdata));
     this.setState({ search: true });
   }
-
-
-  // Ejemplo de Results
-  //   <ContentHolder>
-  //   <Card
-  //     loading={false}
-  //     title="Card Title"
-  //     style={{ width: '100%' }}
-  //   >
-  //     Mensaje
-  //   </Card>
-  // </ContentHolder>
-
 
 
   showResults = (data) => {
@@ -147,13 +143,27 @@ class Busqueda extends Component {
                 title="Buscar"
               >
                 <ContentHolder>
-                  <Form onSubmit={this.submitForm}>
+                  <Form
+                    onSubmit={this.submitForm}
+                  >
                     <BigInputSearch
-                      placeholder="Buscar por nombre o localidad"
-                      value={this.state.formdata.searchValue}
-                      onChange={(event) => this.handleInput(event, 'searchValue')}
+                      placeholder="Nombre"
+                      value={this.state.formdata.name}
+                      onChange={(event) => this.handleInput(event, 'name')}
                       onSubmit={this.submitForm}
                     />
+                    <BigInputSearch style={{
+                      "margin": "5px 0px",
+                      "width": "50%"
+                    }}
+                      placeholder="Localidad"
+                      value={this.state.formdata.location}
+                      onChange={(event) => this.handleInput(event, 'location')}
+                      onSubmit={this.submitForm}
+                    />
+                    <Button icon="search" onClick={this.submitForm}>
+                      Buscar
+                    </Button>
                   </Form>
                 </ContentHolder>
               </Box>

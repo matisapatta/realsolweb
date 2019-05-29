@@ -16,15 +16,24 @@ class Topbar extends Component {
     topLastName: ''
   }
 
-  componentWillMount() {
-
-    this.props.user.users ?
-      this.setState({
-        topName: this.props.user.users.name,
-        topLastName: this.props.user.users.lastname
-      })
-      : null
+  constructor(props){
+    super(props);
+    props.user.users ?
+    this.state = {
+      topName: props.user.users.name,
+      topLastName: props.user.users.lastname
+    }
+    : null
   }
+  // componentWillMount() {
+
+  //   this.props.user.users ?
+  //     this.setState({
+  //       topName: this.props.user.users.name,
+  //       topLastName: this.props.user.users.lastname
+  //     })
+  //     : null
+  // }
 
   showUser = (user) => {
     return (

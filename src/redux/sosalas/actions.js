@@ -22,8 +22,26 @@ import axios from 'axios';
 //     }
 // }
 
+// export function getSalas(value) {
+//     const request = axios.get(`/api/getsala?&name=${value.name}`)
+//     return (dispatch) => {
+//         request.then(({ data }) => {
+//             let sala = data;
+//             dispatch({
+//                 type: 'GET_SALAS',
+//                 payload: sala
+//             })
+//         })
+//     }
+// }
+
 export function getSalas(value) {
-    const request = axios.get(`/api/getsala?search=${value.searchValue}`)
+    let uri = "/api/getsala?";
+    if(value.name!=='')
+    uri= uri+`&name=${value.name}`;
+    if(value.location!=='')
+    uri= uri+`&location=${value.location}`;
+    const request = axios.get(uri)
     return (dispatch) => {
         request.then(({ data }) => {
             let sala = data;
@@ -34,7 +52,6 @@ export function getSalas(value) {
         })
     }
 }
-
 
 
 

@@ -54,8 +54,8 @@ class SalaDetail extends Component {
 
         )
     }
-
-    componentWillMount() {
+    
+    componentDidMount() {
         this.props.dispatch(getSalaDetail(this.props.match.params.id))
     }
 

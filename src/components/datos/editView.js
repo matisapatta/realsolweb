@@ -95,7 +95,7 @@ class editDatosView extends Component {
   render() {
     const user = this.state;
     const viewMode = this.props.viewMode
-    { this.toggleAndSave(viewMode) }
+    this.toggleAndSave(viewMode) 
 
     return (
       <DatosCardWrapper className="isoContactCard">
