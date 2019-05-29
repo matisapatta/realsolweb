@@ -293,7 +293,7 @@ const InputSearchWrapper = ComponentName => styled(ComponentName)`
       width: 100%;
       height: 35px;
       cursor: text;
-      font-size: 13px;
+      font-size: 20px; //13px
       line-height: 1.5;
       color: ${palette('text', 1)};
       background-color: #fff;
@@ -359,7 +359,7 @@ const BigInputSearchWrapper = ComponentName => styled(ComponentName)`
       width: 100%;
       height: 45px;
       cursor: text;
-      font-size: 25px;
+      font-size: 20px; //13px
       line-height: 1.5;
       color: ${palette('text', 1)};
       background-color: #fff;

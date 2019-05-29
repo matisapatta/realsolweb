@@ -11,10 +11,11 @@ import {
 } from 'antd';
 import Form from '../../components/uielements/form';
 import Button from '../../components/uielements/button';
+import Select, { SelectOption } from '../../components/uielements/select';
 import { getSalas, testSalaSave } from '../../redux/sosalas/actions';
 import Card from '../../components/uielements/styles/card.style';
 import { Link } from 'react-router-dom'
-import { WRAPPEDURL } from '../../config';
+import { WRAPPEDURL, locations } from '../../config';
 
 const testSala = {
   name: "Sola de Ensayo",
@@ -52,21 +53,29 @@ const colStyle = {
   marginBottom: '28px',
 };
 const gutter = 36;
+const Option = SelectOption;
+const locationOptions = [];
 
 class Busqueda extends Component {
 
   state = {
     formdata: {
       name: '',
-      location: ''
+      location: []
     },
-    search: false
+    search: false,
+    locations: []
   }
 
   constructor(props) {
     super(props)
     if (props.salas == null)
       this.state = { search: false }
+    locationOptions.length === 0 ?
+      locations.forEach((element)=>{
+      locationOptions.push(<Option key={element}>{element}</Option>);
+    })
+    :null
   }
   // componentWillMount() {
   //   if (this.props.salas == null)
@@ -80,10 +89,26 @@ class Busqueda extends Component {
     this.props.dispatch(testSalaSave(testSala));
 
   }
+  handleChange = (value, name) => {
+    const newFormdata = { ...this.state.formdata }
+    newFormdata[name] = value;
+    this.setState({
+      formdata: newFormdata
+    })
+  };
 
   handleInput = (event, name) => {
     const newFormdata = { ...this.state.formdata }
     newFormdata[name] = event.target.value;
+    this.setState({
+      formdata: newFormdata
+    })
+  }
+
+  handleList = (event, name) => {
+    const newFormdata = { ...this.state.formdata }
+    console.log(event);
+    newFormdata[name].push(event);
     this.setState({
       formdata: newFormdata
     })
@@ -94,7 +119,6 @@ class Busqueda extends Component {
     this.props.dispatch(getSalas(this.state.formdata));
     this.setState({ search: true });
   }
-
 
   showResults = (data) => {
     return (
@@ -152,18 +176,21 @@ class Busqueda extends Component {
                       onChange={(event) => this.handleInput(event, 'name')}
                       onSubmit={this.submitForm}
                     />
-                    <BigInputSearch style={{
-                      "margin": "5px 0px",
-                      "width": "50%"
-                    }}
+                    <Select
+                      mode="multiple"
+                      style={{ "width": '100%', "height": "45px", "margin": "5px 0px" }}
                       placeholder="Localidad"
-                      value={this.state.formdata.location}
-                      onChange={(event) => this.handleInput(event, 'location')}
-                      onSubmit={this.submitForm}
-                    />
-                    <Button icon="search" onClick={this.submitForm}>
-                      Buscar
+                      // value={this.state.formdata.location}
+                      onChange={(event) => this.handleChange(event, 'location')}
+                    >
+                      {locationOptions}
+                    </Select>
+                    <div>
+                      <Button icon="search" onClick={this.submitForm}>
+                        Buscar
                     </Button>
+                    </div>
+
                   </Form>
                 </ContentHolder>
               </Box>
