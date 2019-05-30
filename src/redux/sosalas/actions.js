@@ -53,6 +53,23 @@ export function getSalas(value) {
     }
 }
 
+export function getSalasOwner(id){
+    const request = axios.get(`/api/getsalasowner?id=${id}`)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let send;
+            if (data)
+                send = data;
+            else
+                send = null;
+            dispatch({
+                type: 'GET_SALA_OWNER',
+                payload: send
+            })
+        })
+    }
+}
+
 
 
 // export function getSalaDetail(id) {
