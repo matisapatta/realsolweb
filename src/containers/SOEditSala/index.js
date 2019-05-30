@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 
-class CreateSala extends Component {
+class EditSala extends Component {
 
     constructor(props) {
         super(props)
@@ -10,7 +10,7 @@ class CreateSala extends Component {
 
     render() {
         return (
-            <div>Crear sala</div>
+            <div>Edit sala</div>
         )
     }
 }
@@ -24,4 +24,4 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 
-export default connect(mapStateToProps)(CreateSala);
+export default connect(mapStateToProps)(EditSala);

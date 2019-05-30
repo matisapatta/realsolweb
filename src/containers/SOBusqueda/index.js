@@ -16,6 +16,7 @@ import { getSalas, testSalaSave } from '../../redux/sosalas/actions';
 import Card from '../../components/uielements/styles/card.style';
 import { Link } from 'react-router-dom'
 import { WRAPPEDURL, locations } from '../../config';
+import { rowStyle, colStyle, gutter } from '../../config/styleConst';
 
 const testSala = {
   name: "Sola de Ensayo",
@@ -44,15 +45,6 @@ const testSala = {
   ownerId: "pepito"
 }
 
-const rowStyle = {
-  width: '100%',
-  display: 'flex',
-  flexFlow: 'row wrap',
-};
-const colStyle = {
-  marginBottom: '28px',
-};
-const gutter = 36;
 const Option = SelectOption;
 const locationOptions = [];
 
@@ -72,10 +64,10 @@ class Busqueda extends Component {
     if (props.salas == null)
       this.state = { search: false }
     locationOptions.length === 0 ?
-      locations.forEach((element)=>{
-      locationOptions.push(<Option key={element}>{element}</Option>);
-    })
-    :null
+      locations.forEach((element) => {
+        locationOptions.push(<Option key={element}>{element}</Option>);
+      })
+      : null
   }
   // componentWillMount() {
   //   if (this.props.salas == null)
