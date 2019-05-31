@@ -6,7 +6,7 @@ import WithDirection from '../../config/withDirection';
 const WDDatosCardWrapper = styled.div`
   width: 100%;
   height: calc(100% - 145px);
-  padding: 0 35px;
+  padding: 20px 35px;
   display: -webkit-flex;
   display: -ms-flex;
   display: flex;
@@ -77,7 +77,6 @@ const WDDatosCardWrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
 
     .isoContactCardInfos {
       width: 100%;

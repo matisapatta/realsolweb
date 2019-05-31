@@ -4,11 +4,7 @@ import { connect } from 'react-redux'
 import { updateUser } from '../../redux/sousers/actions';
 import { Layout, Icon } from 'antd';
 import Button from '../../components/uielements/button';
-// import ContactList from '../../components/contacts/contactList';
-// import SingleDatosView from '../../components/datos/singleView';
 import EditDatosView from '../../components/datos/editView';
-// import DeleteButton from '../../components/contacts/deleteButton';
-// import IntlMessages from '../../components/utility/intlMessages';
 import { DatosWrapper } from './datos.style';
 
 const { Content } = Layout;
