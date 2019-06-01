@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Icon } from 'antd';
+// import { Icon } from 'antd';
 import Input, { Textarea } from '../uielements/input';
-import Upload from '../uielements/upload';
-import notification from '../notification';
+// import Upload from '../uielements/upload';
+// import notification from '../notification';
 import { DatosCardWrapper } from './formSala.style';
 import { updateUser } from '../../redux/sousers/actions'
 // import './upload.css';

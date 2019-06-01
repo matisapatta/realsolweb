@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Layout, Icon } from 'antd';
-import Button from '../../components/uielements/button';
+import { Layout, 
+    // Icon 
+} from 'antd';
+// import Button from '../../components/uielements/button';
 import FormSala from '../../components/datossala/formSala';
 import { DatosSalaWrapper } from './createsala.style';
 
@@ -9,9 +11,9 @@ const { Content } = Layout;
 
 class CreateSala extends Component {
 
-    constructor(props) {
-        super(props)
-    }
+    // constructor(props) {
+    //     super(props)
+    // }
 
     render() {
         return (

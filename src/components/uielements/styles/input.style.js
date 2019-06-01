@@ -7,6 +7,11 @@ import {
 } from '../../../config/style-util';
 
 const BigInputWrapper = ComponentName => styled(ComponentName)`
+@media (max-width: 700px) {
+  &.ant-input {
+    font-size: 13px;
+  }
+}
   &.ant-input {
     padding: 4px 10px;
     width: 100%;
@@ -58,13 +63,14 @@ const BigInputWrapper = ComponentName => styled(ComponentName)`
 `;
 
 const InputWrapper = ComponentName => styled(ComponentName)`
+
   &.ant-input {
     padding: 4px 10px;
     width: 100%;
     height: 35px;
     cursor: text;
     text-align: ${props => (props['data-rtl'] === 'rtl' ? 'right' : 'left')};
-    font-size: 13px;
+    font-size: 16px; //13px
     line-height: 1.5;
     color: ${palette('text', 1)};
     background-color: #fff;
@@ -72,7 +78,11 @@ const InputWrapper = ComponentName => styled(ComponentName)`
     border: 1px solid ${palette('border', 0)};
     ${borderRadius('4px')};
     ${transition()};
-
+    @media (max-width: 600px) {
+      &.ant-input {
+        font-size: 16px;
+      }
+    }
     &:focus {
       border-color: ${palette('primary', 0)};
     }

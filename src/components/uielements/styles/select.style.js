@@ -8,7 +8,12 @@ const AntSelect = ComponentName => styled(ComponentName)`
     display: inline-block;
     position: relative;
     color: ${palette('text', 1)};
-    font-size: 20px; // 13px
+    font-size: 16px; // 13px
+    @media (max-width: 600px) {
+      &.ant-select {
+        font-size: 16px;
+      }
+    }
 
     .ant-select-selection {
       background-color: #fff;
@@ -17,7 +22,7 @@ const AntSelect = ComponentName => styled(ComponentName)`
       ${transition()};
 
       &.ant-select-selection--single {
-        height: 45px; // 33px
+        height: 40px; // 33px
         position: relative;
         cursor: pointer;
       }
@@ -25,7 +30,7 @@ const AntSelect = ComponentName => styled(ComponentName)`
       .ant-select-selection__rendered {
         margin-left: 10px;
         margin-right: 10px;
-        line-height: 45px; // 33px
+        line-height: 40px; // 33px
 
         .ant-select-selection-selected-value {
           float: ${props => (props['data-rtl'] === 'rtl' ? 'right' : 'left')};

@@ -7,6 +7,7 @@ const siteConfig = {
   footerText: 'Salas OnLine © 2018',
 };
 
+const dateFormat = "DD/MM/YYYY"
 const siteTitle = "SALAS ONLINE"
 
 const locations = [
@@ -133,5 +134,6 @@ export {
   googleConfig,
   mapboxConfig,
   youtubeSearchApi,
-  locations
+  locations,
+  dateFormat,
 };

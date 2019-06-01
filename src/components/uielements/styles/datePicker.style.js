@@ -6,9 +6,9 @@ const AntDatePicker = ComponentName => styled(ComponentName)`
   .ant-input {
     padding: 4px 10px;
     width: 100%;
-    height: 35px;
+    height: 42px; //35px
     cursor: text;
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1.5;
     color: ${palette('text', 1)};
     background-color: #fff;
