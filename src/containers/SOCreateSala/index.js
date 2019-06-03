@@ -7,6 +7,7 @@ import { Layout,
 import FormSala from '../../components/datossala/formSala';
 import { DatosSalaWrapper } from './createsala.style';
 
+
 const { Content } = Layout;
 
 class CreateSala extends Component {
@@ -31,9 +32,6 @@ class CreateSala extends Component {
                   </Button>
                 </div> */}
                 <FormSala
-                  // user={selectedUser}
-                //   editDatos={updateUser}
-                //   viewMode={!this.state.editView}
                 />
               </Content>
             </Layout>

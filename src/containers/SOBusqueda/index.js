@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import Form from '../../components/uielements/form';
 import Button from '../../components/uielements/button';
-import DatePicker, { DateRangepicker } from '../../components/uielements/datePicker';
+import { DateRangepicker } from '../../components/uielements/datePicker';
 import Select, { SelectOption } from '../../components/uielements/select';
 import { getSalas, testSalaSave } from '../../redux/sosalas/actions';
 import Card from '../../components/uielements/styles/card.style';
@@ -18,14 +18,21 @@ import { Link } from 'react-router-dom'
 import { WRAPPEDURL, locations, dateFormat } from '../../config';
 import { rowStyle, colStyle, gutter } from '../../config/styleConst';
 import { testSala } from '../../testData';
-import { ButtonWrapper } from './gestionsalas.style'
+import { ButtonWrapper } from './busqueda.style'
 import notification from '../../components/notification';
-import moment from 'moment';
+import CardContent from '../../components/cardcontent/cardContent';
+import Modal from '../../components/feedback/modal';
+import GoogleMapReact from 'google-map-react';
+import markerImg from '../../image/marker.png'
+
 
 
 const Option = SelectOption;
 const locationOptions = [];
 
+const Marker = () => (
+  <img src={markerImg} alt="marker" />
+);
 
 class Busqueda extends Component {
 
@@ -40,7 +47,10 @@ class Busqueda extends Component {
       isValid: false,
     },
     search: false,
-    locations: []
+    locations: [],
+    modalVisible: false,
+    modalLoading: false,
+    currentLocation: '',
   }
 
   constructor(props) {
@@ -53,13 +63,15 @@ class Busqueda extends Component {
       })
       : null
   }
-  // componentWillMount() {
-  //   if (this.props.salas == null)
-  //     this.setState({ search: false })
-  //   // else
-  //   //   this.setState({ search: true })
-  //   // this.testSave();
-  // }
+
+  static defaultProps = {
+    center: {
+      lat: -34.5986252,
+      lng: -58.3745519
+    },
+    zoom: 15
+  };
+
 
   testSave = () => {
     this.props.dispatch(testSalaSave(testSala));
@@ -99,6 +111,26 @@ class Busqueda extends Component {
     })
   }
 
+  showModal = () => {
+    this.setState({
+      modalVisible: true,
+    });
+  };
+
+  handleOk = () => {
+    this.setState({ modalLoading: true });
+    setTimeout(() => {
+      this.setState({ modalLoading: false, modalVisible: false });
+    }, 2000);
+  };
+
+  handleClose = () => {
+    this.setState({
+      modalVisible: false,
+      currentLocation: '',
+    });
+  };
+
   validateForm = () => {
     const formData = this.state.formdata;
     let priceValid = false;
@@ -126,22 +158,38 @@ class Busqueda extends Component {
 
   }
 
+  showExtra = (sala) => {
+    return (<a onClick={() => { this.showSalaLocation(sala.name) }}>Mapa</a>)
+  }
+
+  showSalaLocation = (name) => {
+    this.setState({
+      currentLocation: name
+    })
+    this.showModal();
+
+  }
+
   showResults = (data) => {
     return (
       data[0] ?
         (data[0].length > 0) ?
           data[0].map((sala, i) => (
-            <Link to={`${WRAPPEDURL}/sala/${sala._id}`} key={i}>
-              <ContentHolder>
-                <Card
-                  loading={false}
-                  title={`${sala.name}, ${sala.location}`}
-                  style={{ width: '100%' }}
-                >
-                  {sala.description}
-                </Card>
-              </ContentHolder>
-            </Link>
+            // <Link to={`${WRAPPEDURL}/sala/${sala._id}`} key={i}>
+            <ContentHolder key={i}>
+              <Card
+                loading={false}
+                title={<Link to={`${WRAPPEDURL}/sala/${sala._id}`}>{`${sala.name}, ${sala.location}`}</Link>}
+                style={{ width: '100%' }}
+                extra={this.showExtra(sala)}
+              >
+                <CardContent
+                  text={sala.description}
+                  image={sala.mainimage}
+                />
+              </Card>
+            </ContentHolder>
+            // </Link>
           ))
           : <div>No se encontraron coincidencias</div>
         : <div>No se encontraron coincidencias</div>
@@ -164,7 +212,6 @@ class Busqueda extends Component {
 
 
   render() {
-    console.log(this.state)
     return (
       <div>
         <LayoutWrapper>
@@ -213,17 +260,6 @@ class Busqueda extends Component {
                       style={{ "width": '45%', "height": "42px", "marginTop": "16px", "float": "right" }}
                       prefix={<span style={{ color: 'rgba(0,0,0,.25)' }}>$</span>}
                     />
-                    {/* <DatePicker
-                      placeholder="Fecha desde"
-                      style={{ "width": '45%', "marginTop": "16px", "lineHeight": "1" }}
-                      format={dateFormat}
-                      onChange={(event) => this.handleDate(event, 'datefrom')}
-                    />
-                    <DatePicker
-                      placeholder="Fecha hasta"
-                      style={{ "width": '45%', "marginTop": "16px", "lineHeight": "1", "float": "right" }}
-                      format={dateFormat}
-                    /> */}
                     <DateRangepicker
                       placeholder={["Fecha desde", "Fecha hasta"]}
                       style={{ "width": '100%', "marginTop": "16px", "lineHeight": "1" }}
@@ -251,6 +287,33 @@ class Busqueda extends Component {
           </Row>
           {/* Resultados */}
           {this.searchPerformed(this.state.search)}
+          {/* Modal con Mapa */}
+          <Modal
+            visible={this.state.modalVisible}
+            title={this.state.currentLocation}
+            onOk={this.handleOk}
+            onCancel={this.handleClose}
+            footer={[
+              <Button key="back" size="large" type="primary" onClick={this.handleClose}>
+                OK
+              </Button>
+            ]}
+          >
+            <div style={{ height: '400px', width: '100%' }}>
+              <GoogleMapReact
+                // bootstrapURLKeys={{ key: /* YOUR KEY HERE */ }}
+                defaultCenter={this.props.center}
+                defaultZoom={this.props.zoom}
+              >
+                <Marker
+                  lat={-34.5986252}
+                  lng={-58.3745519}
+                />
+              </GoogleMapReact>
+            </div>
+
+          </Modal>
+
         </LayoutWrapper>
       </div>
 

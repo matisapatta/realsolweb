@@ -14,6 +14,7 @@ const Modal = WithDirection(WDModal);
 
 const InputField = InputWrapper(Input);
 
+
 export default class extends Component {
   render() {
     const {
@@ -110,3 +111,5 @@ export default class extends Component {
     );
   }
 }
+
+export { CardContent }

@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import { Icon } from 'antd';
+import { Button } from 'antd';
 import Input, { Textarea } from '../uielements/input';
 // import Upload from '../uielements/upload';
-// import notification from '../notification';
 import { DatosCardWrapper } from './formSala.style';
 import { updateUser } from '../../redux/sousers/actions'
+import { locations } from '../../config';
+import Select, { SelectOption } from '../../components/uielements/select';
+import Modal from '../../components/feedback/modal';
+import ListItem from '../roomslist/roomsList';
+
 // import './upload.css';
 
 // function beforeUpload(file) {
@@ -24,52 +28,89 @@ import { updateUser } from '../../redux/sousers/actions'
 // }
 
 let save = false;
+let locationOptions = [];
 
 class FormSala extends Component {
 
-
-
   state = {
-    fullName: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    note: '',
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/dvdwinden/128.jpg",
-    viewMode: false
-  }
-  componentWillMount() {
-    const user = this.props.user.users
-    this.setState({
-      fullName: `${user.name} ${user.lastname}`,
-      firstName: user.name,
-      lastName: user.lastname,
-      phone: user.phone,
-      note: 'Pepito nota',
-      viewMode: this.props.viewMode
-    })
-  }
-
-
-  handleInput = (type, event) => {
-    switch (type) {
-      case 'firstName':
-        this.setState({ firstName: event.target.value });
-        break;
-      case 'lastName':
-        this.setState({ lastName: event.target.value });
-        break;
-      case 'phone':
-        this.setState({ phone: event.target.value });
-        break;
-      case 'note':
-        this.setState({ note: event.target.value });
-        break;
-      default: null;
-        break;
+    createdSala: {
+      name: '',
+      location: '',
+      mainimage: '',
+      images: [],
+      description: '',
+      rooms: [],
+      ownerId: '',
+      address: '',
+      phoneNumber: '',
+      viewMode: false,
+    },
+    modalVisible: false,
+    tempRoom: {
+      capacity: '',
+      guitar: '',
+      bass: '',
+      drums: ''
     }
 
   }
+
+  constructor(props) {
+    super(props)
+    this.deleteRoom = this.deleteRoom.bind(this);
+    locationOptions.length === 0 ?
+      locations.forEach((element) => {
+        locationOptions.push(<SelectOption key={element}>{element}</SelectOption>);
+      })
+      : null
+  }
+
+
+
+  handleInput = (type, event) => {
+    const newSala = { ...this.state.createdSala }
+    if (type === 'location') {
+      newSala[type] = event;
+    } else {
+      newSala[type] = event.target.value;
+    }
+    this.setState({
+      createdSala: newSala
+    })
+  };
+
+  handleModal = (type, event) => {
+    const newRoom = { ...this.state.tempRoom }
+    newRoom[type] = event.target.value;
+    this.setState({
+      tempRoom: newRoom
+    })
+  };
+
+  clearTempRoom = () => {
+    let clearedRoom = {
+      capacity: '',
+      guitar: '',
+      bass: '',
+      drums: ''
+    }
+    this.setState({ tempRoom: clearedRoom })
+  }
+
+  handleOk = () => {
+    const newSala = { ...this.state.createdSala }
+    newSala.rooms.push(this.state.tempRoom);
+    this.setState({ modalVisible: false, createdSala: newSala });
+    this.clearTempRoom();
+  };
+
+  handleClose = () => {
+    this.setState({
+      modalVisible: false,
+    });
+    this.clearTempRoom();
+  };
+
 
   saveUser = (user) => {
     this.props.dispatch(updateUser(user));
@@ -91,12 +132,101 @@ class FormSala extends Component {
     }
   }
 
+  showModal = () => {
+    return (
+      <Modal
+        visible={this.state.modalVisible}
+        title="Agregar sala"
+        onOk={this.handleOk}
+        onCancel={this.handleClose}
+        footer={[
+          <Button key="back" size="large" onClick={this.handleClose}>
+            Cancelar
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            size="large"
+            // loading={this.state.loading}
+            onClick={this.handleOk}
+          >
+            Guardar
+          </Button>
+        ]}
+      >
+        <div style={{ height: '400px', width: '100%' }}>
+          <DatosCardWrapper className="isoContactCard">
+            <div className="isoContactInfoWrapper">
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Capacidad</p>
+                <Input
+                  placeholder="Capacidad de la sala"
+                  type="number"
+                  value={this.state.tempRoom.capacity}
+                  onChange={event => this.handleModal('capacity', event)}
+                />
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Equipo de guitarra</p>
+                <Input
+                  placeholder="Ej. Fender, Marshall"
+                  value={this.state.tempRoom.guitar}
+                  onChange={event => this.handleModal('guitar', event)}
+                />
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Equipo de bajo</p>
+                <Input
+                  placeholder="Ej. Wenstone, GK"
+                  value={this.state.tempRoom.bass}
+                  onChange={event => this.handleModal('bass', event)}
+                />
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Batería</p>
+                <Input
+                  placeholder="Ej. Sonor, Tama"
+                  value={this.state.tempRoom.drums}
+                  onChange={event => this.handleModal('drums', event)}
+                />
+              </div>
+            </div>
+          </DatosCardWrapper>
+        </div>
+      </Modal>
+    )
+  }
+
+  deleteRoom = (key) => {
+    const newSala = { ...this.state.createdSala }
+    newSala.rooms.splice(key,1);
+    this.setState({ createdSala: newSala });
+  }
+
+  showRooms = () => {
+    const rooms = this.state.createdSala.rooms;
+    return (
+      rooms.length > 0 ?
+        rooms.map((item, i) => (
+          <div className="isoContactCardInfosList" key={i}>
+            <ListItem 
+              title={`Sala ${i+1}`}
+              clickHandler={this.deleteRoom}
+              index={i}
+            />
+            
+          </div>
+        ))
+        : null
+    )
+  }
+
+
+
 
   render() {
-    const user = this.state;
     const viewMode = this.props.viewMode
-    this.toggleAndSave(viewMode) 
-
+    this.toggleAndSave(viewMode)
     return (
       <DatosCardWrapper className="isoContactCard">
         {/* <div className="isoContactCardHead">
@@ -123,20 +253,30 @@ class FormSala extends Component {
           <div className="isoContactCardInfos">
             <p className="isoInfoLabel">Nombre</p>
             <Input
-              placeholder="Nombre"
-              value={this.state.firstName}
-              onChange={event => this.handleInput('firstName', event)}
-              disabled={viewMode}
+              placeholder="Nombre de la sala"
+              value={this.state.createdSala.name}
+              onChange={event => this.handleInput('name', event)}
             />
           </div>
-
           <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Apellido</p>
-            <Input
-              placeholder="Apellido"
-              value={this.state.lastName}
-              onChange={event => this.handleInput('lastName', event)}
-              disabled={viewMode}
+            <p className="isoInfoLabel">Ubicación</p>
+            <Select
+              style={{ "width": '100%', "height": "42px", "marginTop": "15px" }}
+              placeholder="Localidad"
+              // value={this.state.formdata.location}
+              onChange={(event) => this.handleInput('location', event)}
+            >
+              {locationOptions}
+            </Select>
+          </div>
+          <div className="isoContactCardInfos">
+            <p className="isoInfoLabel">Descripción</p>
+            <Textarea
+              placeholder="Descripcion"
+              value={this.state.createdSala.description}
+              type="textarea"
+              rows={5}
+              onChange={event => this.handleInput('description', event)}
             />
           </div>
 
@@ -145,25 +285,33 @@ class FormSala extends Component {
             <Input
               type="number"
               placeholder="Teléfono"
-              value={this.state.phone}
+              value={this.state.createdSala.phone}
               onChange={event => this.handleInput('phone', event)}
-              disabled={viewMode}
             />
           </div>
+          <div className="isoContactCardInfos">
+            <p className="isoInfoLabel">Dirección</p>
+            <Input
+              placeholder="Dirección"
+              value={this.state.createdSala.address}
+              onChange={event => this.handleInput('address', event)}
+            />
+          </div>
+          <div className="isoContactCardInfos">
+            <p className="isoInfoLabel">Salas Disponibles</p>
+            <Button onClick={() => { this.setState({ modalVisible: true }) }}>Agregar</Button>
+          </div>
+
+          {this.showRooms()}
 
           <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Notas</p>
-            <Textarea
-              placeholder="Notas"
-              value={this.state.note}
-              type="textarea"
-              rows={5}
-              onChange={event => this.handleInput('note', event)}
-              disabled={viewMode}
-            />
+            <p className="isoInfoLabel">Logo</p>
+          </div>
+          <div className="isoContactCardInfos">
+            <p className="isoInfoLabel">Imágenes</p>
           </div>
         </div>
-
+        {this.showModal()}
       </DatosCardWrapper>
     );
   }

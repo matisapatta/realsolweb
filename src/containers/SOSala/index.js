@@ -3,16 +3,13 @@ import { getSalaDetail } from '../../redux/sosalas/actions';
 import { connect } from 'react-redux'
 import Button from '../../components/uielements/button';
 import SalaPageWrapper from './sala.style';
-import Carousels from '../../components/uielements/carousel';
 import ContentHolder from '../../components/utility/contentHolder';
-import CarouselWrapper from './carousel.style';
 import { SingleCardWrapper } from './room.style';
+import "react-image-gallery/styles/css/image-gallery.css";
+import ImageGallery from 'react-image-gallery';
+// import Gallery from 'react-grid-gallery'
 
-const Carousel = props => (
-    <CarouselWrapper>
-        <Carousels {...props} />
-    </CarouselWrapper>
-);
+
 
 
 
@@ -54,14 +51,13 @@ class SalaDetail extends Component {
 
         )
     }
-    
+
     componentDidMount() {
         this.props.dispatch(getSalaDetail(this.props.match.params.id))
     }
 
-
     showInfo = (sala) => {
-
+        
         return (
             sala ?
                 <SalaPageWrapper className="">
@@ -73,10 +69,15 @@ class SalaDetail extends Component {
                         <div className="isoHorizontalContent">
                             {sala.description}
                         </div>
-                        <ContentHolder>
-                            <Carousel autoplay rtl>
-                                {this.imagesCarousel(sala.images)}
-                            </Carousel>
+                        <ContentHolder style={{
+                            height: "auto",
+                            width:"100%",
+                        }}>
+                            <ImageGallery 
+                            items={sala.images}
+                            showFullscreenButton={false}
+                            showPlayButton={false}
+                            />
                         </ContentHolder>
                         <h3 className="isoTitle" style={{ textTransform: "uppercase" }}>SALAS DISPONIBLES: </h3>
                         {this.loadRooms(sala.rooms)}

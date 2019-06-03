@@ -30,7 +30,7 @@ const WDButtonWrapper = styled.div`
         background-color: ${palette('primary', 0)};
         border: 0;
         outline: 0;
-        height: 30px;
+        height: 50px;
         padding: 0 15px;
         margin-right: ${props => (props['data-rtl'] === 'rtl' ? '0' : '10px')};
         margin-left: ${props => (props['data-rtl'] === 'rtl' ? '10px' : '0')};

@@ -51,7 +51,7 @@ class AppRouter extends React.Component {
           path={`${url}/editsala/:id`}
           component={asyncComponent(() => import('../SOEditSala'))}
         />
-                <Route
+        <Route
           exact
           path={`${url}/createsala/`}
           component={asyncComponent(() => import('../SOCreateSala'))}

@@ -113,7 +113,7 @@ const WDDatosCardWrapper = styled.div`
         }
 
         &::after {
-          content: ':';
+          //content: ':';
           position: absolute;
           right: ${props => (props['data-rtl'] === 'rtl' ? 'inherit' : '0')};
           left: ${props => (props['data-rtl'] === 'rtl' ? '0' : 'inherit')};

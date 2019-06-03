@@ -5,15 +5,12 @@ import { Link } from 'react-router-dom';
 import { Layout } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Menu from '../../components/uielements/menu';
-// import IntlMessages from '../../components/utility/intlMessages';
 import SidebarWrapper from './sidebar.style';
 
 import appActions from '../../redux/app/actions';
 import Logo from '../../components/utility/logo';
 import { rtl } from '../../config/withDirection';
 
-// const SubMenu = Menu.SubMenu;
-// const MenuItemGroup = Menu.ItemGroup;
 const { Sider } = Layout;
 
 const {
@@ -80,9 +77,6 @@ class Sidebar extends Component {
   }
 
   componentWillUnmount() {
-    // this.props.app.current = null;
-    // this.props.app.openKeys = null;
-    // console.log(this.props);
   }
   componentWillMount() {
 
@@ -115,10 +109,6 @@ class Sidebar extends Component {
     const styling = {
       backgroundColor: customizedTheme.backgroundColor
     };
-    // const submenuStyle = {
-    //   backgroundColor: 'rgba(0,0,0,0.3)',
-    //   color: customizedTheme.textColor
-    // };
     const submenuColor = {
       color: customizedTheme.textColor
     };
@@ -189,7 +179,7 @@ class Sidebar extends Component {
 
 
               {/* Solapas del dueño de sala */}
-              {this.props.user.users.role === 1 ?
+              {this.props.user.users.role === 1 || this.props.user.users.role === 2 ?
                 <Menu.Item key="gestionsalas">
                   <Link to={`${url}/gestionsalas`}>
                     <span className="isoMenuHolder" style={submenuColor}>
@@ -202,7 +192,7 @@ class Sidebar extends Component {
                 </Menu.Item>
                 : null}
 
-              {this.props.user.users.role === 1 ?
+              {this.props.user.users.role === 1 || this.props.user.users.role === 2 ?
                 <Menu.Item key="gestionreservas">
                   <Link to={`${url}/gestionreservas`}>
                     <span className="isoMenuHolder" style={submenuColor}>
@@ -215,7 +205,7 @@ class Sidebar extends Component {
                 </Menu.Item>
                 : null}
 
-              {this.props.user.users.role === 1 ?
+              {this.props.user.users.role === 1 || this.props.user.users.role === 2 ?
                 <Menu.Item key="datossala">
                   <Link to={`${url}/datossala`}>
                     <span className="isoMenuHolder" style={submenuColor}>
