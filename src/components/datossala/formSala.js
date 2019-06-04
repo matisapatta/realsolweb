@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
 import Input, { Textarea } from '../uielements/input';
-// import Upload from '../uielements/upload';
 import { DatosCardWrapper } from './formSala.style';
 import { updateUser } from '../../redux/sousers/actions'
 import { locations } from '../../config';
 import Select, { SelectOption } from '../../components/uielements/select';
 import Modal from '../../components/feedback/modal';
 import ListItem from '../roomslist/roomsList';
+import GalleryUploader from '../../components/galleryUploader'
+
+import axios from 'axios'
 
 // import './upload.css';
 
@@ -58,6 +60,8 @@ class FormSala extends Component {
   constructor(props) {
     super(props)
     this.deleteRoom = this.deleteRoom.bind(this);
+    this.upload = this.upload.bind(this);
+    this.dummyRequest = this.dummyRequest.bind(this);
     locationOptions.length === 0 ?
       locations.forEach((element) => {
         locationOptions.push(<SelectOption key={element}>{element}</SelectOption>);
@@ -199,7 +203,7 @@ class FormSala extends Component {
 
   deleteRoom = (key) => {
     const newSala = { ...this.state.createdSala }
-    newSala.rooms.splice(key,1);
+    newSala.rooms.splice(key, 1);
     this.setState({ createdSala: newSala });
   }
 
@@ -209,19 +213,34 @@ class FormSala extends Component {
       rooms.length > 0 ?
         rooms.map((item, i) => (
           <div className="isoContactCardInfosList" key={i}>
-            <ListItem 
-              title={`Sala ${i+1}`}
+            <ListItem
+              title={`Sala ${i + 1}`}
               clickHandler={this.deleteRoom}
               index={i}
             />
-            
+
           </div>
         ))
         : null
     )
   }
 
+  upload = (file) => {
+    const send = file;
+    console.log(send)
+    axios.post('/api/upload', send, 
+    // {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    //   }}
+    )
+  }
 
+  dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
 
 
   render() {
@@ -307,9 +326,22 @@ class FormSala extends Component {
           <div className="isoContactCardInfos">
             <p className="isoInfoLabel">Logo</p>
           </div>
+          <GalleryUploader
+            maxFiles={1}
+            action={this.upload}
+            customRequest={this.dummyRequest}
+          />
           <div className="isoContactCardInfos">
             <p className="isoInfoLabel">Imágenes</p>
           </div>
+          {/* <div className="isoContactCardInfos"> */}
+          <GalleryUploader
+            maxFiles={5}
+            action={this.upload}
+            customRequest={this.dummyRequest}
+          />
+          {/* </div> */}
+
         </div>
         {this.showModal()}
       </DatosCardWrapper>
