@@ -50,6 +50,10 @@ class editDatosView extends Component {
     })
   }
 
+  dummy = () => {
+
+  }
+
 
   handleInput = (type, event) => {
     switch (type) {
@@ -65,7 +69,7 @@ class editDatosView extends Component {
       case 'note':
         this.setState({ note: event.target.value });
         break;
-      default: null;
+      default: this.dummy();
         break;
     }
 
@@ -95,7 +99,7 @@ class editDatosView extends Component {
   render() {
     const user = this.state;
     const viewMode = this.props.viewMode
-    this.toggleAndSave(viewMode) 
+    this.toggleAndSave(viewMode)
 
     return (
       <DatosCardWrapper className="isoContactCard">

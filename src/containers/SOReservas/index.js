@@ -114,7 +114,9 @@ class Reservas extends Component {
           selectedData={selectedData}
           setModalData={this.setModalData}
         />
-        <DnDCalendar {...calendarOptions} />
+        <DnDCalendar 
+        {...calendarOptions} 
+        />
       </CalendarStyleWrapper>
     );
   }

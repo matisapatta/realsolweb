@@ -129,7 +129,7 @@ const WDDatosCardWrapper = styled.div`
         text-align: ${props => (props['data-rtl'] === 'rtl' ? 'right' : 'left')};
       }
 
-      input {
+      >input {
         font-size: 14px;
         font-weight: 400;
         color: ${palette('text', 1)};
@@ -144,7 +144,7 @@ const WDDatosCardWrapper = styled.div`
         ${boxShadow('none')};
         ${borderRadius('3px')};
         ${transition()};
-
+        
         &:focus {
           border-color: ${palette('primary', 0)};
           ${boxShadow('0 0 0 2px rgba(68, 130, 255, 0.2)')};

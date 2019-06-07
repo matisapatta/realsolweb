@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'antd';
+// import { Button } from 'antd';
+import Button from '../../components/uielements/button';
 import Input, { Textarea } from '../uielements/input';
 import { DatosCardWrapper } from './formSala.style';
 import { updateUser } from '../../redux/sousers/actions'
-import { locations } from '../../config';
+import { locations, days, hours } from '../../config';
 import Select, { SelectOption } from '../../components/uielements/select';
 import Modal from '../../components/feedback/modal';
 import ListItem from '../roomslist/roomsList';
@@ -31,6 +32,8 @@ import axios from 'axios'
 
 let save = false;
 let locationOptions = [];
+let daysOptions = [];
+let hoursOptions = [];
 
 class FormSala extends Component {
 
@@ -42,6 +45,7 @@ class FormSala extends Component {
       images: [],
       description: '',
       rooms: [],
+      days: [],
       ownerId: '',
       address: '',
       phoneNumber: '',
@@ -66,15 +70,32 @@ class FormSala extends Component {
       locations.forEach((element) => {
         locationOptions.push(<SelectOption key={element}>{element}</SelectOption>);
       })
-      : null
+      : this.dummy()
+    daysOptions.length === 0 ?
+      days.forEach((element, i) => {
+        daysOptions.push(<SelectOption key={i}>{element}</SelectOption>);
+      })
+      : this.dummy()
+    hoursOptions.length === 0 ?
+      hours.forEach((element, i) => {
+        hoursOptions.push(<SelectOption key={element}>{element}</SelectOption>);
+      })
+      : this.dummy()
+
   }
 
+  dummy = () => {
 
+  }
 
   handleInput = (type, event) => {
     const newSala = { ...this.state.createdSala }
     if (type === 'location') {
       newSala[type] = event;
+    } else if (type === 'days') {
+      let arr = event.sort();
+      newSala[type] = arr;
+      // newSala[type] = event;
     } else {
       newSala[type] = event.target.value;
     }
@@ -136,6 +157,39 @@ class FormSala extends Component {
     }
   }
 
+
+  renderDays = (item) => {
+    switch (+item) {
+      case 0:
+        console.log("llego a 0")
+        return (
+          <div key={item}>Domingo</div>
+          )
+      case 1:
+        return (<div key={item}>Lunes</div>)
+      case 2:
+        return (<div key={item}>Martes</div>)
+      case 3:
+        return (<div key={item}>Miércoles</div>)
+      case 4:
+        return (<div key={item}>Jueves</div>)
+      case 5:
+        return (<div key={item}>Viernes</div>)
+      case 6:
+        return (<div key={item}>Sábado</div>)
+      default: return (<div>gfhfghfghfghf</div>)
+    }
+  }
+
+  showDays = (receiveddays) => {
+    return (
+      receiveddays.map((item, i) => (
+        <div>{this.renderDays(item)}</div>
+      ))
+    )
+  }
+
+
   showModal = () => {
     return (
       <Modal
@@ -168,6 +222,7 @@ class FormSala extends Component {
                   type="number"
                   value={this.state.tempRoom.capacity}
                   onChange={event => this.handleModal('capacity', event)}
+                  className="styledInput"
                 />
               </div>
               <div className="isoContactCardInfos">
@@ -228,11 +283,11 @@ class FormSala extends Component {
   upload = (file) => {
     const send = file;
     console.log(send)
-    axios.post('/api/upload', send, 
-    // {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }}
+    axios.post('/api/upload', send,
+      // {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data'
+      //   }}
     )
   }
 
@@ -244,9 +299,11 @@ class FormSala extends Component {
 
 
   render() {
+    console.log(this.state)
     const viewMode = this.props.viewMode
     this.toggleAndSave(viewMode)
     return (
+
       <DatosCardWrapper className="isoContactCard">
         {/* <div className="isoContactCardHead">
           <div className="isoPersonImage">
@@ -280,7 +337,7 @@ class FormSala extends Component {
           <div className="isoContactCardInfos">
             <p className="isoInfoLabel">Ubicación</p>
             <Select
-              style={{ "width": '100%', "height": "42px", "marginTop": "15px" }}
+              style={{ "width": '100%', "height": "42px", "marginTop": "15px", "fontSize": "14px" }}
               placeholder="Localidad"
               // value={this.state.formdata.location}
               onChange={(event) => this.handleInput('location', event)}
@@ -317,6 +374,18 @@ class FormSala extends Component {
             />
           </div>
           <div className="isoContactCardInfos">
+            <p className="isoInfoLabel">Abierto</p>
+            <Select
+              mode='multiple'
+              style={{ "width": '100%', "height": "40px", "marginTop": "15px", "fontSize": "14px" }}
+              placeholder="Días abiertos"
+              onChange={(event) => this.handleInput('days', event)}
+            >
+              {daysOptions}
+            </Select>
+          </div>
+            {this.showDays(this.state.createdSala.days)}
+          <div className="isoContactCardInfos">
             <p className="isoInfoLabel">Salas Disponibles</p>
             <Button onClick={() => { this.setState({ modalVisible: true }) }}>Agregar</Button>
           </div>
@@ -345,6 +414,7 @@ class FormSala extends Component {
         </div>
         {this.showModal()}
       </DatosCardWrapper>
+
     );
   }
 }

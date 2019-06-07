@@ -61,7 +61,7 @@ class Busqueda extends Component {
       locations.forEach((element) => {
         locationOptions.push(<Option key={element}>{element}</Option>);
       })
-      : null
+      : this.dummy()
   }
 
   static defaultProps = {
@@ -72,7 +72,9 @@ class Busqueda extends Component {
     zoom: 15
   };
 
+  dummy = () => {
 
+  }
   testSave = () => {
     this.props.dispatch(testSalaSave(testSala));
 

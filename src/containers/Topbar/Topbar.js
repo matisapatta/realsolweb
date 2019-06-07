@@ -23,7 +23,7 @@ class Topbar extends Component {
       topName: props.user.users.name,
       topLastName: props.user.users.lastname
     }
-    : null
+    : this.dummy()
   }
   // componentWillMount() {
 
@@ -34,6 +34,9 @@ class Topbar extends Component {
   //     })
   //     : null
   // }
+  dummy = () => {
+
+  }
 
   showUser = (user) => {
     return (

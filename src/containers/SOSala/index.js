@@ -7,6 +7,8 @@ import ContentHolder from '../../components/utility/contentHolder';
 import { SingleCardWrapper } from './room.style';
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from 'react-image-gallery';
+import { Link } from 'react-router-dom'
+import { WRAPPEDURL } from '../../config';
 // import Gallery from 'react-grid-gallery'
 
 
@@ -25,6 +27,7 @@ class SalaDetail extends Component {
     )
 
     loadRooms = (rooms) => {
+        console.log(this.props)
         const listClass = `isoSingleCard card list`;
         return (
             rooms ?
@@ -42,9 +45,11 @@ class SalaDetail extends Component {
                                 Capacidad de la sala: {item.capacity}
                             </span>
                         </div>
-                        <Button className="isoReserveBtn isoControlBtn" type="primary" icon="calendar">
-                            RESERVAR
+                        <Link to={`${WRAPPEDURL}/sala/${this.props.sala.currentSala._id}/reservar`}>
+                            <Button className="isoReserveBtn isoControlBtn" type="primary" icon="calendar">
+                                RESERVAR
                         </Button>
+                        </Link>
                     </SingleCardWrapper>
                 ))
                 : null
@@ -57,7 +62,7 @@ class SalaDetail extends Component {
     }
 
     showInfo = (sala) => {
-        
+
         return (
             sala ?
                 <SalaPageWrapper className="">
@@ -71,12 +76,12 @@ class SalaDetail extends Component {
                         </div>
                         <ContentHolder style={{
                             height: "auto",
-                            width:"100%",
+                            width: "100%",
                         }}>
-                            <ImageGallery 
-                            items={sala.images}
-                            showFullscreenButton={false}
-                            showPlayButton={false}
+                            <ImageGallery
+                                items={sala.images}
+                                showFullscreenButton={false}
+                                showPlayButton={false}
                             />
                         </ContentHolder>
                         <h3 className="isoTitle" style={{ textTransform: "uppercase" }}>SALAS DISPONIBLES: </h3>

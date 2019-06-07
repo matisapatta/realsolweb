@@ -28,6 +28,11 @@ class AppRouter extends React.Component {
           path={`${url}/sala/:id`}
           component={asyncComponent(() => import('../SOSala'))}
         />
+                <Route
+          exact
+          path={`${url}/sala/:id/reservar`}
+          component={asyncComponent(() => import('../SOCreateReserva'))}
+        />
         <Route
           exact
           path={`${url}/logout`}
