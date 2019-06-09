@@ -125,6 +125,25 @@ export function testSalaSave(sala) {
     }
 }
 
+export function saveSala(sala) {
+    const request = axios.post(`/api/savesala`, sala)
+    
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let sala = data.success ? data.sala : null;
+            let response = {
+                success: data.success,
+                sala
+            }
+            dispatch({
+                type: 'SAVE_SALA',
+                payload: response
+            })
+        })
+    }
+}
+
+
 export function getCurrentState() {
     return {
         type: 'GET_CURRENT_STATE',

@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router'
 // import { Button } from 'antd';
 import Button from '../../components/uielements/button';
 import Input, { Textarea } from '../uielements/input';
-import { DatosCardWrapper } from './formSala.style';
+import { DatosCardWrapper, ButtonWrapper } from './formSala.style';
 import { updateUser } from '../../redux/sousers/actions'
-import { locations, days, hours } from '../../config';
+import { locations, days, hours, WRAPPEDURL } from '../../config';
 import Select, { SelectOption } from '../../components/uielements/select';
 import Modal from '../../components/feedback/modal';
 import ListItem from '../roomslist/roomsList';
 import GalleryUploader from '../../components/galleryUploader'
+import { saveSala } from '../../redux/sosalas/actions';
+import Spins from '../../components/uielements/spin';
+import notification from '../../components/notification';
+
 
 import axios from 'axios'
 
@@ -46,10 +51,10 @@ class FormSala extends Component {
       description: '',
       rooms: [],
       days: [],
-      ownerId: '',
+      ownerId: this.props.user.users.id,
       address: '',
       phoneNumber: '',
-      viewMode: false,
+      // viewMode: false,
     },
     modalVisible: false,
     tempRoom: {
@@ -57,14 +62,16 @@ class FormSala extends Component {
       guitar: '',
       bass: '',
       drums: ''
-    }
+    },
+    loading: this.props.loading,
 
   }
 
   constructor(props) {
     super(props)
     this.deleteRoom = this.deleteRoom.bind(this);
-    this.upload = this.upload.bind(this);
+    this.uploadPic = this.uploadPic.bind(this);
+    this.uploadProfile = this.uploadProfile.bind(this);
     this.dummyRequest = this.dummyRequest.bind(this);
     locationOptions.length === 0 ?
       locations.forEach((element) => {
@@ -81,6 +88,20 @@ class FormSala extends Component {
         hoursOptions.push(<SelectOption key={element}>{element}</SelectOption>);
       })
       : this.dummy()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      this.setState({
+        loading: this.props.salas.loading,
+      })
+      if (this.props.salas.currentSala.success) {
+        notification("success", "La sala se creó correctamente")
+        this.props.history.push(`${WRAPPEDURL}/gestionsalas`)
+      }
+      else
+        notification("error", "Hubo un problema al crear la sala")
+    }
 
   }
 
@@ -103,6 +124,21 @@ class FormSala extends Component {
       createdSala: newSala
     })
   };
+
+  submitForm = (e) => {
+    e.preventDefault();
+    if (this.validateForm()) {
+      this.setState({
+        loading: true
+      })
+      this.props.dispatch(saveSala(this.state.createdSala));
+      // this.setState({ search: true });
+    }
+  }
+
+  validateForm = () => {
+    return true;
+  }
 
   handleModal = (type, event) => {
     const newRoom = { ...this.state.tempRoom }
@@ -161,30 +197,62 @@ class FormSala extends Component {
   renderDays = (item) => {
     switch (+item) {
       case 0:
-        console.log("llego a 0")
         return (
-          <div key={item}>Domingo</div>
-          )
+          <p className="isoInfoLabel">Domingo</p>
+        )
       case 1:
-        return (<div key={item}>Lunes</div>)
+        return (
+          <p className="isoInfoLabel">Lunes</p>
+        )
       case 2:
-        return (<div key={item}>Martes</div>)
+        return (
+          <p className="isoInfoLabel">Martes</p>
+        )
       case 3:
-        return (<div key={item}>Miércoles</div>)
+        return (
+          <p className="isoInfoLabel">Miércoles</p>
+        )
       case 4:
-        return (<div key={item}>Jueves</div>)
+        return (
+          <p className="isoInfoLabel">Jueves</p>
+        )
       case 5:
-        return (<div key={item}>Viernes</div>)
+        return (
+          <p className="isoInfoLabel">Viernes</p>
+        )
       case 6:
-        return (<div key={item}>Sábado</div>)
-      default: return (<div>gfhfghfghfghf</div>)
+        return (
+          <p className="isoInfoLabel">Sábado</p>
+        )
+      default: return (<div></div>)
     }
   }
 
   showDays = (receiveddays) => {
     return (
       receiveddays.map((item, i) => (
-        <div>{this.renderDays(item)}</div>
+        <div className="isoContactCardInfos" key={i}>
+          {this.renderDays(item)}
+          <div style={{ "width": "100%" }}>
+            <Select
+              style={{ "width": '130px', "height": "42px", "marginTop": "15px", "fontSize": "14px", "marginRight": "20px" }}
+              placeholder="Abierto desde"
+              // value={this.state.formdata.location}
+              onChange={(event) => this.handleInput('location', event)}
+            >
+              {hoursOptions}
+            </Select>
+            <Select
+              style={{ "width": '130px', "height": "42px", "marginTop": "15px", "fontSize": "14px", }}
+              placeholder="Abierto hasta"
+              // value={this.state.formdata.location}
+              onChange={(event) => this.handleInput('location', event)}
+            >
+              {hoursOptions}
+            </Select>
+          </div>
+
+        </div>
       ))
     )
   }
@@ -280,15 +348,42 @@ class FormSala extends Component {
     )
   }
 
-  upload = (file) => {
+  uploadPic = (file, name) => {
     const send = file;
-    console.log(send)
-    axios.post('/api/upload', send,
-      // {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data'
-      //   }}
-    )
+    // console.log(this.props)
+    axios.post('/api/upload', {
+      file: send,
+      folder: `${this.props.user.users.id}`,
+      name: `${this.props.user.users.id}-${name}`
+    },
+    ).then(response => {
+      const newCreatedSala = { ...this.state.createdSala }
+      const obj = {
+        original: response.data.pic,
+        thumbnail: response.data.pic
+      }
+      newCreatedSala.images.push(obj)
+      this.setState({
+        createdSala: newCreatedSala
+      })
+    })
+  }
+
+  uploadProfile = (file, name) => {
+    const send = file;
+    // console.log(this.props)
+    axios.post('/api/upload', {
+      file: send,
+      folder: `${this.props.user.users.id}`,
+      name: `${this.props.user.users.id}-${name}`
+    },
+    ).then(response => {
+      const newCreatedSala = { ...this.state.createdSala }
+      newCreatedSala.mainimage = response.data.pic
+      this.setState({
+        createdSala: newCreatedSala
+      })
+    })
   }
 
   dummyRequest = ({ file, onSuccess }) => {
@@ -299,129 +394,121 @@ class FormSala extends Component {
 
 
   render() {
-    console.log(this.state)
+
     const viewMode = this.props.viewMode
     this.toggleAndSave(viewMode)
     return (
+      <div>
+        <Spins spinning={this.state.loading}>
+          <DatosCardWrapper className="isoContactCard">
+            <div className="isoContactInfoWrapper">
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Nombre</p>
+                <Input
+                  placeholder="Nombre de la sala"
+                  value={this.state.createdSala.name}
+                  onChange={event => this.handleInput('name', event)}
+                />
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Ubicación</p>
+                <Select
+                  style={{ "width": '100%', "height": "42px", "marginTop": "15px", "fontSize": "14px" }}
+                  placeholder="Localidad"
+                  // value={this.state.formdata.location}
+                  onChange={(event) => this.handleInput('location', event)}
+                >
+                  {locationOptions}
+                </Select>
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Descripción</p>
+                <Textarea
+                  placeholder="Descripcion"
+                  value={this.state.createdSala.description}
+                  type="textarea"
+                  rows={5}
+                  onChange={event => this.handleInput('description', event)}
+                />
+              </div>
 
-      <DatosCardWrapper className="isoContactCard">
-        {/* <div className="isoContactCardHead">
-          <div className="isoPersonImage">
-            <Upload
-              className="avatar-uploader"
-              name="avatar"
-              showUploadList={false}
-              // beforeUpload={beforeUpload}
-              action=""
-              disabled={viewMode}
-            >
-              {user.avatar ? (
-                <img src={this.state.avatar} alt="" className="avatar" />
-              ) : (
-                  ''
-                )}
-              <Icon type="plus" className="avatar-uploader-trigger" />
-            </Upload>
-          </div>
-          <h1 className="isoPersonName">{`${this.props.user.users.name} ${this.props.user.users.lastname}`}</h1>
-        </div> */}
-        <div className="isoContactInfoWrapper">
-          <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Nombre</p>
-            <Input
-              placeholder="Nombre de la sala"
-              value={this.state.createdSala.name}
-              onChange={event => this.handleInput('name', event)}
-            />
-          </div>
-          <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Ubicación</p>
-            <Select
-              style={{ "width": '100%', "height": "42px", "marginTop": "15px", "fontSize": "14px" }}
-              placeholder="Localidad"
-              // value={this.state.formdata.location}
-              onChange={(event) => this.handleInput('location', event)}
-            >
-              {locationOptions}
-            </Select>
-          </div>
-          <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Descripción</p>
-            <Textarea
-              placeholder="Descripcion"
-              value={this.state.createdSala.description}
-              type="textarea"
-              rows={5}
-              onChange={event => this.handleInput('description', event)}
-            />
-          </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Teléfono</p>
+                <Input
+                  type="number"
+                  placeholder="Teléfono"
+                  value={this.state.createdSala.phoneNumber}
+                  onChange={event => this.handleInput('phoneNumber', event)}
+                />
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Dirección</p>
+                <Input
+                  placeholder="Dirección"
+                  value={this.state.createdSala.address}
+                  onChange={event => this.handleInput('address', event)}
+                />
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Abierto</p>
+                <Select
+                  mode='multiple'
+                  style={{ "width": '100%', "height": "40px", "fontSize": "14px" }}
+                  placeholder="Días abiertos"
+                  onChange={(event) => this.handleInput('days', event)}
+                >
+                  {daysOptions}
+                </Select>
+              </div>
+              {this.showDays(this.state.createdSala.days)}
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Salas Disponibles</p>
+                <Button onClick={() => { this.setState({ modalVisible: true }) }}>Agregar</Button>
+              </div>
 
-          <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Teléfono</p>
-            <Input
-              type="number"
-              placeholder="Teléfono"
-              value={this.state.createdSala.phone}
-              onChange={event => this.handleInput('phone', event)}
-            />
-          </div>
-          <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Dirección</p>
-            <Input
-              placeholder="Dirección"
-              value={this.state.createdSala.address}
-              onChange={event => this.handleInput('address', event)}
-            />
-          </div>
-          <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Abierto</p>
-            <Select
-              mode='multiple'
-              style={{ "width": '100%', "height": "40px", "marginTop": "15px", "fontSize": "14px" }}
-              placeholder="Días abiertos"
-              onChange={(event) => this.handleInput('days', event)}
-            >
-              {daysOptions}
-            </Select>
-          </div>
-            {this.showDays(this.state.createdSala.days)}
-          <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Salas Disponibles</p>
-            <Button onClick={() => { this.setState({ modalVisible: true }) }}>Agregar</Button>
-          </div>
+              {this.showRooms()}
 
-          {this.showRooms()}
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Logo</p>
+              </div>
+              <GalleryUploader
+                maxFiles={1}
+                action={this.uploadProfile}
+                customRequest={this.dummyRequest}
+              />
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Imágenes</p>
+              </div>
+              <GalleryUploader
+                maxFiles={5}
+                action={this.uploadPic}
+                customRequest={this.dummyRequest}
+              />
+              <ButtonWrapper>
+                <div className="isoContainer">
+                  <div className="isoControlBtnGroup">
+                    <Button
+                      type="primary"
+                      onClick={this.submitForm}
+                    >
+                      Guardar
+                </Button>
+                  </div>
+                </div>
+              </ButtonWrapper>
+            </div>
 
-          <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Logo</p>
-          </div>
-          <GalleryUploader
-            maxFiles={1}
-            action={this.upload}
-            customRequest={this.dummyRequest}
-          />
-          <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Imágenes</p>
-          </div>
-          {/* <div className="isoContactCardInfos"> */}
-          <GalleryUploader
-            maxFiles={5}
-            action={this.upload}
-            customRequest={this.dummyRequest}
-          />
-          {/* </div> */}
-
-        </div>
-        {this.showModal()}
-      </DatosCardWrapper>
-
+            {this.showModal()}
+          </DatosCardWrapper>
+        </Spins>
+      </div>
     );
   }
 }
 const mapStateToProps = (state, ownProps) => {
   return {
     user: state.User,
-    sala: state.Sala
+    salas: state.Salas
   }
 }
-export default connect(mapStateToProps)(FormSala);
+export default withRouter(connect(mapStateToProps)(FormSala));

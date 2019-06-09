@@ -20,7 +20,6 @@ class GalleryUploader extends Component {
     };
 
     handleCancel = () => {
-        console.log("borrado")
         this.setState({ previewVisible: false });
     }
 
@@ -35,14 +34,31 @@ class GalleryUploader extends Component {
         });
     };
 
+    base64file = async file => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file);
+        }
+    }
+
+    getImgString = (file) => {
+        this.base64file(file);
+        this.setState({
+            fileSend: file.preview
+        })
+        return true; 
+    }
+
     // handleChange = ({ fileList }) => {
     //     this.props.action(fileList);
     //     this.setState({ fileList });
     // }
 
     handleChange = (info) => {
-        if (info.file.status === "done")
-            this.props.action(info.fileList)
+        if (info.file.status === "done") {
+            // console.log(info.file)
+            this.props.action(info.file.originFileObj.preview,info.file.name)
+        }
+            
         this.setState({ fileList: info.fileList })
     }
 
@@ -51,6 +67,7 @@ class GalleryUploader extends Component {
     }
 
     render() {
+        // console.log(this.state.fileSend)
         const { previewVisible, previewImage, fileList } = this.state;
         const uploadButton = (
             <div>
@@ -63,12 +80,13 @@ class GalleryUploader extends Component {
                 <Upload
                     // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                     // action="/api/upload"
-                    action=""
+                    // action=""
                     listType="picture-card"
                     fileList={fileList}
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
                     customRequest = {this.props.customRequest}
+                    beforeUpload = {this.getImgString}
                     // onSuccess={this.handleSuccess}
                 >
                     {fileList.length >= this.props.maxFiles ? null : uploadButton}

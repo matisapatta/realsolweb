@@ -9,6 +9,8 @@ export default function reducers(state = {}, action) {
             return { ...state, currentSala: action.payload }
         case 'TEST_SALA':
             return { ...state, currentSala: action.payload }
+        case 'SAVE_SALA':
+            return { ...state, currentSala: action.payload, loading: false }
         case 'GET_SALA_OWNER':
             return { ...state, listSalas: action.payload }
         default:

@@ -4,11 +4,11 @@ import { transition, borderRadius } from '../../config/style-util';
 import WithDirection from '../../config/withDirection';
 
 const WDDatosSalaWrapper = styled.div`
-  padding: 50px 35px;
+  padding: 20px 35px;
   display: flex;
 
   @media only screen and (max-width: 767px) {
-    padding: 50px 20px;
+    padding: 20px 20px;
     flex-direction: column;
     height: auto;
   }
