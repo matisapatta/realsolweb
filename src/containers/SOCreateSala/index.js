@@ -10,6 +10,7 @@ import { DatosSalaWrapper } from './createsala.style';
 // import Spins from '../../components/uielements/spin';
 
 
+
 const { Content } = Layout;
 
 const titleStyle = {
@@ -54,7 +55,6 @@ class CreateSala extends Component {
 
     return (
       <div>
-        {/* <Spins spinning={this.state.loading}> */}
         <div style={titleStyle}>
           Creación de sala
         </div>
@@ -78,7 +78,6 @@ class CreateSala extends Component {
             </Content>
           </Layout>
         </DatosSalaWrapper>
-        {/* </Spins> */}
       </div>
 
     )

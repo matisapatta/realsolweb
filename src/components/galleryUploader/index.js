@@ -55,7 +55,6 @@ class GalleryUploader extends Component {
 
     handleChange = (info) => {
         if (info.file.status === "done") {
-            // console.log(info.file)
             this.props.action(info.file.originFileObj.preview,info.file.name)
         }
             

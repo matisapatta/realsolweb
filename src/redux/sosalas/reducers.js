@@ -13,6 +13,8 @@ export default function reducers(state = {}, action) {
             return { ...state, currentSala: action.payload, loading: false }
         case 'GET_SALA_OWNER':
             return { ...state, listSalas: action.payload }
+        case 'CLEAN_PROPS':
+            return { ...state, currentSala: action.payload }
         default:
             return state;
     }

@@ -18,7 +18,7 @@ class ListItem extends Component {
                 <div className="isoCardImage">
                     <img alt="#" src={roomIcon} />
                 </div>
-                <div className="isoCardContent">
+                <div className="isoCardContent" style={{"cursor":"pointer"}}  onClick={()=>{this.props.editRoom(this.props.index)}}>
                     <h3 className="isoCardTitle">{this.props.title}</h3>
                 </div>
                 <button className="isoDeleteBtn" 

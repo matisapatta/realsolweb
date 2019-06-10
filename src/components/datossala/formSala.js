@@ -12,6 +12,7 @@ import Modal from '../../components/feedback/modal';
 import ListItem from '../roomslist/roomsList';
 import GalleryUploader from '../../components/galleryUploader'
 import { saveSala } from '../../redux/sosalas/actions';
+import { initReservations } from '../../redux/soreservations/actions';
 import Spins from '../../components/uielements/spin';
 import notification from '../../components/notification';
 
@@ -51,12 +52,54 @@ class FormSala extends Component {
       description: '',
       rooms: [],
       days: [],
+      open: [
+        {
+          day: "0",
+          from: '',
+          to: ''
+        },
+        {
+          day: "1",
+          from: '',
+          to: ''
+        },
+        {
+          day: "2",
+          from: '',
+          to: ''
+        },
+        {
+          day: "3",
+          from: '',
+          to: ''
+        },
+        {
+          day: "4",
+          from: '',
+          to: ''
+        },
+        {
+          day: "5",
+          from: '',
+          to: ''
+        },
+        {
+          day: "6",
+          from: '',
+          to: ''
+        },
+      ],
       ownerId: this.props.user.users.id,
-      address: '',
+      address: {
+        stringaddress: '',
+        lat:'-34.5986252',
+        lng:'-58.3745519'
+      },
       phoneNumber: '',
       // viewMode: false,
     },
     modalVisible: false,
+    editModalVisible: false,
     tempRoom: {
       capacity: '',
       guitar: '',
@@ -70,6 +113,7 @@ class FormSala extends Component {
   constructor(props) {
     super(props)
     this.deleteRoom = this.deleteRoom.bind(this);
+    this.editRoom = this.editRoom.bind(this);
     this.uploadPic = this.uploadPic.bind(this);
     this.uploadProfile = this.uploadProfile.bind(this);
     this.dummyRequest = this.dummyRequest.bind(this);
@@ -95,8 +139,10 @@ class FormSala extends Component {
       this.setState({
         loading: this.props.salas.loading,
       })
-      if (this.props.salas.currentSala.success) {
+      if (this.props.salas.currentSala) {
         notification("success", "La sala se creó correctamente")
+        // console.log(this.props.salas.currentSala)
+        this.props.dispatch(initReservations(this.props.salas.currentSala.sala))
         this.props.history.push(`${WRAPPEDURL}/gestionsalas`)
       }
       else
@@ -109,7 +155,8 @@ class FormSala extends Component {
 
   }
 
-  handleInput = (type, event) => {
+
+  handleInput = (type, event, i) => {
     const newSala = { ...this.state.createdSala }
     if (type === 'location') {
       newSala[type] = event;
@@ -117,6 +164,12 @@ class FormSala extends Component {
       let arr = event.sort();
       newSala[type] = arr;
       // newSala[type] = event;
+    } else if (type === 'from') {
+      newSala['open'][i].from = event;
+    } else if (type === 'to') {
+      newSala['open'][i].to = event;
+    } else if (type === 'address') {
+      newSala['address'].stringaddress = event.target.value;
     } else {
       newSala[type] = event.target.value;
     }
@@ -132,6 +185,7 @@ class FormSala extends Component {
         loading: true
       })
       this.props.dispatch(saveSala(this.state.createdSala));
+      
       // this.setState({ search: true });
     }
   }
@@ -147,6 +201,18 @@ class FormSala extends Component {
       tempRoom: newRoom
     })
   };
+
+  handleEditModal = (type,event) => {
+    const newRoom = { ...this.state.createdSala }
+    newRoom['rooms'][this.state.editIndex][type] = event.target.value;
+    this.setState({
+      createdSala : newRoom
+    })
+  }
+
+  handleOkEditModal = () => {
+    this.setState({editModalVisible:false})
+  }
 
   clearTempRoom = () => {
     let clearedRoom = {
@@ -168,6 +234,7 @@ class FormSala extends Component {
   handleClose = () => {
     this.setState({
       modalVisible: false,
+      editModalVisible: false,
     });
     this.clearTempRoom();
   };
@@ -238,7 +305,7 @@ class FormSala extends Component {
               style={{ "width": '130px', "height": "42px", "marginTop": "15px", "fontSize": "14px", "marginRight": "20px" }}
               placeholder="Abierto desde"
               // value={this.state.formdata.location}
-              onChange={(event) => this.handleInput('location', event)}
+              onChange={(event) => this.handleInput('from', event, item)}
             >
               {hoursOptions}
             </Select>
@@ -246,7 +313,7 @@ class FormSala extends Component {
               style={{ "width": '130px', "height": "42px", "marginTop": "15px", "fontSize": "14px", }}
               placeholder="Abierto hasta"
               // value={this.state.formdata.location}
-              onChange={(event) => this.handleInput('location', event)}
+              onChange={(event) => this.handleInput('to', event, item)}
             >
               {hoursOptions}
             </Select>
@@ -257,6 +324,74 @@ class FormSala extends Component {
     )
   }
 
+  showEditModal = (i) => (
+
+    this.state.createdSala.rooms[i] ? 
+    // return (
+      <Modal
+        visible={this.state.editModalVisible}
+        title="Editar sala"
+        onOk={this.handleOkEditModal}
+        onCancel={this.handleClose}
+        footer={[
+          <Button key="back" size="large" onClick={this.handleClose}>
+            Cancelar
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            size="large"
+            // loading={this.state.loading}
+            onClick={this.handleOkEditModal}
+          >
+            Guardar
+          </Button>
+        ]}
+      >
+        <div style={{ height: '400px', width: '100%' }}>
+          <DatosCardWrapper className="isoContactCard">
+            <div className="isoContactInfoWrapper">
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Capacidad</p>
+                <Input
+                  placeholder="Capacidad de la sala"
+                  type="number"
+                  value={this.state.createdSala.rooms[i].capacity}
+                  onChange={event => this.handleEditModal('capacity', event)}
+                  className="styledInput"
+                />
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Equipo de guitarra</p>
+                <Input
+                  placeholder="Ej. Fender, Marshall"
+                  value={this.state.createdSala.rooms[i].guitar}
+                  onChange={event => this.handleEditModal('guitar', event)}
+                />
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Equipo de bajo</p>
+                <Input
+                  placeholder="Ej. Wenstone, GK"
+                  value={this.state.createdSala.rooms[i].bass}
+                  onChange={event => this.handleEditModal('bass', event)}
+                />
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Batería</p>
+                <Input
+                  placeholder="Ej. Sonor, Tama"
+                  value={this.state.createdSala.rooms[i].drums}
+                  onChange={event => this.handleEditModal('drums', event)}
+                />
+              </div>
+            </div>
+          </DatosCardWrapper>
+        </div>
+      </Modal>
+      :null
+    // )
+  )
 
   showModal = () => {
     return (
@@ -324,6 +459,10 @@ class FormSala extends Component {
     )
   }
 
+  editRoom = (index) => {
+    this.setState({editModalVisible:true,editIndex:index})
+  }
+
   deleteRoom = (key) => {
     const newSala = { ...this.state.createdSala }
     newSala.rooms.splice(key, 1);
@@ -337,6 +476,7 @@ class FormSala extends Component {
         rooms.map((item, i) => (
           <div className="isoContactCardInfosList" key={i}>
             <ListItem
+              editRoom={this.editRoom}
               title={`Sala ${i + 1}`}
               clickHandler={this.deleteRoom}
               index={i}
@@ -349,6 +489,7 @@ class FormSala extends Component {
   }
 
   uploadPic = (file, name) => {
+    this.setState({loading:true})
     const send = file;
     // console.log(this.props)
     axios.post('/api/upload', {
@@ -364,7 +505,8 @@ class FormSala extends Component {
       }
       newCreatedSala.images.push(obj)
       this.setState({
-        createdSala: newCreatedSala
+        createdSala: newCreatedSala,
+        loading:false
       })
     })
   }
@@ -394,7 +536,7 @@ class FormSala extends Component {
 
 
   render() {
-
+    // console.log(this.state)
     const viewMode = this.props.viewMode
     this.toggleAndSave(viewMode)
     return (
@@ -445,7 +587,7 @@ class FormSala extends Component {
                 <p className="isoInfoLabel">Dirección</p>
                 <Input
                   placeholder="Dirección"
-                  value={this.state.createdSala.address}
+                  value={this.state.createdSala.address.stringaddress}
                   onChange={event => this.handleInput('address', event)}
                 />
               </div>
@@ -480,7 +622,7 @@ class FormSala extends Component {
                 <p className="isoInfoLabel">Imágenes</p>
               </div>
               <GalleryUploader
-                maxFiles={5}
+                maxFiles={6}
                 action={this.uploadPic}
                 customRequest={this.dummyRequest}
               />
@@ -499,6 +641,7 @@ class FormSala extends Component {
             </div>
 
             {this.showModal()}
+            {this.showEditModal(this.state.editIndex)}
           </DatosCardWrapper>
         </Spins>
       </div>

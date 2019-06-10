@@ -11,8 +11,8 @@ const CardContentWrapper = styled.div`
   img {
     object-fit: contain; 
     display: inline-block; 
-    height: 150px;
-    width: 150px;
+    //height: 150px;
+    //width: 150px;
     padding-right: 10px;
   }
 

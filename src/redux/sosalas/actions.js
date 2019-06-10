@@ -37,10 +37,10 @@ import axios from 'axios';
 
 export function getSalas(value) {
     let uri = "/api/getsala?";
-    if(value.name!=='')
-    uri= uri+`&name=${value.name}`;
-    if(value.location!=='')
-    uri= uri+`&location=${value.location}`;
+    if (value.name !== '')
+        uri = uri + `&name=${value.name}`;
+    if (value.location !== '')
+        uri = uri + `&location=${value.location}`;
     const request = axios.get(uri)
     return (dispatch) => {
         request.then(({ data }) => {
@@ -53,7 +53,7 @@ export function getSalas(value) {
     }
 }
 
-export function getSalasOwner(id){
+export function getSalasOwner(id) {
     const request = axios.get(`/api/getsalasowner?id=${id}`)
     return (dispatch) => {
         request.then(({ data }) => {
@@ -112,9 +112,10 @@ export function testSalaSave(sala) {
     const request = axios.post(`/api/testsalasave`, sala)
     return (dispatch) => {
         request.then(({ data }) => {
-            let sala = data.success ? data.sala : null;
+            // let sala = data.success ? data.sala : null;
+            let sala = data.sala ? data.sala : false;
             let response = {
-                success: data.success,
+                // success: data.success,
                 sala
             }
             dispatch({
@@ -125,14 +126,22 @@ export function testSalaSave(sala) {
     }
 }
 
+export function cleanProps() {
+    return ({
+        type: 'CLEAN_PROPS',
+        payload: null
+    })
+}
+
 export function saveSala(sala) {
     const request = axios.post(`/api/savesala`, sala)
-    
+
     return (dispatch) => {
         request.then(({ data }) => {
-            let sala = data.success ? data.sala : null;
+            // let sala = data.success ? data.sala : null;
+            let sala = data.sala ? data.sala : false;
             let response = {
-                success: data.success,
+                // success: data.success,
                 sala
             }
             dispatch({

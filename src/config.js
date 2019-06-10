@@ -148,7 +148,8 @@ const firebaseConfig = {
   messagingSenderId: '',
 };
 const googleConfig = {
-  apiKey: '', //
+  // apiKey: 'AIzaSyDLnk0LYS_ue1sCL2OR5-YCsUpC2gkwiyY', //AIzaSyDLnk0LYS_ue1sCL2OR5-YCsUpC2gkwiyY
+  apiKey: ''
 };
 const mapboxConfig = {
   tileLayer: '',

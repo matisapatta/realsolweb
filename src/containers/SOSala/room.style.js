@@ -8,7 +8,7 @@ const WDSingleCardWrapper = styled.div`
   background-color: #ffffff;
   position: relative;
   margin-bottom: 5px;
-  ${boxShadow('0 0 1px rgba(0,0,0,0.15)')};
+  ${boxShadow('0 0 3px rgba(0,0,0,0.15)')};
 
   .isoCardImage {
     overflow: hidden;
