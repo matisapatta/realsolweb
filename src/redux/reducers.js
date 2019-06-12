@@ -4,6 +4,7 @@ import Box from './box/reducer';
 import Calendar from './calendar/reducer'
 import Salas from './sosalas/reducers';
 import User from './sousers/reducers';
+import Reservations from './soreservations/reducers'
 import ThemeSwitcher from './themeSwitcher/reducer'
 
 
@@ -15,5 +16,6 @@ export default {
   Box,
   ThemeSwitcher,
   Salas,
-  User
+  User,
+  Reservations
 };

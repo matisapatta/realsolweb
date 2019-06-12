@@ -12,6 +12,7 @@ export default function reducers(state = {}, action) {
             return { ...state, users: action.payload }
         case 'UPDATE_USER':
             return { ...state, users: action.payload }
+
         default:
             return state;
     }

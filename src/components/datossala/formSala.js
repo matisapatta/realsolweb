@@ -12,7 +12,6 @@ import Modal from '../../components/feedback/modal';
 import ListItem from '../roomslist/roomsList';
 import GalleryUploader from '../../components/galleryUploader'
 import { saveSala } from '../../redux/sosalas/actions';
-import { initReservations } from '../../redux/soreservations/actions';
 import Spins from '../../components/uielements/spin';
 import notification from '../../components/notification';
 
@@ -89,6 +88,7 @@ class FormSala extends Component {
           to: ''
         },
       ],
+      price:'',
       ownerId: this.props.user.users.id,
       address: {
         stringaddress: '',
@@ -142,7 +142,6 @@ class FormSala extends Component {
       if (this.props.salas.currentSala) {
         notification("success", "La sala se creó correctamente")
         // console.log(this.props.salas.currentSala)
-        this.props.dispatch(initReservations(this.props.salas.currentSala.sala))
         this.props.history.push(`${WRAPPEDURL}/gestionsalas`)
       }
       else
@@ -589,6 +588,17 @@ class FormSala extends Component {
                   placeholder="Dirección"
                   value={this.state.createdSala.address.stringaddress}
                   onChange={event => this.handleInput('address', event)}
+                />
+              </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Precio</p>
+                <Input
+                  type="number"
+                  placeholder="Precio"
+                  value={this.state.createdSala.price}
+                  onChange={event => this.handleInput('price', event)}
+                  prefix={<span style={{ color: 'rgba(0,0,0,.25)'}}>$</span>}
+                  style={{height:"36px"}}
                 />
               </div>
               <div className="isoContactCardInfos">

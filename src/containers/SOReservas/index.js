@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import clone from 'clone';
 import notification from '../../components/notification';
 import ModalEvents from './modalEvents';
-import calendarActions from '../../redux/calendar/actions';
 import { CalendarStyleWrapper } from './calendar.style';
 import DnDCalendar from './DnDCalendar';
-const { changeView, changeEvents } = calendarActions;
+import { getReservationsByUser, deleteReservation } from '../../redux/soreservations/actions'
+import moment from 'moment'
 
 
 const getIndex = (events, selectedEvent) =>
@@ -15,10 +15,61 @@ const getIndex = (events, selectedEvent) =>
 class Reservas extends Component {
 
   state = {
-    view: this.props.view,
+    // view: this.props.view,
+    view: 'month',
     modalVisible: false,
-    selectedData: undefined
+    selectedData: undefined,
+    events: []
   };
+  constructor(props) {
+    super(props)
+    props.dispatch(getReservationsByUser(props.user.users.id))
+  }
+
+
+  componentDidUpdate(prevProps, prevState) {
+
+
+    let events = [];
+    if (prevProps.reservations.userlist) {
+      if (this.props.reservations.userlist !== prevProps.reservations.userlist) {
+        this.props.reservations.userlist.map((item, i) => {
+          const end = moment(new Date(item.timestamp).getTime()).add(item.hours, 'hours');
+          events.push({
+            allDay: false,
+            // start: item.timestamp,
+            // end: end,
+            start: new Date(item.timestamp),
+            end: new Date(end),
+            title: `Reserva en Sala ${item.salaName}`,
+            desc: `Código de Reserva: ${item._id}`,
+            id: item._id,
+          })
+        })
+        this.setState({
+          events
+        })
+      }
+    } else if (this.props.reservations.userlist) {
+      this.props.reservations.userlist.map((item, i) => {
+        const end = moment(new Date(item.timestamp).getTime()).add(item.hours, 'hours');
+        events.push({
+          allDay: false,
+          start: new Date(item.timestamp), // Cosa e mandinga
+          end: new Date(end),
+          title: `Reserva en Sala ${item.salaName}`,
+          desc: `Código de Reserva: ${item._id}`,
+          id: item._id,
+        })
+      })
+      this.setState({
+        events
+      })
+    }
+  }
+
+
+
 
   onSelectEvent = selectedData => {
     this.setState({ modalVisible: 'update', selectedData });
@@ -27,16 +78,17 @@ class Reservas extends Component {
     this.setState({ modalVisible: 'new', selectedData });
   };
   onView = view => {
-    this.props.changeView(view);
+    this.setState({ view: view })
   };
   onEventDrop = newOption => {
     const { event, start, end } = newOption;
-    const events = clone(this.props.events);
+    const events = clone(this.state.events);
     const allDay = new Date(end).getTime() !== new Date(start).getTime();
     const updatedEvent = { ...event, start, end, allDay };
     const index = getIndex(events, updatedEvent);
     events[index] = clone(updatedEvent);
-    this.props.changeEvents(events);
+    // this.props.changeEvents(events);
+    this.setState({ events })
     notification(
       'success',
       'Move event successfully',
@@ -44,8 +96,8 @@ class Reservas extends Component {
     );
   };
   setModalData = (type, selectedData) => {
-    const { changeEvents } = this.props;
-    const events = clone(this.props.events);
+
+    const events = clone(this.state.events);
     const { modalVisible } = this.state;
     if (type === 'cancel') {
       this.setState({
@@ -57,11 +109,16 @@ class Reservas extends Component {
       if (index > -1) {
         events.splice(index, 1);
       }
-      changeEvents(events);
+
+      // Eliminar la reserva
+      this.props.dispatch(deleteReservation(selectedData))
+
       this.setState({
         modalVisible: false,
-        selectedData: undefined
+        selectedData: undefined,
+        events
       });
+
     } else if (type === 'updateValue') {
       this.setState({ selectedData });
     } else {
@@ -73,16 +130,18 @@ class Reservas extends Component {
           events[index] = selectedData;
         }
       }
-      changeEvents(events);
+
       this.setState({
         modalVisible: false,
-        selectedData: undefined
+        selectedData: undefined,
+        events
       });
     }
+
   };
 
   render() {
-    const messages = { 
+    const messages = {
       allDay: 'Todo el día',
       previous: 'Anterior',
       next: 'Siguiente',
@@ -95,8 +154,7 @@ class Reservas extends Component {
       time: 'Hora',
       event: 'Evento',
     };
-    const { view, events } = this.props;
-    const { modalVisible, selectedData } = this.state;
+    const { events, view, modalVisible, selectedData } = this.state;
     const calendarOptions = {
       messages,
       events,
@@ -114,8 +172,8 @@ class Reservas extends Component {
           selectedData={selectedData}
           setModalData={this.setModalData}
         />
-        <DnDCalendar 
-        {...calendarOptions} 
+        <DnDCalendar
+          {...calendarOptions}
         />
       </CalendarStyleWrapper>
     );
@@ -124,8 +182,15 @@ class Reservas extends Component {
 
 function mapStateToProps(state) {
   const { events, view } = state.Calendar.toJS();
-  return { events, view };
+
+  return {
+    events,
+    view,
+    user: state.User,
+    salas: state.Sala,
+    reservations: state.Reservations,
+  };
 }
-export default connect(mapStateToProps, { changeView, changeEvents })(
+export default connect(mapStateToProps)(
   Reservas
 );

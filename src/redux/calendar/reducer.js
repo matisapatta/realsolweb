@@ -1,9 +1,8 @@
 import { Map } from 'immutable';
 import actions from './actions';
-import events from '../../containers/Calendar/demoEvents';
 
 const initState = new Map({
-  events,
+  events: [],
   view: 'month'
 });
 
@@ -13,6 +12,7 @@ export default function calendsrReducer(state = initState, action) {
       return state.set('view', action.view);
     case actions.CALENDAR_EVENTS:
       return state.set('events', action.events);
+      // return state.set('events', null);
     default:
       return state;
   }
