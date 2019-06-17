@@ -3,25 +3,26 @@ import { connect } from 'react-redux';
 import { Icon } from 'antd';
 import Input, { Textarea } from '../uielements/input';
 import Upload from '../uielements/upload';
-import notification from '../notification';
 import { DatosCardWrapper } from './datosCard.style';
 import { updateUser } from '../../redux/sousers/actions'
+import axios from 'axios'
+import { getBase64 } from '../../helpers/utility';
 import './upload.css';
 
-function beforeUpload(file) {
-  const isJPG = file.type === 'image/jpeg';
-  if (!isJPG) {
-    notification('error', 'You can only upload JPG file!', '');
-    return false;
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    notification('error', 'Image must smaller than 2MB!', '');
-    return false;
-  }
-  notification('success', 'Image uploaded successfully!', '');
-  return true;
-}
+// function beforeUpload(file) {
+//   const isJPG = file.type === 'image/jpeg';
+//   if (!isJPG) {
+//     notification('error', 'You can only upload JPG file!', '');
+//     return false;
+//   }
+//   const isLt2M = file.size / 1024 / 1024 < 2;
+//   if (!isLt2M) {
+//     notification('error', 'Image must smaller than 2MB!', '');
+//     return false;
+//   }
+//   notification('success', 'Image uploaded successfully!', '');
+//   return true;
+// }
 
 let save = false;
 
@@ -35,8 +36,13 @@ class editDatosView extends Component {
     lastName: '',
     phone: '',
     note: '',
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/dvdwinden/128.jpg",
+    avatar: '',
     viewMode: false
+  }
+
+  constructor(props) {
+    super(props);
+    this.uploadProfile = this.uploadProfile.bind(this)
   }
   componentWillMount() {
     const user = this.props.user.users
@@ -46,14 +52,30 @@ class editDatosView extends Component {
       lastName: user.lastname,
       phone: user.phone,
       note: 'Pepito nota',
+      avatar: user.avatar,
       viewMode: this.props.viewMode
     })
   }
 
-  dummy = () => {
+  dummyRequest = ({ file, onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
 
+  getImgString = (file) => {
+    this.base64file(file);
+    this.setState({
+      fileSend: file.preview
+    })
+    return true;
   }
 
+  base64file = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file);
+    }
+  }
 
   handleInput = (type, event) => {
     switch (type) {
@@ -89,10 +111,31 @@ class editDatosView extends Component {
         _id: this.props.user.users.id,
         name: this.state.firstName,
         lastname: this.state.lastName,
-        phone: this.state.phone
+        phone: this.state.phone,
+        avatar: this.state.avatar,
       }
       this.saveUser(data);
     }
+  }
+
+  uploadProfile = (file) => {
+    const send = file.file.originFileObj.preview;
+    const name = file.file.originFileObj.name;
+    axios.post('/api/upload', {
+      file: send,
+      folder: `${this.props.user.users.id}`,
+      name: `avatar-${this.props.user.users.id}-${name}`
+    },
+    ).then(response => {
+      // const newUser = { ...this.state.user }
+      // newCreatedSala.mainimage = response.data.pic
+      this.setState({
+        avatar: response.data.pic
+      })
+    })
+  }
+  dummy = () => {
+
   }
 
 
@@ -100,7 +143,8 @@ class editDatosView extends Component {
     const user = this.state;
     const viewMode = this.props.viewMode
     this.toggleAndSave(viewMode)
-
+    // console.log(this.props)
+    // console.log(user)
     return (
       <DatosCardWrapper className="isoContactCard">
         <div className="isoContactCardHead">
@@ -109,9 +153,11 @@ class editDatosView extends Component {
               className="avatar-uploader"
               name="avatar"
               showUploadList={false}
-              beforeUpload={beforeUpload}
+              beforeUpload={this.getImgString}
               action=""
               disabled={viewMode}
+              onChange={this.uploadProfile}
+              customRequest={this.dummyRequest}
             >
               {user.avatar ? (
                 <img src={this.state.avatar} alt="" className="avatar" />
@@ -120,6 +166,18 @@ class editDatosView extends Component {
                 )}
               <Icon type="plus" className="avatar-uploader-trigger" />
             </Upload>
+            {/* <GalleryUploader
+              maxFiles={1}
+              action={this.uploadProfile}
+              customRequest={this.dummyRequest}
+              >
+              {user.avatar ? (
+                <img src={this.state.avatar} alt="" className="avatar" />
+              ) : (
+                  ''
+                )}
+              <Icon type="plus" className="avatar-uploader-trigger" />
+              </GalleryUploader> */}
           </div>
           <h1 className="isoPersonName">{`${this.props.user.users.name} ${this.props.user.users.lastname}`}</h1>
         </div>

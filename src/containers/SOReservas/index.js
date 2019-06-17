@@ -5,7 +5,7 @@ import notification from '../../components/notification';
 import ModalEvents from './modalEvents';
 import { CalendarStyleWrapper } from './calendar.style';
 import DnDCalendar from './DnDCalendar';
-import { getReservationsByUser, deleteReservation } from '../../redux/soreservations/actions'
+import { getReservationsByUser, cancelReservation } from '../../redux/soreservations/actions'
 import moment from 'moment'
 
 
@@ -110,8 +110,12 @@ class Reservas extends Component {
         events.splice(index, 1);
       }
 
-      // Eliminar la reserva
-      this.props.dispatch(deleteReservation(selectedData))
+      // Cancelar la reserva
+      // console.log(this.props.user.users.id)
+      let sendData = { ...selectedData };
+      sendData.userid = this.props.user.users.id;
+      // console.log(sendData)
+      this.props.dispatch(cancelReservation(sendData))
 
       this.setState({
         modalVisible: false,

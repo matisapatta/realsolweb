@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import userpic from '../../image/user1.png';
+import userpic from '../../image/avatar.png';
 import authAction from '../../redux/auth/actions';
 
 const { logout } = authAction;
@@ -26,7 +26,7 @@ class TopbarUser extends Component {
     return (
       <div>
         <div className="isoImgWrapper">
-          <img alt="user" src={userpic} />
+          <img alt="user" src={this.props.avatar || userpic} style={{borderRadius:"50%"}}/>
           <span className="userActivity online" />
         </div>
       </div>

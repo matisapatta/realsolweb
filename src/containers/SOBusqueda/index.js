@@ -140,11 +140,13 @@ class Busqueda extends Component {
       formData.pricefrom = "0";
     if (formData.priceto === '')
       formData.priceto = "0";
-    if (parseInt(formData.pricefrom, 10) > parseInt(formData.priceto, 10)) {
-      notification('error', 'El campo "precio hasta" debe ser mayor al campo "precio desde"', '');
-    } else {
-      priceValid = true;
-    }
+    if(formData.pricefrom !== "0" && formData.priceto!=="0"){
+      if (parseInt(formData.pricefrom, 10) > parseInt(formData.priceto, 10)) {
+        notification('error', 'El campo "precio hasta" debe ser mayor al campo "precio desde"', '');
+      } else {
+        priceValid = true;
+      }
+    } else { priceValid=true}
     if (priceValid)
       return true;
     return false

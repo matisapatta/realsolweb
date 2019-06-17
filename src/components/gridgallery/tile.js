@@ -61,16 +61,19 @@ class Tile extends Component {
         // When tile clicked
         if (this.state.open) {
             tileImgStyle = {
-                width: '62vw',
-                height: '62vw',
+                width: '600px',
+                height: '600px',
                 position: 'absolute',
-                top: '50%',
+                top: '100%',
                 left: '50%',
+                right: '50%',
+                bottom: '50%',
                 margin: '0',
                 marginTop: '-31vw',
                 marginLeft: '-31vw',
                 boxShadow: '0 0 40px 5px rgba(0, 0, 0, 0.3)',
                 transform: 'none',
+                maxHeight: '600px',
             };
         } else {
             tileImgStyle = {

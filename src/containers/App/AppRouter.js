@@ -28,7 +28,7 @@ class AppRouter extends React.Component {
           path={`${url}/sala/:id`}
           component={asyncComponent(() => import('../SOSala'))}
         />
-                <Route
+        <Route
           exact
           path={`${url}/sala/:id/reservar`}
           component={asyncComponent(() => import('../SOCreateReserva'))}
@@ -61,6 +61,12 @@ class AppRouter extends React.Component {
           path={`${url}/createsala/`}
           component={asyncComponent(() => import('../SOCreateSala'))}
         />
+        <Route
+          exact
+          path={`${url}/gestionreservas/`}
+          component={asyncComponent(() => import('../SOGestionReservas'))}
+        />
+
 
       </Switch>
     );

@@ -38,6 +38,9 @@ class SalaDetail extends Component {
                                 Capacidad de la sala: {item.capacity}
                             </span>
                         </div>
+                        <div className="isoControlBtn" style={{fontSize:"30px", width:"100px"}}>
+                            {`$ ${item.price}`}
+                        </div>
                         {/* <Link to={`${WRAPPEDURL}/sala/${this.props.sala.currentSala._id}/reservar`}>
                             <Button className="isoReserveBtn isoControlBtn" type="primary" icon="calendar">
                                 RESERVAR
@@ -56,7 +59,6 @@ class SalaDetail extends Component {
     }
 
     showInfo = (sala) => {
-        // console.log(sala);
         return (
             sala ?
                 <SalaPageWrapper className="">

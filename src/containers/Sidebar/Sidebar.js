@@ -12,6 +12,8 @@ import Logo from '../../components/utility/logo';
 import { rtl } from '../../config/withDirection';
 
 const { Sider } = Layout;
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
 
 const {
   toggleOpenDrawer,
@@ -112,6 +114,11 @@ class Sidebar extends Component {
     const submenuColor = {
       color: customizedTheme.textColor
     };
+    const submenuStyle = {
+      backgroundColor: 'rgba(0,0,0,0.3)',
+      color: customizedTheme.textColor
+    };
+
     return (
       <SidebarWrapper>
         <Sider
@@ -222,17 +229,46 @@ class Sidebar extends Component {
 
               {/* Solapas de Admin */}
               {this.props.user.users.role === 2 ?
-                <Menu.Item key="admin">
-                  <Link to={`${url}/admin`}>
+
+
+                // <Menu.Item key="admin">
+                //   <Link to={`${url}/admin`}>
+                //     <span className="isoMenuHolder" style={submenuColor}>
+                //       <i className="ion-android-settings" />
+                //       <span className="nav-text">
+                //         Administrador
+                //       </span>
+                //     </span>
+                //   </Link>
+                // </Menu.Item>
+                <SubMenu
+                  key="admin"
+                  title={
                     <span className="isoMenuHolder" style={submenuColor}>
                       <i className="ion-android-settings" />
                       <span className="nav-text">
                         Administrador
                       </span>
                     </span>
-                  </Link>
-                </Menu.Item>
+                  }
+                >
+                  <Menu.Item style={submenuStyle} key="adminreservas">
+                    <Link style={submenuColor} to={`${url}/gestionreservas`}>
+                      Administrar reservas
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item style={submenuStyle} key="adminsalas">
+                    <Link style={submenuColor} to={`${url}/gestionsalas`}>
+                      Administrar salas
+                    </Link>
+                  </Menu.Item>
+                </SubMenu>
+
+
                 : null}
+
+
+
 
               <Menu.Item key="logout">
                 <Link to={`${url}/logout`}>

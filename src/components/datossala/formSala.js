@@ -88,14 +88,15 @@ class FormSala extends Component {
           to: ''
         },
       ],
-      price:'',
       ownerId: this.props.user.users.id,
       address: {
         stringaddress: '',
-        lat:'-34.5986252',
-        lng:'-58.3745519'
+        lat: '-34.5986252',
+        lng: '-58.3745519'
       },
       phoneNumber: '',
+      pricefrom: '',
+      priceto: '',
       // viewMode: false,
     },
     modalVisible: false,
@@ -104,7 +105,8 @@ class FormSala extends Component {
       capacity: '',
       guitar: '',
       bass: '',
-      drums: ''
+      drums: '',
+      price: '',
     },
     loading: this.props.loading,
 
@@ -132,9 +134,16 @@ class FormSala extends Component {
         hoursOptions.push(<SelectOption key={element}>{element}</SelectOption>);
       })
       : this.dummy()
+    if (this.props.editSala) {
+      console.log(this.props.editSala)
+      this.state = {
+        createdSala: this.props.currentSala
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
+
     if (prevProps !== this.props) {
       this.setState({
         loading: this.props.salas.loading,
@@ -184,7 +193,7 @@ class FormSala extends Component {
         loading: true
       })
       this.props.dispatch(saveSala(this.state.createdSala));
-      
+
       // this.setState({ search: true });
     }
   }
@@ -201,16 +210,16 @@ class FormSala extends Component {
     })
   };
 
-  handleEditModal = (type,event) => {
+  handleEditModal = (type, event) => {
     const newRoom = { ...this.state.createdSala }
     newRoom['rooms'][this.state.editIndex][type] = event.target.value;
     this.setState({
-      createdSala : newRoom
+      createdSala: newRoom
     })
   }
 
   handleOkEditModal = () => {
-    this.setState({editModalVisible:false})
+    this.setState({ editModalVisible: false })
   }
 
   clearTempRoom = () => {
@@ -218,7 +227,8 @@ class FormSala extends Component {
       capacity: '',
       guitar: '',
       bass: '',
-      drums: ''
+      drums: '',
+      price: '',
     }
     this.setState({ tempRoom: clearedRoom })
   }
@@ -226,8 +236,19 @@ class FormSala extends Component {
   handleOk = () => {
     const newSala = { ...this.state.createdSala }
     newSala.rooms.push(this.state.tempRoom);
+    if (this.state.createdSala.pricefrom === '') {
+      newSala.pricefrom = this.state.tempRoom.price
+    } else if (parseInt(this.state.createdSala.pricefrom, 10) >= parseInt(this.state.tempRoom.price, 10)) {
+      newSala.pricefrom = this.state.tempRoom.price
+    }
+    if (this.state.createdSala.priceto === '') {
+      newSala.priceto = this.state.tempRoom.price
+    } else if (parseInt(this.state.createdSala.priceto, 10) <= parseInt(this.state.tempRoom.price, 10)) {
+      newSala.priceto = this.state.tempRoom.price
+    }
     this.setState({ modalVisible: false, createdSala: newSala });
     this.clearTempRoom();
+
   };
 
   handleClose = () => {
@@ -325,8 +346,8 @@ class FormSala extends Component {
 
   showEditModal = (i) => (
 
-    this.state.createdSala.rooms[i] ? 
-    // return (
+    this.state.createdSala.rooms[i] ?
+      // return (
       <Modal
         visible={this.state.editModalVisible}
         title="Editar sala"
@@ -384,11 +405,22 @@ class FormSala extends Component {
                   onChange={event => this.handleEditModal('drums', event)}
                 />
               </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Precio por hora</p>
+                <Input
+                  type="number"
+                  placeholder="Precio"
+                  value={this.state.createdSala.rooms[i].price}
+                  onChange={event => this.handleEditModal('price', event)}
+                  prefix={<span style={{ color: 'rgba(0,0,0,.25)' }}>$</span>}
+                // style={{height:"36px"}}
+                />
+              </div>
             </div>
           </DatosCardWrapper>
         </div>
       </Modal>
-      :null
+      : null
     // )
   )
 
@@ -451,6 +483,17 @@ class FormSala extends Component {
                   onChange={event => this.handleModal('drums', event)}
                 />
               </div>
+              <div className="isoContactCardInfos">
+                <p className="isoInfoLabel">Precio por hora</p>
+                <Input
+                  type="number"
+                  placeholder="Precio"
+                  value={this.state.tempRoom.price}
+                  onChange={event => this.handleModal('price', event)}
+                  prefix={<span style={{ color: 'rgba(0,0,0,.25)' }}>$</span>}
+                // style={{height:"36px"}}
+                />
+              </div>
             </div>
           </DatosCardWrapper>
         </div>
@@ -459,7 +502,7 @@ class FormSala extends Component {
   }
 
   editRoom = (index) => {
-    this.setState({editModalVisible:true,editIndex:index})
+    this.setState({ editModalVisible: true, editIndex: index })
   }
 
   deleteRoom = (key) => {
@@ -488,7 +531,7 @@ class FormSala extends Component {
   }
 
   uploadPic = (file, name) => {
-    this.setState({loading:true})
+    this.setState({ loading: true })
     const send = file;
     // console.log(this.props)
     axios.post('/api/upload', {
@@ -505,7 +548,7 @@ class FormSala extends Component {
       newCreatedSala.images.push(obj)
       this.setState({
         createdSala: newCreatedSala,
-        loading:false
+        loading: false
       })
     })
   }
@@ -536,6 +579,7 @@ class FormSala extends Component {
 
   render() {
     // console.log(this.state)
+    // console.log(this.state.createdSala)
     const viewMode = this.props.viewMode
     this.toggleAndSave(viewMode)
     return (
@@ -590,17 +634,7 @@ class FormSala extends Component {
                   onChange={event => this.handleInput('address', event)}
                 />
               </div>
-              <div className="isoContactCardInfos">
-                <p className="isoInfoLabel">Precio</p>
-                <Input
-                  type="number"
-                  placeholder="Precio"
-                  value={this.state.createdSala.price}
-                  onChange={event => this.handleInput('price', event)}
-                  prefix={<span style={{ color: 'rgba(0,0,0,.25)'}}>$</span>}
-                  style={{height:"36px"}}
-                />
-              </div>
+
               <div className="isoContactCardInfos">
                 <p className="isoInfoLabel">Abierto</p>
                 <Select

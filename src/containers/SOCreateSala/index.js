@@ -17,15 +17,9 @@ const titleStyle = {
   "fontSize": "25px",
   "textAlign": "center",
   "paddingTop": "20px",
-
-
 }
 
 class CreateSala extends Component {
-
-  // constructor(props) {
-  //     super(props)
-  // }
 
   state = {
     loading: false,
@@ -35,20 +29,6 @@ class CreateSala extends Component {
   dummy = () => {
 
   }
-
-  // static getDerivedStateFromProps(props, state) {
-  //   console.log("derived")
-  //   console.log(state)
-  //   if (props.salas.loading === false) {
-  //     return {
-  //       ...state,
-  //       loading: props.loading,
-  //       refresh: true,
-  //     };
-  //   }
-  //   return null;
-  // }
-
 
 
   render() {
@@ -64,16 +44,10 @@ class CreateSala extends Component {
         >
           <Layout className="isoContactBoxWrapper">
             <Content className="isoContactBox">
-              {/* <div className="isoContactControl">
-                  <Button type="button"
-                    onClick={this.editDatos}
-                  >
-                    {this.state.editView ? <Icon type="check" /> : <Icon type="edit" />}{' '}
-                  </Button>
-                </div> */}
               <FormSala
                 loading={this.state.loading}
                 refresh={this.state.refresh}
+                currentSala={null}
               />
             </Content>
           </Layout>

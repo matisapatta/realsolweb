@@ -82,7 +82,7 @@ class Topbar extends Component {
             </li>
             <li
               className="isoUser">
-              <TopbarUser locale={locale} />
+              <TopbarUser locale={locale} avatar={this.props.user.users.avatar} />
             </li>
           </ul>
         </Header>

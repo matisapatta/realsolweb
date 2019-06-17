@@ -71,8 +71,8 @@ export function saveReservation(reservation) {
         })
     }
 }
-export function deleteReservation(reservation) {
-    const request = axios.post(`/api/deletereservation?id=${reservation.id}`, reservation)
+export function cancelReservation(reservation) {
+    const request = axios.post(`/api/cancelreservation?id=${reservation.id}`, reservation)
     return (dispatch) => {
         request.then(({ data }) => {
             // let sala = data.success ? data.sala : null;

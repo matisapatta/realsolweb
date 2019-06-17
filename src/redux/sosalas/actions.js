@@ -36,11 +36,16 @@ import axios from 'axios';
 // }
 
 export function getSalas(value) {
+
     let uri = "/api/getsala?";
     if (value.name !== '')
         uri = uri + `&name=${value.name}`;
     if (value.location !== '')
         uri = uri + `&location=${value.location}`;
+    if (value.pricefrom !== "0")
+        uri = uri + `&pricefrom=${value.pricefrom}`;
+    if (value.priceto !== "0")
+        uri = uri + `&priceto=${value.priceto}`;
     const request = axios.get(uri)
     return (dispatch) => {
         request.then(({ data }) => {
