@@ -33,6 +33,7 @@ class CreateReserva extends Component {
         rDay: null,
         loading: false,
         modalVisible: false,
+        payModalVisible: false,
         resHours: 1,
     }
 
@@ -50,7 +51,7 @@ class CreateReserva extends Component {
 
     componentDidUpdate(prevProps, prevState) {
 
-        const payData = {...this.state.payData, reservationId:''}
+        const payData = { ...this.state.payData, reservationId: '' }
 
         if (prevProps.reservations.reservation) {
             if (prevProps.reservations.reservation._id !== this.props.reservations.reservation._id) {
@@ -60,13 +61,14 @@ class CreateReserva extends Component {
                     _id: this.props.user.users.id,
                     reservations: userReservations
                 }))
-                
+
                 payData.reservationId = this.props.reservations.reservation._id
                 axios.post('/api/pay', payData).then((res, err) => {
                     if (err) console.log(err)
                     console.log(res.data)
+                    this.setState({ init_point: res.data.body.sandbox_init_point, payModalVisible: true, loading: false })
                 })
-                this.setState({ loading: false })
+                // this.setState({ loading: false })
             }
         } else if (this.props.reservations.reservation) {
             let userReservations = this.props.user.users.reservations;
@@ -80,9 +82,10 @@ class CreateReserva extends Component {
             axios.post('/api/pay', payData).then((res, err) => {
                 if (err) console.log(err)
                 console.log(res.data)
+                this.setState({ init_point: res.data.body.sandbox_init_point, payModalVisible: true, loading: false })
             })
 
-            this.setState({ loading: false })
+            // this.setState({ loading: false })
         }
     }
 
@@ -188,6 +191,51 @@ class CreateReserva extends Component {
         })
     }
 
+    showPaymentModal = () => (
+        <Modal
+            visible={this.state.payModalVisible}
+            title="Realizar pago"
+            onOk={this.handleOk}
+            onCancel={() => { this.handleClose("pay") }}
+            footer={[
+                <Button key="back" size="large" onClick={() => { this.handleClose("pay") }}>
+                    Cancelar reserva
+                </Button>,
+                <Button
+                    key="submit"
+                    type="primary"
+                    size="large"
+                    // onClick={this.handleOk}
+                    onClick={() => { console.log(this.state.init_point) }}
+                >
+                    Realizar pago
+          </Button>
+            ]}
+        >
+            <ModalDataWrapper className="isoContactCard">
+                <div className="isoContactInfoWrapper">
+                    <div className="isoContactCardInfos">
+                        <p className="isoInfoLabel" style={{ fontSize: "24px", paddingTop: "5px" }} >Pago de reserva en {this.props.salas.currentSala.name}</p>
+                    </div>
+                    <div className="isoContactCardInfos">
+                        <p className="isoInfoLabel">Día</p>
+                        <span>{moment(this.state.calendarDate).format('dddd D [de] MMMM [de] YYYY')}</span>
+                    </div>
+                    <div className="isoContactCardInfos">
+                        <p className="isoInfoLabel">Importe</p>
+                        {
+                            this.state.payData ?
+                                <span>$ {this.state.payData.showPrice}</span>
+                                : 0
+                        }
+
+                    </div>
+                </div>
+            </ModalDataWrapper>
+        </Modal>
+    )
+
+
     showReserveModal = () => (
         <Modal
             visible={this.state.modalVisible}
@@ -246,9 +294,19 @@ class CreateReserva extends Component {
         </Modal>
     )
 
-    handleClose = () => {
+
+
+
+
+    handleClose = (str) => {
+        if (str === "pay") {
+            console.log("payment modal")
+            this.props.dispatch(getReservationsBySala(this.props.salas.currentSala._id))
+            this.setState({ payModalVisible: false })
+        }
         this.setState({
             modalVisible: false,
+            // payModalVisible: false,
         });
     };
 
@@ -290,9 +348,9 @@ class CreateReserva extends Component {
             const payData = {
                 item: {
                     title: "Reserva sala ensayo",
-                    quantity: hours,
+                    quantity: parseInt(hours, 10),
                     currency_id: 'ARS',
-                    unit_price: price * hours
+                    unit_price: price
                 },
                 payer: {
                     // email: user.email,
@@ -303,10 +361,11 @@ class CreateReserva extends Component {
                 },
                 sala: {
                     id: this.props.salas.currentSala._id
-                }
+                },
+                showPrice: price * hours
             }
 
-            this.setState({payData})
+            this.setState({ payData })
             this.props.dispatch(saveReservation(resData));
             this.props.dispatch(getReservationsBySala(this.props.salas.currentSala._id))
             this.setState({ loading: true })
@@ -389,6 +448,7 @@ class CreateReserva extends Component {
                         </Col>
                     </Row>
                     {this.showReserveModal()}
+                    {this.showPaymentModal()}
                 </Spins>
             </div>
         )
