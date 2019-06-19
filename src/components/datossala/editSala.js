@@ -11,7 +11,7 @@ import Select, { SelectOption } from '../../components/uielements/select';
 import Modal from '../../components/feedback/modal';
 import ListItem from '../roomslist/roomsList';
 import GalleryUploader from '../../components/galleryUploader'
-import { saveSala } from '../../redux/sosalas/actions';
+import { updateSala } from '../../redux/sosalas/actions';
 import Spins from '../../components/uielements/spin';
 import notification from '../../components/notification';
 
@@ -44,6 +44,7 @@ class FormEditSala extends Component {
 
     state = {
         editedSala: {
+            _id: this.props.salas.currentSala._id,
             name: this.props.salas.currentSala.name,
             location: this.props.salas.currentSala.location,
             mainimage: this.props.salas.currentSala.mainimage,
@@ -69,6 +70,7 @@ class FormEditSala extends Component {
             price: '',
         },
         loading: this.props.loading,
+        edited: false
 
     }
 
@@ -98,10 +100,10 @@ class FormEditSala extends Component {
     }
 
     componentDidUpdate(prevProps) {
-
         if (this.props.salas.currentSala !== prevProps.salas.currentSala) {
             this.setState({
                 editedSala: {
+                    _id: this.props.salas.currentSala._id,
                     name: this.props.salas.currentSala.name,
                     location: this.props.salas.currentSala.location,
                     mainimage: this.props.salas.currentSala.mainimage,
@@ -117,9 +119,17 @@ class FormEditSala extends Component {
                     priceto: this.props.salas.currentSala.priceto,
                     // viewMode: false,
                 },
-                loading:false
+                loading: false,
+                edited: true,
             })
+            if (this.state.edited)
+                notification("success", "La sala se modificó correctamente")
+            // this.props.history.push(`${WRAPPEDURL}/gestionsalas`)
         }
+        // if (this.props.salas.currentSala !== prevProps.salas.editedSala) {
+        //     console.log(this.props.salas)
+        //     // this.setState({ editedSala: this.props.salas.currentSala, loading: false })
+        // }
 
         // if (prevProps !== this.props) {
         //     this.setState({
@@ -141,9 +151,9 @@ class FormEditSala extends Component {
 
     dummyRequest = ({ file, onSuccess }) => {
         setTimeout(() => {
-          this.setState({loading:false})
+            this.setState({ loading: false })
         }, 200);
-      };
+    };
 
 
     handleInput = (type, event, i) => {
@@ -174,7 +184,7 @@ class FormEditSala extends Component {
             this.setState({
                 loading: true
             })
-            // this.props.dispatch(saveSala(this.state.editedSala));
+            this.props.dispatch(updateSala(this.state.editedSala));
 
             // this.setState({ search: true });
         }
@@ -554,7 +564,7 @@ class FormEditSala extends Component {
 
     dummyRequest = () => {
         setTimeout(() => {
-            this.setState({loading:false})
+            this.setState({ loading: false })
         }, 200);
     };
 

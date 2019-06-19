@@ -72,6 +72,7 @@ export function saveReservation(reservation) {
     }
 }
 export function cancelReservation(reservation) {
+    console.log(reservation)
     const request = axios.post(`/api/cancelreservation?id=${reservation.id}`, reservation)
     return (dispatch) => {
         request.then(({ data }) => {
@@ -80,6 +81,24 @@ export function cancelReservation(reservation) {
             let response = {
                 // success: data.success,
                 reservation
+            }
+            dispatch({
+                type: 'CANCEL_RESERVATION',
+                payload: response
+            })
+        })
+    }
+}
+
+export function deleteReservation(reservation) {
+    const request = axios.post(`/api/deletereservation?id=${reservation._id}`, reservation)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            // let sala = data.success ? data.sala : null;
+            let deleted = data.deleted ? data.deleted : false;
+            let response = {
+                // success: data.success,
+                deleted
             }
             dispatch({
                 type: 'DELETE_RESERVATION',

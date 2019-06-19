@@ -69,6 +69,13 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
           component={asyncComponent(() =>
             import('./containers/Page/resetPassword'))}
         />
+        <Route
+          exact
+          path={'/paymentok/:id'}
+          component={asyncComponent(() =>
+            import('./containers/Page/resetPassword'))}
+        />
+
 
         {/* <Route
           path="/auth0loginCallback"

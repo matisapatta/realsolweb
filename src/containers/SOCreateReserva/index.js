@@ -8,7 +8,7 @@ import 'moment/locale/es';
 import LayoutWrapper from '../../components/utility/layoutWrapper';
 import Box from '../../components/utility/box';
 import { CellWrapper, CellHeaderWrapper, CellColumnWrapper } from './cell.style'
-import { getReservationsBySala, saveReservation } from '../../redux/soreservations/actions'
+import { getReservationsBySala, saveReservation, deleteReservation } from '../../redux/soreservations/actions'
 import { updateUser } from '../../redux/sousers/actions'
 import Modal from '../../components/feedback/modal';
 import Button from '../../components/uielements/button';
@@ -65,7 +65,6 @@ class CreateReserva extends Component {
                 payData.reservationId = this.props.reservations.reservation._id
                 axios.post('/api/pay', payData).then((res, err) => {
                     if (err) console.log(err)
-                    console.log(res.data)
                     this.setState({ init_point: res.data.body.sandbox_init_point, payModalVisible: true, loading: false })
                 })
                 // this.setState({ loading: false })
@@ -206,7 +205,7 @@ class CreateReserva extends Component {
                     type="primary"
                     size="large"
                     // onClick={this.handleOk}
-                    onClick={() => { console.log(this.state.init_point) }}
+                    onClick={this.handlePayment}
                 >
                     Realizar pago
           </Button>
@@ -296,11 +295,15 @@ class CreateReserva extends Component {
 
 
 
+    handlePayment = () => {
+        this.setState({payModalVisible:false}); 
+        window.location.href = this.state.init_point; 
+    }
 
 
     handleClose = (str) => {
         if (str === "pay") {
-            console.log("payment modal")
+            this.props.dispatch(deleteReservation(this.props.reservations.reservation))
             this.props.dispatch(getReservationsBySala(this.props.salas.currentSala._id))
             this.setState({ payModalVisible: false })
         }
@@ -342,6 +345,7 @@ class CreateReserva extends Component {
                 paid: false,
                 salaName: this.props.salas.currentSala.name,
                 cancelled: false,
+                reviewed: false,
             }
 
             const user = this.props.user.users
@@ -409,7 +413,7 @@ class CreateReserva extends Component {
     render() {
         // console.log(this.state.calendarDate)
         // console.log(rDay)
-        console.log(this.props)
+        // console.log(this.props)
         // console.log(this.state)
         moment.locale('es', {
             week: {

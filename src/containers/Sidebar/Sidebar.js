@@ -172,6 +172,19 @@ class Sidebar extends Component {
                 : null}
 
               {this.props.user.users.role !== 1 ?
+                <Menu.Item key="reviews">
+                  <Link to={`${url}/reviews`}>
+                    <span className="isoMenuHolder" style={submenuColor}>
+                      <i className="ion-star" />
+                      <span className="nav-text">
+                        Valoraciones
+                    </span>
+                    </span>
+                  </Link>
+                </Menu.Item>
+                : null}
+
+              {this.props.user.users.role !== 1 ?
                 <Menu.Item key="datos">
                   <Link to={`${url}/datos`}>
                     <span className="isoMenuHolder" style={submenuColor}>
@@ -260,6 +273,11 @@ class Sidebar extends Component {
                   <Menu.Item style={submenuStyle} key="adminsalas">
                     <Link style={submenuColor} to={`${url}/gestionsalas`}>
                       Administrar salas
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item style={submenuStyle} key="adminreview">
+                    <Link style={submenuColor} to={`${url}/adminreview`}>
+                      Administrar valoraciones
                     </Link>
                   </Menu.Item>
                 </SubMenu>

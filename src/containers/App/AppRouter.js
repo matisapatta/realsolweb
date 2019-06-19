@@ -12,11 +12,17 @@ class AppRouter extends React.Component {
           exact
           path={`${url}/busqueda`}
           component={asyncComponent(() => import('../SOBusqueda'))}
+          isLoggedIn={true}
         />
         <Route
           exact
           path={`${url}/reservas`}
           component={asyncComponent(() => import('../SOReservas'))}
+        />
+        <Route
+          exact
+          path={`${url}/reviews`}
+          component={asyncComponent(() => import('../SOReviews'))}
         />
         <Route
           exact

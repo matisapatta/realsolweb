@@ -157,6 +157,24 @@ export function saveSala(sala) {
     }
 }
 
+export function updateSala(sala) {
+    const request = axios.post(`/api/updatesala`, sala)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            // let sala = data.success ? data.sala : null;
+            let sala = data.sala ? data.sala : false;
+            let response = {
+                // success: data.success,
+                ...sala
+            }
+            dispatch({
+                type: 'UPDATE_SALA',
+                payload: response
+            })
+        })
+    }
+}
+
 
 export function getCurrentState() {
     return {
