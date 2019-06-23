@@ -1,36 +1,142 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import ScriptTag from 'react-script-tag';
-import axios from 'axios'
+import { getSalasOwner } from '../../redux/sosalas/actions';
+import LayoutWrapper from '../../components/utility/layoutWrapper';
+import { Link } from 'react-router-dom'
+import { WRAPPEDURL } from '../../config';
+import ContentHolder from '../../components/utility/contentHolder';
+import {
+    Col,
+    Row,
+    Icon
+} from 'antd';
+import Card from '../../components/uielements/styles/card.style';
+import { rowStyle, gutter } from '../../config/styleConst';
+import { InputSearch } from '../../components/uielements/input';
+import { getReservationById } from '../../redux/soreservations/actions'
+import notification from '../../components/notification'
 
-/* <form action={axios.post('/api/pay')} method="POST" style={{height:"100px"}} >
-<ScriptTag
-    src="https://www.mercadopago.com.ar/integrations/v1/web-tokenize-checkout.js"
-    data-public-key="TEST-508e8d24-efc9-4ba1-a139-b74a8f22e2b3"
-    data-transaction-amount="100.00">
-</ScriptTag>
-</form> */
-
+const titleStyle = {
+    "fontSize": "25px",
+    "textAlign": "center",
+    "display": "flex",
+    "alignItems": "center",
+    "justifyContent": "center",
+    "width": "100%"
+}
 
 class GestionReservas extends Component {
 
-    testF = () => {
-        console.log("pepe")
+    // constructor(props) {
+    //     super(props)
+    // }
+
+    state = {
+        searchValue: ''
+    }
+
+    componentDidMount() {
+        this.props.dispatch(getSalasOwner(this.props.user.users.id))
+    }
+
+    handleSearchInput = (event) => {
+        this.setState({
+            searchValue: event.target.value
+        })
+    }
+
+    submitSearch = () => {
+        const id = this.state.searchValue;
+        if (id.match(/^[0-9a-fA-F]{24}$/)) {
+            this.props.dispatch(getReservationById(id));
+        } else {
+            notification('error',"No es un formato de ID de reserva válido")
+        }
+        
+    }
+
+
+    showResults = (data) => {
+        return (
+            data ?
+                (data.length > 0) ?
+                    data.map((sala, i) => (
+                        <Link to={`${WRAPPEDURL}/gestionreservas/sala/${sala._id}`} key={i}>
+                            <ContentHolder style={{
+                                marginTop: "8px"
+                            }}>
+                                <Card
+                                    loading={false}
+                                    title={`${sala.name}, ${sala.location}`}
+                                    style={{ width: '100%' }}
+                                >
+                                    {sala.description}
+                                </Card>
+                            </ContentHolder>
+                        </Link>
+                    ))
+                    : <div>No tiene salas registradas</div>
+                : <div>No tiene salas registradas</div>
+        )
     }
 
     render() {
+        console.log(this.props)
         return (
-            <div>
-                Gestion reservas
-            </div>
+            <LayoutWrapper>
+                <div style={titleStyle}>
+                    Gestión de Reservas
+                </div>
+                <Row style={rowStyle} gutter={gutter} justify="start">
+                    <Col md={24} sm={24} xs={24} style={{ marginBottom: "10px" }} >
+                        <ContentHolder>
+                            <InputSearch
+                                size="large"
+                                placeholder="Buscar por código de reserva"
+                                value={this.state.searchValue}
+                                onChange={this.handleSearchInput}
+                                onPressEnter={this.submitSearch}
+                                onSearch={this.submitSearch}
+                            />
+                        </ContentHolder>
+                    </Col>
+                </Row>
+                <Row style={rowStyle} gutter={gutter} justify="start">
+                    <Col md={24} sm={24} xs={24} style={{
+                        marginBottom: "10px"
+                    }} >
+                        {/* <Box title="Salas"> */}
+                        {this.showResults(this.props.salas.listSalas)}
+                        {/* </Box> */}
+                    </Col>
+                </Row>
+                {/* <Row style={rowStyle} gutter={gutter} justify="start">
+                    <Col md={24} sm={24} xs={24} style={colStyle}>
+                        <ButtonWrapper>
+                            <div className="isoContainer">
+                                <div className="isoControlBtnGroup">
+                                    <button className="isoControlBtn" onClick={this.createSala}>
+                                        <Icon type="plus" />
+                                        Agregar Sala de Ensayo
+                                    </button>
+                                </div>
+                            </div>
+                        </ButtonWrapper>
+                    </Col>
+                </Row> */}
+            </LayoutWrapper>
         )
     }
 }
 
+
 const mapStateToProps = (state, ownProps) => {
     return {
-        salas: state.Sala
+        salas: state.Salas,
+        user: state.User,
+        reservations: state.Reservations,
     }
 }
 
-export default connect(mapStateToProps)(GestionReservas)
+
+export default connect(mapStateToProps)(GestionReservas);

@@ -31,14 +31,14 @@ const WDSingleCardWrapper = styled.div`
     margin: 0 15px;
 
     .isoCardTitle {
-      font-size: 14px;
+      font-size: 20px;
       font-weight: 500;
       color: ${palette('text', 0)};
       margin: 0 0 3px;
     }
 
     .isoCardDate {
-      font-size: 12px;
+      font-size: 16px;
       font-weight: 400;
       color: ${palette('grayscale', 0)};
     }

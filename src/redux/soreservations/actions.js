@@ -53,6 +53,23 @@ export function getReservationsByUser(id) {
     }
 }
 
+export function getReservationById(id) {
+    const request = axios.get(`/api/getreservationbyid?_id=${id}`)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let send;
+            if (data)
+                send = data;
+            else
+                send = null;
+            dispatch({
+                type: 'GET_RESERVATION_BY_ID',
+                payload: send
+            })
+        })
+    }
+}
+
 
 export function saveReservation(reservation) {
     const request = axios.post(`/api/savereservation`, reservation)
@@ -100,6 +117,7 @@ export function deleteReservation(reservation) {
                 // success: data.success,
                 deleted
             }
+            console.log(response)
             dispatch({
                 type: 'DELETE_RESERVATION',
                 payload: response
