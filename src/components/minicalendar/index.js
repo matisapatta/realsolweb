@@ -12,19 +12,19 @@ class MiniCalendar extends Component {
 
         const days = this.props.validDays;
         if (days.length === 1) {
-            return ((current.day() === parseInt(days[0], 10)) && current.isSameOrAfter(moment(today)) )
+            return ((current.day() === parseInt(days[0], 10)) && (this.props.vendor || current.isSameOrAfter(moment(today))) )
         } else if (days.length === 2) {
-            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10)) && current.isSameOrAfter(moment(today)) )
+            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10)) && (this.props.vendor || current.isSameOrAfter(moment(today))) )
         } else if (days.length === 3) {
-            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10) || current.day() === parseInt(days[2], 10)) && current.isSameOrAfter(moment(today)) )
+            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10) || current.day() === parseInt(days[2], 10)) && (this.props.vendor || current.isSameOrAfter(moment(today))) )
         } else if (days.length === 4) {
-            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10) || current.day() === parseInt(days[2], 10) || current.day() === parseInt(days[3], 10)) && current.isSameOrAfter(moment(today)) )
+            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10) || current.day() === parseInt(days[2], 10) || current.day() === parseInt(days[3], 10)) && (this.props.vendor || current.isSameOrAfter(moment(today))) )
         } else if (days.length === 5) {
-            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10) || current.day() === parseInt(days[2], 10) || current.day() === parseInt(days[3], 10) || current.day() === parseInt(days[4], 10)) && current.isSameOrAfter(moment(today)) )
+            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10) || current.day() === parseInt(days[2], 10) || current.day() === parseInt(days[3], 10) || current.day() === parseInt(days[4], 10)) && (this.props.vendor || current.isSameOrAfter(moment(today))) )
         } else if (days.length === 6) {
-            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10) || current.day() === parseInt(days[2], 10) || current.day() === parseInt(days[3], 10) || current.day() === parseInt(days[4], 10) || current.day() === parseInt(days[5], 10)) && current.isSameOrAfter(moment(today)) )
+            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10) || current.day() === parseInt(days[2], 10) || current.day() === parseInt(days[3], 10) || current.day() === parseInt(days[4], 10) || current.day() === parseInt(days[5], 10)) && (this.props.vendor || current.isSameOrAfter(moment(today))) )
         } else if (days.length === 7) {
-            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10) || current.day() === parseInt(days[2], 10) || current.day() === parseInt(days[3], 10) || current.day() === parseInt(days[4], 10) || current.day() === parseInt(days[5], 10) || current.day() === parseInt(days[6], 10)) && current.isSameOrAfter(moment(today))  )
+            return ((current.day() === parseInt(days[0], 10) || current.day() === parseInt(days[1], 10) || current.day() === parseInt(days[2], 10) || current.day() === parseInt(days[3], 10) || current.day() === parseInt(days[4], 10) || current.day() === parseInt(days[5], 10) || current.day() === parseInt(days[6], 10)) && (this.props.vendor || current.isSameOrAfter(moment(today))) )
         }
     }
 

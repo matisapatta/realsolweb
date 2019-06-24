@@ -8,8 +8,6 @@ export default function reducers(state = {}, action) {
             return { ...state, userlist: action.payload }
         case 'GET_RESERVATION_BY_ID':
             return { ...state, currentReservation: action.payload }
-        case 'CLOSE_RESERVATION':
-            return { ...state, currentReservation: action.payload }
         case 'SAVE_RESERVATION':
             return { ...state, ...action.payload }
         case 'CANCEL_RESERVATION':

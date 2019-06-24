@@ -114,6 +114,7 @@ class Reservas extends Component {
       // console.log(this.props.user.users.id)
       let sendData = { ...selectedData };
       sendData.userid = this.props.user.users.id;
+      sendData.username = this.props.user.users.name + ' ' + this.props.user.users.lastname;
       // console.log(sendData)
       this.props.dispatch(cancelReservation(sendData))
 

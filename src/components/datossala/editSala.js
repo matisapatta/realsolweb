@@ -11,7 +11,7 @@ import Select, { SelectOption } from '../../components/uielements/select';
 import Modal from '../../components/feedback/modal';
 import ListItem from '../roomslist/roomsList';
 import GalleryUploader from '../../components/galleryUploader'
-import { updateSala } from '../../redux/sosalas/actions';
+import { updateSala, deleteSala, getSalasOwner } from '../../redux/sosalas/actions';
 import Spins from '../../components/uielements/spin';
 import notification from '../../components/notification';
 
@@ -62,6 +62,7 @@ class FormEditSala extends Component {
         },
         modalVisible: false,
         editModalVisible: false,
+        deleteModalVisible: false,
         tempRoom: {
             capacity: '',
             guitar: '',
@@ -247,6 +248,7 @@ class FormEditSala extends Component {
         this.setState({
             modalVisible: false,
             editModalVisible: false,
+            deleteModalVisible: false,
         });
         this.clearTempRoom();
     };
@@ -336,6 +338,34 @@ class FormEditSala extends Component {
         )
     }
 
+    showDeleteModal = () => (
+        <Modal
+            visible={this.state.deleteModalVisible}
+            title="Eliminar sala"
+            onOk={this.deleteSala}
+            onCancel={this.handleClose}
+            footer={[
+                <Button key="back" size="large" onClick={this.handleClose}>
+                    Cancelar
+            </Button>,
+                <Button
+                    key="submit"
+                    type="danger"
+                    size="large"
+                    // loading={this.state.loading}
+                    onClick={this.deleteSala}
+                >
+                    Eliminar
+                </Button>]}
+        >
+            <div>
+                <h3>
+                    ¿Seguro quiere eliminar la sala?
+                </h3>
+            </div>
+        </Modal >
+    )
+
     showEditModal = (i) => (
 
         this.state.editedSala.rooms[i] ?
@@ -348,7 +378,7 @@ class FormEditSala extends Component {
                 footer={[
                     <Button key="back" size="large" onClick={this.handleClose}>
                         Cancelar
-          </Button>,
+                            </Button>,
                     <Button
                         key="submit"
                         type="primary"
@@ -357,7 +387,7 @@ class FormEditSala extends Component {
                         onClick={this.handleOkEditModal}
                     >
                         Guardar
-          </Button>
+                            </Button>
                 ]}
             >
                 <div style={{ height: '400px', width: '100%' }}>
@@ -522,6 +552,23 @@ class FormEditSala extends Component {
         )
     }
 
+    deleteSala = () => {
+        let sendData = {}
+        sendData = {
+            id: this.props.salas.currentSala._id
+        }
+        this.props.dispatch(deleteSala(sendData))
+        this.props.dispatch(getSalasOwner(this.props.user.users.id))
+        this.setState({ loading: true, deleteModalVisible: false })
+        setTimeout(() => {
+            this.setState({ loading: false })
+            notification("success", "La sala ha sido eliminada")
+            this.props.history.push(`${WRAPPEDURL}/gestionsalas`)
+        }, 2000)
+
+
+    }
+
     uploadPic = (file, name) => {
         this.setState({ loading: true })
         const send = file;
@@ -570,7 +617,7 @@ class FormEditSala extends Component {
 
 
     render() {
-        // console.log(this.props)
+        console.log(this.props)
         const viewMode = this.props.viewMode
         this.toggleAndSave(viewMode)
         return (
@@ -668,9 +715,17 @@ class FormEditSala extends Component {
                                         <Button
                                             type="primary"
                                             onClick={this.submitForm}
+                                            style={{ marginRight: "10px" }}
                                         >
                                             Guardar
-                </Button>
+                                        </Button>
+                                        <Button
+                                            type="danger"
+                                            onClick={() => { this.setState({ deleteModalVisible: true }) }}
+                                            style={{ marginLeft: "10px" }}
+                                        >
+                                            Eliminar
+                                        </Button>
                                     </div>
                                 </div>
                             </ButtonWrapper>
@@ -678,6 +733,8 @@ class FormEditSala extends Component {
 
                         {/* {this.showModal()} */}
                         {this.showEditModal(this.state.editIndex)}
+                        {this.showModal()}
+                        {this.showDeleteModal()}
                     </DatosCardWrapper>
                 </Spins>
             </div>

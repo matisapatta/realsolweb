@@ -34,6 +34,7 @@ class GestionSalas extends Component {
                 (data.length > 0) ?
                     data.map((sala, i) => (
                         <Link to={`${WRAPPEDURL}/editsala/${sala._id}`} key={i}>
+
                             <ContentHolder style={{
                                 marginTop: "8px"
                             }}>
@@ -60,7 +61,7 @@ class GestionSalas extends Component {
                         marginBottom: "10px"
                     }} >
                         {/* <Box title="Salas"> */}
-                            {this.showResults(this.props.salas.listSalas)}
+                        {this.showResults(this.props.salas.listSalas)}
                         {/* </Box> */}
                     </Col>
                 </Row>

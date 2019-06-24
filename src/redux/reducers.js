@@ -6,6 +6,7 @@ import Salas from './sosalas/reducers';
 import User from './sousers/reducers';
 import Reservations from './soreservations/reducers'
 import ThemeSwitcher from './themeSwitcher/reducer'
+import Reviews from './soreviews/reducers'
 
 
 
@@ -17,5 +18,6 @@ export default {
   ThemeSwitcher,
   Salas,
   User,
-  Reservations
+  Reservations,
+  Reviews,
 };

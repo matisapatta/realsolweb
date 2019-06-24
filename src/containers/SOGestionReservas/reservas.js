@@ -8,8 +8,7 @@ import 'moment/locale/es';
 import LayoutWrapper from '../../components/utility/layoutWrapper';
 import Box from '../../components/utility/box';
 import { CellWrapper, CellHeaderWrapper, CellColumnWrapper } from './cell.style'
-import { getReservationsBySala, saveReservation, deleteReservation } from '../../redux/soreservations/actions'
-import { updateUser } from '../../redux/sousers/actions'
+import { getReservationsBySala, saveReservation, cancelReservation, closeReservation, getReservationById } from '../../redux/soreservations/actions'
 import Modal from '../../components/feedback/modal';
 import Button from '../../components/uielements/button';
 import Spins from '../../components/uielements/spin';
@@ -17,7 +16,6 @@ import { ModalDataWrapper } from './modal.style';
 import Select, { SelectOption } from '../../components/uielements/select';
 import notification from '../../components/notification';
 import { dailyhours } from '../../config';
-import axios from 'axios'
 
 const Cell = CellWrapper(Col);
 const CellHeader = CellHeaderWrapper(Col);
@@ -26,7 +24,7 @@ const CellColumn = CellColumnWrapper(Col)
 const hours_a = [1, 2];
 let hoursOptions = []
 
-class CreateReserva extends Component {
+class ManageReserva extends Component {
 
     state = {
         calendarDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 0, 0, 0),
@@ -51,40 +49,26 @@ class CreateReserva extends Component {
 
     componentDidUpdate(prevProps, prevState) {
 
-        const payData = { ...this.state.payData, reservationId: '' }
-
         if (prevProps.reservations.reservation) {
             if (prevProps.reservations.reservation._id !== this.props.reservations.reservation._id) {
-                let userReservations = this.props.user.users.reservations;
-                userReservations.push(this.props.reservations.reservation._id);
-                this.props.dispatch(updateUser({
-                    _id: this.props.user.users.id,
-                    reservations: userReservations
-                }))
+                // let userReservations = this.props.user.users.reservations;
+                // userReservations.push(this.props.reservations.reservation._id);
+                // this.props.dispatch(updateUser({
+                //     _id: this.props.user.users.id,
+                //     reservations: userReservations
+                // }))
 
-                payData.reservationId = this.props.reservations.reservation._id
-                axios.post('/api/pay', payData).then((res, err) => {
-                    if (err) console.log(err)
-                    this.setState({ init_point: res.data.body.sandbox_init_point, payModalVisible: true, loading: false })
-                })
-                // this.setState({ loading: false })
+                this.setState({ loading: false })
             }
         } else if (this.props.reservations.reservation) {
-            let userReservations = this.props.user.users.reservations;
-            userReservations.push(this.props.reservations.reservation._id);
-            this.props.dispatch(updateUser({
-                _id: this.props.user.users.id,
-                reservations: userReservations
-            }))
+            // let userReservations = this.props.user.users.reservations;
+            // userReservations.push(this.props.reservations.reservation._id);
+            // this.props.dispatch(updateUser({
+            //     _id: this.props.user.users.id,
+            //     reservations: userReservations
+            // }))
 
-            payData.reservationId = this.props.reservations.reservation._id
-            axios.post('/api/pay', payData).then((res, err) => {
-                if (err) console.log(err)
-                console.log(res.data)
-                this.setState({ init_point: res.data.body.sandbox_init_point, payModalVisible: true, loading: false })
-            })
-
-            // this.setState({ loading: false })
+            this.setState({ loading: false })
         }
     }
 
@@ -152,17 +136,24 @@ class CreateReserva extends Component {
         const list = this.props.reservations.list;
         const day = moment(this.state.calendarDate.getTime()).format("YYYYMMDD");
         let free = true;
+        let id = '';
+        let closed = false;
         // console.log(open)
         // const past = moment().isAfter
         // console.log(past)
         if (list) {
 
             list.forEach((item) => {
-                if (item.from === hour && item.roomId === room && item.day === day)
+                if (item.from === hour && item.roomId === room && item.day === day) {
                     free = false;
+                    id = item._id;
+                    closed = item.closed;
+                }
                 if (item.hours > 1) {
                     if (parseInt(item.from.substring(0, 2), 10) + 1 === moment.duration(hour).hours() && item.roomId === room && item.day === day) {
                         free = false;
+                        id = item._id;
+                        closed = item.closed;
                     }
                 }
             })
@@ -173,7 +164,7 @@ class CreateReserva extends Component {
                     // <Cell xs={this.state.colSize} sm={this.state.colSize} md={this.state.colSize} lg={this.state.colSize} key={roomiteration} onClick={() => { this.showReserveModal(room, hour) }}>Libre</Cell>
                     <Cell xs={this.state.colSize} sm={this.state.colSize} md={this.state.colSize} lg={this.state.colSize} key={roomiteration} onClick={() => { this.toggleModal(room, hour, price) }}>Libre</Cell>
                     :
-                    <Cell xs={this.state.colSize} sm={this.state.colSize} md={this.state.colSize} lg={this.state.colSize} key={roomiteration} style={{ cursor: "not-allowed", backgroundColor: "rgba(197,239,247,0.3)" }} >Ocupado</Cell>
+                    <Cell xs={this.state.colSize} sm={this.state.colSize} md={this.state.colSize} lg={this.state.colSize} key={roomiteration} onClick={() => { this.showReservationDetail(id) }} style={{ backgroundColor: "rgba(197,239,247,0.3)" }} >{closed ? "Reserva cerrada" : "Reservado"}</Cell>
                 :
                 <Cell xs={this.state.colSize} sm={this.state.colSize} md={this.state.colSize} lg={this.state.colSize} key={roomiteration} style={{ cursor: "not-allowed", backgroundColor: "rgba(242, 241, 239, 0.8)" }} >Cerrado</Cell>
         )
@@ -189,50 +180,137 @@ class CreateReserva extends Component {
         })
     }
 
-    showPaymentModal = () => (
-        <Modal
-            visible={this.state.payModalVisible}
-            title="Realizar pago"
-            onOk={this.handleOk}
-            onCancel={() => { this.handleClose("pay") }}
-            footer={[
-                <Button key="back" size="large" onClick={() => { this.handleClose("pay") }}>
-                    Cancelar reserva
-                </Button>,
-                <Button
-                    key="submit"
-                    type="primary"
-                    size="large"
-                    // onClick={this.handleOk}
-                    onClick={this.handlePayment}
-                >
-                    Realizar pago
-          </Button>
-            ]}
-        >
-            <ModalDataWrapper className="isoContactCard">
-                <div className="isoContactInfoWrapper">
-                    <div className="isoContactCardInfos">
-                        <p className="isoInfoLabel" style={{ fontSize: "24px", paddingTop: "5px" }} >Pago de reserva en {this.props.salas.currentSala.name}</p>
-                    </div>
-                    <div className="isoContactCardInfos">
-                        <p className="isoInfoLabel">Día</p>
-                        <span>{moment(this.state.calendarDate).format('dddd D [de] MMMM [de] YYYY')}</span>
-                    </div>
-                    <div className="isoContactCardInfos">
-                        <p className="isoInfoLabel">Importe</p>
+    showReservationDetail = (id) => {
+        this.props.dispatch(getReservationById(id));
+        this.setState({ detailVisible: true })
+    }
+
+    handleOkDetail = () => {
+        this.setState({
+            detailVisible: false
+        })
+    }
+
+    closeReservation = () => {
+        let reservation = {
+            id: this.props.reservations.currentReservation._id
+        }
+        this.props.dispatch(closeReservation(reservation))
+        this.setState({ detailVisible: false })
+        notification('success', "La reserva ha sido cerrada")
+        this.props.dispatch(getReservationsBySala(this.props.salas.currentSala._id))
+
+    }
+
+    cancelReservation = () => {
+        let sendData = {}
+        sendData = {
+            id: this.props.reservations.currentReservation._id,
+            userid: this.props.user.users.id,
+            username: this.props.user.users.name + ' ' + this.props.user.users.lastname
+        }
+        this.props.dispatch(cancelReservation(sendData))
+        this.props.dispatch(getReservationsBySala(this.props.salas.currentSala._id))
+        this.setState({ detailVisible: false })
+        notification("success", "La reserva fue cancelada")
+    }
+
+    showReservationDetailModal = () => (
+        this.props.reservations.currentReservation ?
+            <Modal
+                visible={this.state.detailVisible}
+                title="Detalle de reserva"
+                onOk={this.handleOkDetail}
+                onCancel={this.handleOkDetail}
+                footer={[
+                    <Button
+                        key="submit"
+                        type="primary"
+                        size="large"
+                        onClick={this.handleOkDetail}
+                    >
+                        OK
+                </Button>
+                ]}
+            >
+                <ModalDataWrapper className="isoContactCard">
+                    <div className="isoContactInfoWrapper">
+                        <div className="isoContactCardInfos">
+                            <p className="isoInfoLabel" style={{ fontSize: "24px", paddingTop: "5px" }} >Reserva en {this.props.reservations.currentReservation.salaName}</p>
+                        </div>
+                        <div className="isoContactCardInfos">
+                            <p className="isoInfoLabel">Día</p>
+                            <span>{moment(this.props.reservations.currentReservation.timestamp).format('dddd D [de] MMMM [de] YYYY')}</span>
+                        </div>
+                        <div className="isoContactCardInfos">
+                            <p className="isoInfoLabel">Hora</p>
+                            <span>{this.props.reservations.currentReservation.from}</span>
+                        </div>
+                        <div className="isoContactCardInfos">
+                            <p className="isoInfoLabel">Horas</p>
+                            <span>{this.props.reservations.currentReservation.hours}</span>
+                        </div>
+                        <div className="isoContactCardInfos">
+                            <p className="isoInfoLabel">Usuario</p>
+                            <span>{this.props.reservations.currentReservation.username}</span>
+                        </div>
+                        <div className="isoContactCardInfos">
+                            <p className="isoInfoLabel">Email</p>
+                            <span>{this.props.reservations.currentReservation.useremail}</span>
+                        </div>
+                        <div className="isoContactCardInfos">
+                            <p className="isoInfoLabel">Teléfono</p>
+                            <span>{this.props.reservations.currentReservation.userphone}</span>
+                        </div>
                         {
-                            this.state.payData ?
-                                <span>$ {this.state.payData.showPrice}</span>
-                                : 0
+                            this.props.reservations.currentReservation.cancelled ?
+                                <div>
+                                    <div className="isoContactCardInfos">
+                                        <p className="isoInfoLabel">Cancelada el</p>
+                                        <span>{moment(this.props.reservations.currentReservation.updatedAt).format('dddd D [de] MMMM [de] YYYY')}</span>
+                                    </div>
+                                    <div className="isoContactCardInfos">
+                                        <p className="isoInfoLabel">Cancelada por</p>
+                                        <span>{this.props.reservations.currentReservation.cancelledBy}</span>
+                                    </div>
+                                </div>
+                                : <div></div>
+                        }
+                        {
+                            !this.props.reservations.currentReservation.cancelled && !this.props.reservations.currentReservation.closed ?
+                                <div className="isoContactCardInfos" style={{ textAlign: "center" }}>
+                                    <Button onClick={this.closeReservation} type="primary" style={{ width: "100%" }} >Cerrar reserva</Button>
+                                </div>
+                                : <div></div>
+                        }
+                        {
+                            !this.props.reservations.currentReservation.cancelled && !this.props.reservations.currentReservation.closed && this.props.user.users.id === this.props.reservations.currentReservation.userId ?
+                                <div className="isoContactCardInfos" style={{ textAlign: "center" }}>
+                                    <Button onClick={this.cancelReservation} type="" style={{ width: "100%" }} >Cancelar reserva</Button>
+                                </div>
+                                : <div></div>
+                        }
+                        {
+                            this.props.reservations.currentReservation.closed ?
+                                <div className="isoContactCardInfos">
+                                    <p className="isoInfoLabel" style={{ alignContent: "center", justifyContent: "center", alignItems: "center", fontSize: "24px" }}>Reserva Cerrada</p>
+                                </div>
+                                : <div></div>
                         }
 
                     </div>
-                </div>
-            </ModalDataWrapper>
-        </Modal>
-    )
 
+                </ModalDataWrapper>
+                {/* <div>
+                Reserva en Sala {this.props.salas.currentSala.name}
+            </div>
+            <div>
+                Día: {moment(this.state.calendarDate).format('YYYYMMDD')}
+                Hora: {this.state.resHour}
+            </div> */}
+            </Modal>
+            : <div></div>
+    )
 
     showReserveModal = () => (
         <Modal
@@ -294,18 +372,12 @@ class CreateReserva extends Component {
 
 
 
-    handlePayment = () => {
-        this.setState({payModalVisible:false}); 
-        window.location.href = this.state.init_point; 
-    }
-
-
     handleClose = (str) => {
-        if (str === "pay") {
-            this.props.dispatch(deleteReservation(this.props.reservations.reservation))
-            this.props.dispatch(getReservationsBySala(this.props.salas.currentSala._id))
-            this.setState({ payModalVisible: false })
-        }
+        // if (str === "pay") {
+        //     this.props.dispatch(deleteReservation(this.props.reservations.reservation))
+        //     this.props.dispatch(getReservationsBySala(this.props.salas.currentSala._id))
+        //     this.setState({ payModalVisible: false })
+        // }
         this.setState({
             modalVisible: false,
             // payModalVisible: false,
@@ -316,7 +388,7 @@ class CreateReserva extends Component {
         const room = this.state.resRoom;
         const hour = this.state.resHour;
         const hours = this.state.resHours;
-        const price = this.state.resPrice;
+        // const price = this.state.resPrice;
         const validHour = parseInt(hour.substring(0, 2), 10);
         let reservationDate = moment(this.state.calendarDate.getTime()).add(validHour, 'hours')
         const list = this.props.reservations.list;
@@ -347,28 +419,28 @@ class CreateReserva extends Component {
                 reviewed: false,
             }
 
-            const user = this.props.user.users
-            const payData = {
-                item: {
-                    title: "Reserva sala ensayo",
-                    quantity: parseInt(hours, 10),
-                    currency_id: 'ARS',
-                    unit_price: price
-                },
-                payer: {
-                    // email: user.email,
-                    email: 'test_user_72945948@testuser.com',
-                    name: user.name,
-                    surname: user.lastname,
-                    date_created: moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ")
-                },
-                sala: {
-                    id: this.props.salas.currentSala._id
-                },
-                showPrice: price * hours
-            }
+            // const user = this.props.user.users
+            // const payData = {
+            //     item: {
+            //         title: "Reserva sala ensayo",
+            //         quantity: parseInt(hours, 10),
+            //         currency_id: 'ARS',
+            //         unit_price: price
+            //     },
+            //     payer: {
+            //         // email: user.email,
+            //         email: 'test_user_72945948@testuser.com',
+            //         name: user.name,
+            //         surname: user.lastname,
+            //         date_created: moment().format("YYYY-MM-DDTHH:mm:ss.SSSZ")
+            //     },
+            //     sala: {
+            //         id: this.props.salas.currentSala._id
+            //     },
+            //     showPrice: price * hours
+            // }
 
-            this.setState({ payData })
+            // this.setState({ payData })
             this.props.dispatch(saveReservation(resData));
             this.props.dispatch(getReservationsBySala(this.props.salas.currentSala._id))
             this.setState({ loading: true })
@@ -412,7 +484,7 @@ class CreateReserva extends Component {
     render() {
         // console.log(this.state.calendarDate)
         // console.log(rDay)
-        // console.log(this.props)
+        console.log(this.props)
         // console.log(this.state)
         moment.locale('es', {
             week: {
@@ -431,14 +503,18 @@ class CreateReserva extends Component {
         return (
             <div>
                 <Spins spinning={this.state.loading}>
-                    <div style={titleStyle} >Reserva de sala {`${this.props.salas.currentSala.name}`}</div>
+                    {
+                        this.props.salas.currentSala ?
+                            <div style={titleStyle} >Reservas de sala {`${this.props.salas.currentSala.name}`}</div>
+                            : <div></div>
+                    }
                     <Row>
                         <Col xs={24} sm={24} md={8} lg={8} >
                             <CalendarStyleWrapper className="isomorphicCalendarWrapper">
                                 <MiniCalendar
                                     setCalendarDate={this.setCalendarDate}
                                     validDays={days}
-                                    vendor={false}
+                                    vendor={true}
                                 />
                             </CalendarStyleWrapper>
                         </Col>
@@ -452,7 +528,7 @@ class CreateReserva extends Component {
                         </Col>
                     </Row>
                     {this.showReserveModal()}
-                    {this.showPaymentModal()}
+                    {this.showReservationDetailModal()}
                 </Spins>
             </div>
         )
@@ -470,4 +546,4 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 
-export default connect(mapStateToProps)(CreateReserva);
+export default connect(mapStateToProps)(ManageReserva);

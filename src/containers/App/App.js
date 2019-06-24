@@ -15,12 +15,20 @@ import AppRouter from './AppRouter';
 import themes from '../../config/themes';
 import AppHolder from './commonStyle';
 import './global.css';
+import 'moment/locale/es';
+import moment from 'moment'
 
 const { Content } = Layout;
 const { logout } = authAction;
 const { toggleAll } = appActions;
 export class App extends Component {
   render() {
+    moment.locale('es', {
+      week: {
+        dow: 0,
+        // doy : Int
+      }
+    })
     const { url } = this.props.match;
     const { selectedTheme } = this.props;
     // const currentAppLocale = AppLocale[locale];

@@ -175,6 +175,22 @@ export function updateSala(sala) {
     }
 }
 
+export function deleteSala(sala) {
+    const request = axios.post(`/api/deletesala?id=${sala.id}`, sala)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let sala = data.deleted;
+            let response = {
+                ...sala
+            }
+            dispatch({
+                type: 'DELETE_SALA',
+                payload: response
+            })
+        })
+    }
+}
+
 
 export function getCurrentState() {
     return {

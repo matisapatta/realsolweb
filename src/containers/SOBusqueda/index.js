@@ -24,6 +24,7 @@ import CardContent from '../../components/cardcontent/cardContent';
 import Modal from '../../components/feedback/modal';
 import GoogleMapReact from 'google-map-react';
 import markerImg from '../../image/marker.png'
+import moment from 'moment';
 
 
 
@@ -140,13 +141,13 @@ class Busqueda extends Component {
       formData.pricefrom = "0";
     if (formData.priceto === '')
       formData.priceto = "0";
-    if(formData.pricefrom !== "0" && formData.priceto!=="0"){
+    if (formData.pricefrom !== "0" && formData.priceto !== "0") {
       if (parseInt(formData.pricefrom, 10) > parseInt(formData.priceto, 10)) {
         notification('error', 'El campo "precio hasta" debe ser mayor al campo "precio desde"', '');
       } else {
         priceValid = true;
       }
-    } else { priceValid=true}
+    } else { priceValid = true }
     if (priceValid)
       return true;
     return false
@@ -216,6 +217,12 @@ class Busqueda extends Component {
 
 
   render() {
+    moment.locale('es', {
+      week: {
+        dow: 0,
+        // doy : Int
+      }
+    })
     return (
       <div>
         <LayoutWrapper>
@@ -264,12 +271,12 @@ class Busqueda extends Component {
                       style={{ "width": '45%', "height": "42px", "marginTop": "16px", "float": "right" }}
                       prefix={<span style={{ color: 'rgba(0,0,0,.25)' }}>$</span>}
                     />
-                    <DateRangepicker
+                    {/* <DateRangepicker
                       placeholder={["Fecha desde", "Fecha hasta"]}
                       style={{ "width": '100%', "marginTop": "16px", "lineHeight": "1" }}
                       format={dateFormat}
                       onChange={(date, dateString) => this.handleDate(date, dateString)}
-                    />
+                    /> */}
                     <div style={{
                       marginTop: "15px",
                       alignContent: "center"
