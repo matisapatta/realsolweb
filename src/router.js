@@ -50,6 +50,11 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
           path={'/signup'}
           component={asyncComponent(() => import('./containers/Page/signup'))}
         />
+        <Route
+          exact
+          path={'/vendorsignup'}
+          component={asyncComponent(() => import('./containers/Page/vendorsignup'))}
+        />
 
         <Route
           exact

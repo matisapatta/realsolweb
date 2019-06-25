@@ -10,7 +10,7 @@ import { userRegister,
 } from '../../redux/sousers/actions';
 import Auth0 from '../../helpers/auth0/index';
 import IntlMessages from '../../components/utility/intlMessages';
-import SignUpStyleWrapper from './signup.style';
+import SignUpStyleWrapper from './vendorsignup.style';
 import { siteTitle } from '../../config';
 import { GoogleLogin } from 'react-google-login'
 import  FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
@@ -75,6 +75,7 @@ class SignUp extends React.Component {
       lastname: this.state.lastname,
       password: this.state.password,
       phone: this.state.phone,
+      role: 1
     }))
 
   }
@@ -87,7 +88,8 @@ class SignUp extends React.Component {
       email: this.state.email,
       name: this.state.name,
       lastname: this.state.lastname,
-      password: this.state.password
+      password: this.state.password,
+      role: 1
     }, this.props.user.users))
   }
 
@@ -101,7 +103,7 @@ class SignUp extends React.Component {
       avatar: response.picture.data.url,
       facebookId: response.userID,
       isLocal: false,
-      role: 0,
+      role: 1,
     }))
   }
   
@@ -114,7 +116,7 @@ class SignUp extends React.Component {
       avatar: response.profileObj.imageUrl,
       googleId: response.profileObj.googleId,
       isLocal: false,
-      role: 0,
+      role: 1,
     }))
   }
 
@@ -126,10 +128,11 @@ class SignUp extends React.Component {
           <div className="isoSignUpContent">
             <div className="isoLogoWrapper">
               <Link to="/">
-                {siteTitle}
+                <div>{siteTitle}</div>
+                <br/>
+                <div>Registro como Proveedor</div>
               </Link>
             </div>
-
             <div className="isoSignUpForm">
               <div className="isoInputWrapper isoLeftRightComponent">
                 <Input size="large" placeholder="Nombre" value={this.state.name} onChange={this.handleInputName} />
