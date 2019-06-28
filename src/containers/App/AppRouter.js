@@ -48,7 +48,7 @@ class AppRouter extends React.Component {
         <Route
           exact
           path={`${url}/`}
-          component={asyncComponent(() => import('../SOBusqueda'))}
+          component={asyncComponent(() => import('../SOIndex'))}
         />
 
         {/* {{Routes de Dueño de Sala}} */}

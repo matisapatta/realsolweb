@@ -413,10 +413,11 @@ class ManageReserva extends Component {
                 hours: hours,
                 timestamp: reservationDate.format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
                 userId: this.props.user.users.id,
-                paid: false,
+                paid: parseInt(hours, 10) * this.state.resPrice,
                 salaName: this.props.salas.currentSala.name,
                 cancelled: false,
                 reviewed: false,
+                numberDay: moment(this.state.calendarDate).day(),
             }
 
             // const user = this.props.user.users
@@ -441,6 +442,8 @@ class ManageReserva extends Component {
             // }
 
             // this.setState({ payData })
+            console.log(this.state)
+            console.log(this.props)
             this.props.dispatch(saveReservation(resData));
             this.props.dispatch(getReservationsBySala(this.props.salas.currentSala._id))
             this.setState({ loading: true })
@@ -484,7 +487,7 @@ class ManageReserva extends Component {
     render() {
         // console.log(this.state.calendarDate)
         // console.log(rDay)
-        console.log(this.props)
+        // console.log(this.props)
         // console.log(this.state)
         moment.locale('es', {
             week: {

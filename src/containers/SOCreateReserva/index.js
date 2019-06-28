@@ -341,10 +341,11 @@ class CreateReserva extends Component {
                 hours: hours,
                 timestamp: reservationDate.format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
                 userId: this.props.user.users.id,
-                paid: false,
+                paid: price * parseInt(hours, 10),
                 salaName: this.props.salas.currentSala.name,
                 cancelled: false,
                 reviewed: false,
+                numberDay: moment(this.state.calendarDate).day(),
             }
 
             const user = this.props.user.users

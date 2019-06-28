@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import Form from '../../components/uielements/form';
 import Button from '../../components/uielements/button';
-import { DateRangepicker } from '../../components/uielements/datePicker';
+// import { DateRangepicker } from '../../components/uielements/datePicker';
 import Select, { SelectOption } from '../../components/uielements/select';
 import { getSalas, testSalaSave } from '../../redux/sosalas/actions';
 import Card from '../../components/uielements/styles/card.style';
@@ -25,6 +25,7 @@ import Modal from '../../components/feedback/modal';
 import GoogleMapReact from 'google-map-react';
 import markerImg from '../../image/marker.png'
 import moment from 'moment';
+// import StepWizard from 'react-step-wizard';
 
 
 

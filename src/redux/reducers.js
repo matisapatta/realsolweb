@@ -7,6 +7,7 @@ import User from './sousers/reducers';
 import Reservations from './soreservations/reducers'
 import ThemeSwitcher from './themeSwitcher/reducer'
 import Reviews from './soreviews/reducers'
+import Reports from './soreports/reducers'
 
 
 
@@ -20,4 +21,5 @@ export default {
   User,
   Reservations,
   Reviews,
+  Reports,
 };
