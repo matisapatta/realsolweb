@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import IsoWidgetsWrapper from './widgets-wrapper';
-import IsoWidgetBox from './widget-box';
+// import IsoWidgetBox from './widget-box';
 import { Row, Col } from 'antd';
 import SingleProgressWidget from '../../components/widgets/progress/progress-single';
 import ReportsWidget from '../../components/widgets/report/report-widget';
@@ -121,49 +121,49 @@ class MainVendor extends Component {
                 >
                     <SingleProgressWidget
                         label="Domingo"
-                        percent={data.reserv.dom*100/data.total}
+                        percent={Math.floor(data.reserv.dom*100/data.total)}
                         barHeight={7}
                         status="active"
                         info={true} // Boolean: true, false
                     />
                     <SingleProgressWidget
                         label="Lunes"
-                        percent={data.reserv.lun*100/data.total}
+                        percent={Math.floor(data.reserv.lun*100/data.total)}
                         barHeight={7}
                         status="active"
                         info={true} // Boolean: true, false
                     />
                     <SingleProgressWidget
                         label="Martes"
-                        percent={data.reserv.mar*100/data.total}
+                        percent={Math.floor(data.reserv.mar*100/data.total)}
                         barHeight={7}
                         status="active"
                         info={true} // Boolean: true, false
                     />
                     <SingleProgressWidget
                         label="Miércoles"
-                        percent={data.reserv.mier*100/data.total}
+                        percent={Math.floor(data.reserv.mier*100/data.total)}
                         barHeight={7}
                         status="active"
                         info={true} // Boolean: true, false
                     />
                     <SingleProgressWidget
                         label="Jueves"
-                        percent={data.reserv.jue*100/data.total}
+                        percent={Math.floor(data.reserv.jue*100/data.total)}
                         barHeight={7}
                         status="active"
                         info={true} // Boolean: true, false
                     />
                     <SingleProgressWidget
                         label="Viernes"
-                        percent={data.reserv.vie*100/data.total}
+                        percent={Math.floor(data.reserv.vie*100/data.total)}
                         barHeight={7}
                         status="active"
                         info={true} // Boolean: true, false
                     />
                     <SingleProgressWidget
                         label="Sábado"
-                        percent={data.reserv.sab*100/data.total}
+                        percent={Math.floor(data.reserv.sab*100/data.total)}
                         barHeight={7}
                         status="active"
                         info={true} // Boolean: true, false
@@ -291,7 +291,7 @@ class MainVendor extends Component {
 
 
     render() {
-        console.log(this.props)
+        // console.log(this.props)
         return (
             <Spins spinning={this.state.loading}>
                 <div>

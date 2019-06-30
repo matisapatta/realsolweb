@@ -418,6 +418,7 @@ class ManageReserva extends Component {
                 cancelled: false,
                 reviewed: false,
                 numberDay: moment(this.state.calendarDate).day(),
+                location: this.props.salas.currentSala.location,
             }
 
             // const user = this.props.user.users
@@ -442,8 +443,8 @@ class ManageReserva extends Component {
             // }
 
             // this.setState({ payData })
-            console.log(this.state)
-            console.log(this.props)
+            // console.log(this.state)
+            // console.log(this.props)
             this.props.dispatch(saveReservation(resData));
             this.props.dispatch(getReservationsBySala(this.props.salas.currentSala._id))
             this.setState({ loading: true })

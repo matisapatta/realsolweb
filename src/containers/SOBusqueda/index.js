@@ -1,36 +1,49 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import LayoutWrapper from '../../components/utility/layoutWrapper';
-import StyledInput from '../../components/uielements/input';
+// import StyledInput from '../../components/uielements/input';
 import Box from '../../components/utility/box';
+import Box1 from '../../components/utility/box1';
 import ContentHolder from '../../components/utility/contentHolder';
 import {
   Col,
   Row,
+  Icon
 } from 'antd';
-import Form from '../../components/uielements/form';
+// import Form from '../../components/uielements/form';
 import Button from '../../components/uielements/button';
 // import { DateRangepicker } from '../../components/uielements/datePicker';
-import Select, { SelectOption } from '../../components/uielements/select';
+// import Select, { SelectOption } from '../../components/uielements/select';
 import { getSalas, testSalaSave } from '../../redux/sosalas/actions';
 import Card from '../../components/uielements/styles/card.style';
 import { Link } from 'react-router-dom'
-import { WRAPPEDURL, locations, dateFormat } from '../../config';
+import {
+  WRAPPEDURL,
+  //  locations 
+} from '../../config';
 import { rowStyle, colStyle, gutter } from '../../config/styleConst';
 import { testSala } from '../../testData';
-import { ButtonWrapper } from './busqueda.style'
+// import { ButtonWrapper } from './busqueda.style'
 import notification from '../../components/notification';
 import CardContent from '../../components/cardcontent/cardContent';
+import CardContent1 from '../../components/cardcontent/cardContent1';
 import Modal from '../../components/feedback/modal';
 import GoogleMapReact from 'google-map-react';
 import markerImg from '../../image/marker.png'
 import moment from 'moment';
-// import StepWizard from 'react-step-wizard';
+import StepWizard from 'react-step-wizard';
+import Name from './wizard/name'
+import Location from './wizard/location'
+import Price from './wizard/price'
+import SearchIcon from '../../image/icons/searchicon.png'
+import ResponsiveIcon from '../../image/icons/responsiveicon.png'
+import MusicIcon from '../../image/icons/musicicon.png'
 
 
 
-const Option = SelectOption;
-const locationOptions = [];
+
+// const Option = SelectOption;
+// const locationOptions = [];
 
 const Marker = () => (
   <img src={markerImg} alt="marker" />
@@ -59,11 +72,15 @@ class Busqueda extends Component {
     super(props)
     if (props.salas == null)
       this.state = { search: false }
-    locationOptions.length === 0 ?
-      locations.forEach((element) => {
-        locationOptions.push(<Option key={element}>{element}</Option>);
-      })
-      : this.dummy()
+    // locationOptions.length === 0 ?
+    //   locations.forEach((element) => {
+    //     locationOptions.push(<Option key={element}>{element}</Option>);
+    //   })
+    //   : this.dummy()
+
+    this.handleInput = this.handleInput.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.submitForm = this.submitForm.bind(this)
   }
 
   static defaultProps = {
@@ -97,14 +114,14 @@ class Busqueda extends Component {
     })
   }
 
-  handleList = (event, name) => {
-    const newFormdata = { ...this.state.formdata }
-    console.log(event);
-    newFormdata[name].push(event);
-    this.setState({
-      formdata: newFormdata
-    })
-  }
+  // handleList = (event, name) => {
+  //   const newFormdata = { ...this.state.formdata }
+  //   console.log(event);
+  //   newFormdata[name].push(event);
+  //   this.setState({
+  //     formdata: newFormdata
+  //   })
+  // }
 
   handleDate = (date, dateString) => {
     const newFormdata = { ...this.state.formdata }
@@ -212,10 +229,62 @@ class Busqueda extends Component {
             </Box>
           </Col>
         </Row>
-        : null
+        :
+        <Row style={rowStyle} gutter={gutter} justify="start">
+          <Col md={24} sm={24} xs={24} style={colStyle}>
+              <Box1>
+                <Row style={rowStyle} gutter={gutter} justify="start">
+                  <Col md={8} sm={8} xs={24} style={colStyle}>
+                    <ContentHolder>
+                      <Card
+                        loading={false}
+                        // title=""
+                        style={{ width: '100%', border: "0", boxShadow: "0 0 0 0" }}
+                      >
+                        <CardContent1
+                          text={<div><h3>Elegante y funcional</h3><span>Una plataforma pensada por músicos, para músicos</span></div>}
+                          image={MusicIcon}
+
+                        />
+                      </Card>
+                    </ContentHolder>
+                  </Col>
+                  <Col md={8} sm={8} xs={24} style={colStyle}>
+                    <ContentHolder>
+                      <Card
+                        loading={false}
+                        // title=""
+                        style={{ width: '100%', border: "0", boxShadow: "0 0 0 0" }}
+                      >
+                        <CardContent1
+                          text={<div><h3>Búsqueda exacta</h3><span>Filtrá por ubicación, nombre y precio</span></div>}
+                          image={SearchIcon}
+                        />
+                      </Card>
+                    </ContentHolder>
+                  </Col>
+                  <Col md={8} sm={8} xs={24} style={colStyle}>
+                    <ContentHolder>
+                      <Card
+                        loading={false}
+                        // title=""
+                        style={{ width: '100%', border: "0", boxShadow: "0 0 0 0", padding: "0" }}
+                      >
+                        <CardContent1
+                          text={<div><h3>Multiplataforma</h3><span>Accedé a reservar salas desde tu dispositivo favorito</span></div>}
+                          image={ResponsiveIcon}
+                        />
+                      </Card>
+                    </ContentHolder>
+                  </Col>
+                </Row>
+              </Box1>
+          </Col>
+        </Row>
     )
   }
 
+  setInstance = SW => this.setState({ SW })
 
   render() {
     moment.locale('es', {
@@ -224,10 +293,11 @@ class Busqueda extends Component {
         // doy : Int
       }
     })
+    console.log(this.state)
     return (
       <div>
         <LayoutWrapper>
-          <Row style={rowStyle} gutter={gutter} justify="start">
+          {/* <Row style={rowStyle} gutter={gutter} justify="start">
             <Col md={24} sm={24} xs={24} style={colStyle}>
               <Box
                 title="Buscar"
@@ -272,12 +342,6 @@ class Busqueda extends Component {
                       style={{ "width": '45%', "height": "42px", "marginTop": "16px", "float": "right" }}
                       prefix={<span style={{ color: 'rgba(0,0,0,.25)' }}>$</span>}
                     />
-                    {/* <DateRangepicker
-                      placeholder={["Fecha desde", "Fecha hasta"]}
-                      style={{ "width": '100%', "marginTop": "16px", "lineHeight": "1" }}
-                      format={dateFormat}
-                      onChange={(date, dateString) => this.handleDate(date, dateString)}
-                    /> */}
                     <div style={{
                       marginTop: "15px",
                       alignContent: "center"
@@ -294,6 +358,23 @@ class Busqueda extends Component {
                     </div>
                   </Form>
                 </ContentHolder>
+              </Box>
+            </Col>
+          </Row> */}
+
+          <Row style={rowStyle} gutter={gutter} justify="start">
+            <Col md={24} sm={24} xs={24} style={colStyle}>
+              <Box
+              // title="Buscar"
+              >
+                <StepWizard
+                  // nav={<Nav />}
+                  instance={this.setInstance}
+                >
+                  <Name handleInput={this.handleInput} submitForm={this.submitForm} />
+                  <Location handleChange={this.handleChange} />
+                  <Price submitForm={this.submitForm} handleInput={this.handleInput} />
+                </StepWizard>
               </Box>
             </Col>
           </Row>

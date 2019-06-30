@@ -14,6 +14,8 @@ export default function reducers(state = {}, action) {
             return { ...state, ...action.payload }
         case 'CANCEL_RESERVATION':
             return { ...state, ...action.payload }
+        case 'REVIEW_RESERVATION':
+            return { ...state, ...action.payload }
         case 'DELETE_RESERVATION':
             return { ...state, deleted: action.payload }
         default:

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Button from './uielements/button';
-import Popover from './uielements/popover';
+// import Popover from './uielements/popover';
 import ColorChooserDropdown from './colorChooser.style';
 
 export default class ColorChoser extends Component {
@@ -19,7 +19,7 @@ export default class ColorChoser extends Component {
     this.setState({ visible: !this.state.visible });
   }
   render() {
-    const { colors, seectedColor, changeColor } = this.props;
+    const { colors, selectedColor, changeColor } = this.props;
     const content = () =>
       <ColorChooserDropdown className="isoColorOptions">
         {colors.map((color, index) => {
@@ -34,17 +34,17 @@ export default class ColorChoser extends Component {
         })}
       </ColorChooserDropdown>;
     return (
-      <Popover
-        content={content()}
-        trigger="click"
-        visible={this.state.visible}
-        onVisibleChange={this.handleVisibleChange}
-      >
-        <Button
-          style={{ backgroundColor: colors[seectedColor] }}
+      // <Popover
+      //   // content={content()}
+      //   trigger="click"
+      //   visible={this.state.visible}
+      //   onVisibleChange={this.handleVisibleChange}
+      // >
+        <div
+          style={{ backgroundColor: selectedColor }}
           className="isoColorChooser"
         />
-      </Popover>
+      // </Popover>
     );
   }
 }

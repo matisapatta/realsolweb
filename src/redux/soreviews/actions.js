@@ -53,23 +53,24 @@ import axios from 'axios';
 // }
 
 
-// export function saveReservation(reservation) {
-//     const request = axios.post(`/api/savereservation`, reservation)
-//     return (dispatch) => {
-//         request.then(({ data }) => {
-//             // let sala = data.success ? data.sala : null;
-//             let reservation = data.reservation ? data.reservation : false;
-//             let response = {
-//                 // success: data.success,
-//                 reservation
-//             }
-//             dispatch({
-//                 type: 'SAVE_RESERVATION',
-//                 payload: response
-//             })
-//         })
-//     }
-// }
+export function saveReview(review) {
+    const request = axios.post(`/api/savereview`, review)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            // let sala = data.success ? data.sala : null;
+            let review = data.review ? data.review : false;
+            let response = {
+                // success: data.success,
+                review
+            }
+            dispatch({
+                type: 'SAVE_REVIEW',
+                payload: response
+            })
+        })
+    }
+}
+
 // export function cancelReservation(reservation) {
 //     const request = axios.post(`/api/cancelreservation?id=${reservation.id}`, reservation)
 //     return (dispatch) => {

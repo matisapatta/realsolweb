@@ -27,6 +27,7 @@ const Card = styled(CardComp)`
   }
 
   .ant-card-body {
+    //padding: 0px
     p {
       font-size: 13px;
       color: ${palette('text', 3)};
@@ -48,7 +49,7 @@ const Card = styled(CardComp)`
     }
 
     &:hover {
-      border: 1px solid ${palette('border', 0)} !important;
+      //border: 1px solid ${palette('border', 0)} !important;
     }
   }
 

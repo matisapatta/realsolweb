@@ -142,4 +142,22 @@ export function deleteReservation(reservation) {
     }
 }
 
+export function markAsReviewed(reservation) {
+    const request = axios.post(`/api/markasreviewed?id=${reservation.id}`, reservation)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            // let sala = data.success ? data.sala : null;
+            let reservation = data.reservation ? data.reservation : false;
+            let response = {
+                // success: data.success,
+                reservation
+            }
+            dispatch({
+                type: 'REVIEW_RESERVATION',
+                payload: response
+            })
+        })
+    }
+}
+
 
