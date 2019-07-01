@@ -63,11 +63,12 @@ export default class ReviewList extends Component {
           !reservation.reviewed ?
 
             <Button
-              className="isoTodoDelete"
+              style={{padding:"8px"}}
+              className=""
               icon="form"
               type="button"
               onClick={() => { this.setState({ modalVisible: true, reservation: reservation }) }}
-            />
+            >Valorar</Button>
             : <div></div>
         }{
           !reservation.reviewed ?
@@ -76,11 +77,12 @@ export default class ReviewList extends Component {
 
             :
             <Button
-            className="isoTodoDelete"
+            style={{padding:"8px"}}
+            className=""
             icon="eye"
             type="button"
             onClick={() => { alert("ver valoracion") }}
-          />
+          >Ver valoración</Button>
         }
 
       </div>
@@ -210,7 +212,7 @@ class CancelButton extends Component {
           handleDelete();
         }}
       >
-        <Button type="button" className="isoTodoDelete" icon="close" />
+        <Button type="button" className="isoTodoMats" icon="close" />
       </Popconfirm>
     );
   }

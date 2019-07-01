@@ -260,6 +260,9 @@ const WDTodoListWrapper = styled.div`
           }
         }
       }
+      .isoTodoMats {
+        margin-left: 10px
+      }
 
       .isoTodoDelete,
       .isoNoteEditIcon {
