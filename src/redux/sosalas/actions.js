@@ -75,6 +75,23 @@ export function getSalasOwner(id) {
     }
 }
 
+export function getSalasAdmin() {
+    const request = axios.get(`/api/getsalasadmin`)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let send;
+            if (data)
+                send = data;
+            else
+                send = null;
+            dispatch({
+                type: 'GET_SALA_ADMIN',
+                payload: send
+            })
+        })
+    }
+}
+
 
 
 // export function getSalaDetail(id) {

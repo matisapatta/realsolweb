@@ -19,6 +19,8 @@ export default function reducers(state = {}, action) {
         //     return { ...state, updatedSala: action.payload }
         case 'GET_SALA_OWNER':
             return { ...state, listSalas: action.payload }
+        case 'GET_SALA_ADMIN':
+            return { ...state, listSalas: action.payload }
         case 'CLEAN_PROPS':
             return { ...state, currentSala: action.payload }
         default:

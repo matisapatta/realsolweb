@@ -212,6 +212,7 @@ class editDatosView extends Component {
               disabled={viewMode}
             />
           </div>
+          
 
           <div className="isoContactCardInfos">
             <p className="isoInfoLabel">Notas</p>

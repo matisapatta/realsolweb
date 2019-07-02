@@ -227,7 +227,8 @@ class Sidebar extends Component {
 
               {this.props.user.users.role === 1 || this.props.user.users.role === 2 ?
                 <Menu.Item key="datossala">
-                  <Link to={`${url}/datossala`}>
+                  {/* <Link to={`${url}/datossala`}> */}
+                  <Link to={`${url}/datos`}>
                     <span className="isoMenuHolder" style={submenuColor}>
                       <i className="ion-android-person" />
                       <span className="nav-text">
@@ -275,11 +276,11 @@ class Sidebar extends Component {
                       Administrar salas
                     </Link>
                   </Menu.Item>
-                  <Menu.Item style={submenuStyle} key="adminreview">
+                  {/* <Menu.Item style={submenuStyle} key="adminreview">
                     <Link style={submenuColor} to={`${url}/adminreview`}>
                       Administrar valoraciones
                     </Link>
-                  </Menu.Item>
+                  </Menu.Item> */}
                 </SubMenu>
 
 

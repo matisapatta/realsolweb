@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getSalasOwner } from '../../redux/sosalas/actions';
+import { getSalasOwner, getSalaDetail, getSalasAdmin } from '../../redux/sosalas/actions';
+import { getReviewsBySala } from '../../redux/soreviews/actions'
 import LayoutWrapper from '../../components/utility/layoutWrapper';
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { WRAPPEDURL } from '../../config';
 import ContentHolder from '../../components/utility/contentHolder';
 import {
@@ -13,13 +14,14 @@ import Card from '../../components/uielements/styles/card.style';
 import { rowStyle, gutter } from '../../config/styleConst';
 import { InputSearch } from '../../components/uielements/input';
 import { getReservationById, closeReservation, cancelReservation } from '../../redux/soreservations/actions'
-import { getSalaDetail } from '../../redux/sosalas/actions'
 import notification from '../../components/notification'
 import Modal from '../../components/feedback/modal';
 import Button from '../../components/uielements/button';
 // import Spins from '../../components/uielements/spin';
 import { ModalDataWrapper } from './modal.style';
 import moment from 'moment'
+import Rate from '../../components/uielements/rate';
+import { SingleCardWrapper } from '../SOSala/room.style';
 
 const titleStyle = {
     "fontSize": "25px",
@@ -37,7 +39,8 @@ class GestionReservas extends Component {
     // }
 
     state = {
-        searchValue: ''
+        searchValue: '',
+        reviewModalVisible: false,
     }
 
     reservePage = (id) => {
@@ -48,7 +51,20 @@ class GestionReservas extends Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(getSalasOwner(this.props.user.users.id))
+        if (this.props.user.users.role === 1) {
+            this.props.dispatch(getSalasOwner(this.props.user.users.id))
+        } else if (this.props.user.users.role === 2) {
+            this.props.dispatch(getSalasAdmin())
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.reviews.list && this.props.reviews.list !== prevProps.reviews.list) {
+            this.setState({
+                reviews: this.props.reviews.list,
+                reviewModalVisible: true,
+            })
+        }
     }
 
     handleSearchInput = (event) => {
@@ -96,9 +112,54 @@ class GestionReservas extends Component {
 
     handleOk = () => {
         this.setState({
-            modalVisible: false
+            modalVisible: false,
+            reviewModalVisible: false,
         })
     }
+
+    showReviews = (salaId) => {
+        this.props.dispatch(getReviewsBySala(salaId))
+    }
+
+    reviewModal = () => (
+        this.state.reviews ?
+            <Modal
+                style={{ height: "300px" }}
+                visible={this.state.reviewModalVisible}
+                title="Valoraciones"
+                onOk={this.handleOk}
+                onCancel={this.handleOk}
+                footer={[
+                    <Button
+                        key="submit"
+                        type="primary"
+                        size="large"
+                        // loading={this.state.loading}
+                        onClick={this.handleOk}
+                    >
+                        Cerrar
+                    </Button>
+                ]}
+            >
+                <div style={{ maxHeight: "300px", overflow: "scroll" }}>
+                    {
+                        this.state.reviews.map((item, i) => (
+                            <SingleCardWrapper key={i} style={{ border: "0.5px solid lightgrey", boxShadow: "none" }} >
+                                <div className="isoCardContent">
+                                    {/* <h3 className="isoCardTitle">Sala {i + 1}</h3> */}
+                                    <span>Reseña de {item.reviewerName}, creada el {moment(item.createdAt).format('D [de] MMMM [de] YYYY')}</span>
+                                    <Rate value={item.score} disabled />
+                                    <span className="isoCardDate">
+                                        {item.reviewText}
+                                    </span>
+                                </div>
+                            </SingleCardWrapper>
+                        ))
+                    }
+                </div>
+            </Modal>
+            : <div></div>
+    )
 
     showReservationModal = () => (
         this.props.reservations.currentReservation ?
@@ -204,16 +265,28 @@ class GestionReservas extends Component {
                 (data.length > 0) ?
                     data.map((sala, i) => (
                         // <Link to={`${WRAPPEDURL}/gestionreservas/sala/${sala._id}`} key={i}>
-                        <div key={i} onClick={() => this.reservePage(sala._id)} style={{ cursor: "pointer" }} >
+                        <div key={i} >
                             <ContentHolder style={{
                                 marginTop: "8px"
                             }}>
                                 <Card
                                     loading={false}
-                                    title={`${sala.name}, ${sala.location}`}
+                                    title={<div><span onClick={() => this.reservePage(sala._id)} style={{ cursor: "pointer" }} >{sala.name}, {sala.location}</span>
+                                        <Rate value={sala.score} disabled style={{ paddingLeft: "15px" }} />
+                                        {
+                                            sala.score !== 0 ?
+                                                <span style={{ fontSize: "14px", fontWeight: "400", cursor: 'pointer' }} onClick={() => { this.showReviews(sala._id) }}>
+                                                    Ver valoraciones
+                                                </span>
+                                                :
+                                                <span style={{ fontSize: "14px", fontWeight: "400" }}  >
+                                                    Aún no hay valoraciones
+                                                </span>
+                                        }
+                                    </div>}
                                     style={{ width: '100%' }}
                                 >
-                                    {sala.description}
+                                    <span onClick={() => this.reservePage(sala._id)} style={{ cursor: "pointer" }} >{sala.description}</span>
                                 </Card>
                             </ContentHolder>
                         </div>
@@ -255,6 +328,7 @@ class GestionReservas extends Component {
                     </Col>
                 </Row>
                 {this.showReservationModal()}
+                {this.reviewModal()}
             </LayoutWrapper>
         )
     }
@@ -266,6 +340,7 @@ const mapStateToProps = (state, ownProps) => {
         salas: state.Salas,
         user: state.User,
         reservations: state.Reservations,
+        reviews: state.Reviews,
     }
 }
 
