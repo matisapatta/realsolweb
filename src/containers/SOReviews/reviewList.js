@@ -41,7 +41,7 @@ export default class ReviewList extends Component {
     };
   }
   singleReserv(reservation) {
-    const { deleteTodo } = this.props;
+    const { deleteTodo, displayReview } = this.props;
     const onDelete = () => deleteTodo(reservation._id);
     const updateTodo = (key, value) => {
       reservation[key] = value;
@@ -81,7 +81,8 @@ export default class ReviewList extends Component {
             className=""
             icon="eye"
             type="button"
-            onClick={() => { alert("ver valoracion") }}
+            onClick={()=>{displayReview(reservation._id)}}
+            // onClick={() => { alert(reservation._id) }}
           >Ver valoración</Button>
         }
 
@@ -105,6 +106,7 @@ export default class ReviewList extends Component {
       score: this.state.rating,
       reviewText: this.state.text,
       location:this.state.reservation.location,
+      salaName: this.state.reservation.salaName,
     }
     this.props.saveReview(review)
     this.setState({
@@ -148,7 +150,7 @@ export default class ReviewList extends Component {
             <div className="isoContactCardInfos">
               <p className="isoInfoLabel">Puntaje</p>
               <span>
-                <Rate allowHalf value={this.state.rating} defaultValue={2.5} onChange={(event)=>{this.setState({rating:event})}} />
+                <Rate value={this.state.rating} defaultValue={3} onChange={(event)=>{this.setState({rating:event})}} />
               </span>
             </div>
             <div className="isoContactCardInfos">
@@ -166,7 +168,7 @@ export default class ReviewList extends Component {
 
 
   render() {
-    console.log(this.state)
+    // console.log(this.state)
     const { search } = this.state;
     // console.log(this.props)
     const { selectedReserv, completed } = filterTodos(this.props.reservations, search);

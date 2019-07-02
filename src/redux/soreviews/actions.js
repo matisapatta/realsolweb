@@ -1,22 +1,22 @@
 import axios from 'axios';
 
 
-// export function getReservationsBySala(id) {
-//     const request = axios.get(`/api/getreservationsbysala?_id=${id}`)
-//     return (dispatch) => {
-//         request.then(({ data }) => {
-//             let send;
-//             if (data)
-//                 send = data;
-//             else
-//                 send = null;
-//             dispatch({
-//                 type: 'GET_RESERVATIONS_BY_SALA',
-//                 payload: send
-//             })
-//         })
-//     }
-// }
+export function getReviewsBySala(id) {
+    const request = axios.get(`/api/getreviewsbysala?_id=${id}`)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let send;
+            if (data)
+                send = data;
+            else
+                send = null;
+            dispatch({
+                type: 'GET_REVIEWS_BY_SALA',
+                payload: send
+            })
+        })
+    }
+}
 
 // export function getReservationsByUser(id) {
 //     const request = axios.get(`/api/getreservationsbyuser?_id=${id}`)
@@ -35,22 +35,22 @@ import axios from 'axios';
 //     }
 // }
 
-// export function getReservationById(id) {
-//     const request = axios.get(`/api/getreservationbyid?_id=${id}`)
-//     return (dispatch) => {
-//         request.then(({ data }) => {
-//             let send;
-//             if (data)
-//                 send = data;
-//             else
-//                 send = null;
-//             dispatch({
-//                 type: 'GET_RESERVATION_BY_ID',
-//                 payload: send
-//             })
-//         })
-//     }
-// }
+export function getReviewByResId(id) {
+    const request = axios.get(`/api/getreviewsbyreservationid?_id=${id}`)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let send;
+            if (data)
+                send = data;
+            else
+                send = null;
+            dispatch({
+                type: 'GET_REVIEW_BY_RESID',
+                payload: send
+            })
+        })
+    }
+}
 
 
 export function saveReview(review) {

@@ -8,7 +8,6 @@ import ContentHolder from '../../components/utility/contentHolder';
 import {
   Col,
   Row,
-  Icon
 } from 'antd';
 // import Form from '../../components/uielements/form';
 import Button from '../../components/uielements/button';
@@ -38,6 +37,7 @@ import Price from './wizard/price'
 import SearchIcon from '../../image/icons/searchicon.png'
 import ResponsiveIcon from '../../image/icons/responsiveicon.png'
 import MusicIcon from '../../image/icons/musicicon.png'
+import Rate from '../../components/uielements/rate';
 
 
 
@@ -202,10 +202,11 @@ class Busqueda extends Component {
             <ContentHolder key={i}>
               <Card
                 loading={false}
-                title={<Link to={`${WRAPPEDURL}/sala/${sala._id}`}>{`${sala.name}, ${sala.location}`}</Link>}
+                title={<div><Link to={`${WRAPPEDURL}/sala/${sala._id}`}>{`${sala.name}, ${sala.location}`}</Link><Rate value={sala.score} disabled style={{paddingLeft:"15px"}} /></div>}
                 style={{ width: '100%' }}
                 extra={this.showExtra(sala)}
               >
+                
                 <CardContent
                   text={sala.description}
                   image={sala.mainimage}
@@ -293,7 +294,7 @@ class Busqueda extends Component {
         // doy : Int
       }
     })
-    console.log(this.state)
+    // console.log(this.state)
     return (
       <div>
         <LayoutWrapper>

@@ -617,7 +617,7 @@ class FormEditSala extends Component {
 
 
     render() {
-        console.log(this.props)
+        // console.log(this.props)
         const viewMode = this.props.viewMode
         this.toggleAndSave(viewMode)
         return (

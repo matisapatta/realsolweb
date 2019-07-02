@@ -18,7 +18,7 @@ const CardContentWrapper = styled.div`
 
   .cardContentText {
     width: 100%;
-    text-align: justify;
+    //text-align: justify;
   }
 }
 `;

@@ -131,6 +131,8 @@ export function testSalaSave(sala) {
     }
 }
 
+
+
 export function cleanProps() {
     return ({
         type: 'CLEAN_PROPS',
@@ -190,6 +192,24 @@ export function deleteSala(sala) {
         })
     }
 }
+
+// export function addScoreToSala(id) {
+//     const request = axios.post(`/api/addscoretosala?id=${id}`, id)
+//     return (dispatch) => {
+//         request.then(({ data }) => {
+//             // let sala = data.success ? data.sala : null;
+//             let sala = data.sala ? data.sala : false;
+//             let response = {
+//                 // success: data.success,
+//                 ...sala
+//             }
+//             dispatch({
+//                 type: 'ADD_SCORE_TO_SALA',
+//                 payload: response
+//             })
+//         })
+//     }
+// }
 
 
 export function getCurrentState() {

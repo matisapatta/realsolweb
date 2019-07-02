@@ -53,6 +53,23 @@ export function getReservationsByUser(id) {
     }
 }
 
+export function getResToReviewByUser(id) {
+    const request = axios.get(`/api/getrestoreviewbyuser?_id=${id}`)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let send;
+            if (data)
+                send = data;
+            else
+                send = null;
+            dispatch({
+                type: 'GET_RES_TO_REVIEW_BY_USER',
+                payload: send
+            })
+        })
+    }
+}
+
 export function getReservationById(id) {
     const request = axios.get(`/api/getreservationbyid?_id=${id}`)
     return (dispatch) => {

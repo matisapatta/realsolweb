@@ -6,6 +6,8 @@ export default function reducers(state = {}, action) {
             return { ...state, list: action.payload }
         case 'GET_RESERVATIONS_BY_USER':
             return { ...state, userlist: action.payload }
+        case 'GET_RES_TO_REVIEW_BY_USER':
+            return { ...state, userlist: action.payload }
         case 'GET_RESERVATION_BY_ID':
             return { ...state, currentReservation: action.payload }
         case 'CLOSE_RESERVATION':

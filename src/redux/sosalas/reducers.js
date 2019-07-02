@@ -15,6 +15,8 @@ export default function reducers(state = {}, action) {
             return { ...state, currentSala: action.payload, loading: false }
         case 'DELETE_SALA':
             return { ...state, ...action.payload, loading: false }
+        // case 'ADD_SCORE_TO_SALA':
+        //     return { ...state, updatedSala: action.payload }
         case 'GET_SALA_OWNER':
             return { ...state, listSalas: action.payload }
         case 'CLEAN_PROPS':

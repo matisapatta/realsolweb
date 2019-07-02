@@ -195,6 +195,9 @@ class MainVendor extends Component {
                 // a must be equal to b
                 return 0;
             });
+            console.log(data)
+            console.log(data7)
+            // console.log(i)
             return (
                 data.map((item, i) => (
                     <div style={wisgetPageStyle} key={i}>
@@ -211,7 +214,7 @@ class MainVendor extends Component {
                                     <StickerWidget
                                         number={item.total}
                                         text="Reservas totales"
-                                        icon="ion-email-unread"
+                                        icon="ion-ios-paper"
                                         fontColor="#ffffff"
                                         bgColor="#7266BA"
                                     />
@@ -222,7 +225,7 @@ class MainVendor extends Component {
                                     <StickerWidget
                                         number={data7[i].total}
                                         text="Reservas en la última semana"
-                                        icon="ion-email-unread"
+                                        icon="ion-ios-paper"
                                         fontColor="#ffffff"
                                         bgColor="#42A5F6"
                                     />
@@ -262,6 +265,9 @@ class MainVendor extends Component {
                 // a must be equal to b
                 return 0;
             });
+            console.log(data)
+            console.log(data7)
+            console.log(i)
             return (
                 <Row style={rowStyle} gutter={0} justify="center" >
                     <Col md={12} sm={24} xs={24} style={colStyle}>
