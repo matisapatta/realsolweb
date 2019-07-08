@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router'
 import { getSalaDetail, cleanProps } from '../../redux/sosalas/actions';
 import { getReviewsBySala } from '../../redux/soreviews/actions'
 import { connect } from 'react-redux'
@@ -173,7 +174,6 @@ class SalaDetail extends Component {
 
     render() {
         const sala = this.props.salas.currentSala;
-        // console.log(this.props)
         return (
             <div>
                 {this.showInfo(sala)}
@@ -190,5 +190,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-
-export default connect(mapStateToProps)(SalaDetail)
+export default withRouter(connect(mapStateToProps)(SalaDetail));

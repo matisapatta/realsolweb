@@ -1,21 +1,41 @@
-import React from 'react';
+import React, { Component } from 'react';
 import axios from 'axios'
+import Spins from '../../components/uielements/spin';
 
-const Logout = (props) => {
+class Logout extends Component {
 
-    axios.get('/api/logout').then(() => {
-        setTimeout(() => {
-            props.history.push('/')
-        }, 2000)
-    })
+    state = {
+        loading: true
+    }
 
-    return (
-        <div className="logout_container">
-            <h1>
-                Cerrando sesión...
-            </h1>
-        </div>
-    );
+    componentWillMount() {
+        this.handleLogout();
+    }
+
+    handleLogout = () => {
+        axios.get('/api/logout').then(() => {
+            setTimeout(() => {
+                this.setState({ loading: false })
+                this.props.history.push('/')
+            }, 1000)
+        })
+    }
+
+
+
+    render() {
+        return (
+            <Spins spinning={this.state.loading}>
+                <div className="logout_container">
+                    <h1>
+                        Cerrando sesión...
+                </h1>
+                </div>
+            </Spins>
+
+        );
+    }
+
 };
 
 export default Logout;

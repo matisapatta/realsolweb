@@ -194,6 +194,41 @@ export function updateSala(sala) {
     }
 }
 
+export function closeSpecial(sala) {
+    const request = axios.post(`/api/closespecial`, sala)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            // let sala = data.success ? data.sala : null;
+            let sala = data.sala ? data.sala : false;
+            let response = {
+                // success: data.success,
+                ...sala
+            }
+            dispatch({
+                type: 'UPDATE_SALA',
+                payload: response
+            })
+        })
+    }
+}
+export function openSpecial(sala) {
+    const request = axios.post(`/api/openspecial`, sala)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            // let sala = data.success ? data.sala : null;
+            let sala = data.sala ? data.sala : false;
+            let response = {
+                // success: data.success,
+                ...sala
+            }
+            dispatch({
+                type: 'UPDATE_SALA',
+                payload: response
+            })
+        })
+    }
+}
+
 export function deleteSala(sala) {
     const request = axios.post(`/api/deletesala?id=${sala.id}`, sala)
     return (dispatch) => {

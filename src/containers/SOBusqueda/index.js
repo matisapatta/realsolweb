@@ -34,10 +34,13 @@ import StepWizard from 'react-step-wizard';
 import Name from './wizard/name'
 import Location from './wizard/location'
 import Price from './wizard/price'
-import SearchIcon from '../../image/icons/searchicon.png'
-import ResponsiveIcon from '../../image/icons/responsiveicon.png'
-import MusicIcon from '../../image/icons/musicicon.png'
+// import SearchIcon from '../../image/icons/searchicon.png'
+// import ResponsiveIcon from '../../image/icons/responsiveicon.png'
+// import MusicIcon from '../../image/icons/musicicon.png'
 import Rate from '../../components/uielements/rate';
+import SaxImg from '../../image/sax1.png'
+import AmpliImg from '../../image/ampli2.png'
+import GuitarImg from '../../image/guitar3.png'
 
 
 
@@ -194,6 +197,7 @@ class Busqueda extends Component {
   }
 
   showResults = (data) => {
+    // console.log(this.props)
     return (
       data[0] ?
         (data[0].length > 0) ?
@@ -202,11 +206,24 @@ class Busqueda extends Component {
             <ContentHolder key={i}>
               <Card
                 loading={false}
-                title={<div><Link to={`${WRAPPEDURL}/sala/${sala._id}`}>{`${sala.name}, ${sala.location}`}</Link><Rate value={sala.score} disabled style={{paddingLeft:"15px"}} /></div>}
+                title={
+                  <div>
+                    {
+                      this.props.user.users ?
+                        this.props.user.users.isAuth ?
+                          <Link to={`${WRAPPEDURL}/sala/${sala._id}`}>{`${sala.name}, ${sala.location}`}</Link>
+                          :
+                          <Link to={`/sala/${sala._id}`}>{`${sala.name}, ${sala.location}`}</Link>
+                        :
+                        <Link to={`/sala/${sala._id}`}>{`${sala.name}, ${sala.location}`}</Link>
+                    }
+                    <Rate value={sala.score} disabled style={{ paddingLeft: "15px" }} />
+                  </div>
+                }
                 style={{ width: '100%' }}
                 extra={this.showExtra(sala)}
               >
-                
+
                 <CardContent
                   text={sala.description}
                   image={sala.mainimage}
@@ -232,56 +249,67 @@ class Busqueda extends Component {
         </Row>
         :
         <Row style={rowStyle} gutter={gutter} justify="start">
-          <Col md={24} sm={24} xs={24} style={colStyle}>
-              <Box1>
-                <Row style={rowStyle} gutter={gutter} justify="start">
-                  <Col md={8} sm={8} xs={24} style={colStyle}>
-                    <ContentHolder>
-                      <Card
-                        loading={false}
-                        // title=""
-                        style={{ width: '100%', border: "0", boxShadow: "0 0 0 0" }}
-                      >
-                        <CardContent1
-                          text={<div><h3>Elegante y funcional</h3><span>Una plataforma pensada por músicos, para músicos</span></div>}
-                          image={MusicIcon}
-
-                        />
-                      </Card>
-                    </ContentHolder>
-                  </Col>
-                  <Col md={8} sm={8} xs={24} style={colStyle}>
-                    <ContentHolder>
-                      <Card
-                        loading={false}
-                        // title=""
-                        style={{ width: '100%', border: "0", boxShadow: "0 0 0 0" }}
-                      >
-                        <CardContent1
-                          text={<div><h3>Búsqueda exacta</h3><span>Filtrá por ubicación, nombre y precio</span></div>}
-                          image={SearchIcon}
-                        />
-                      </Card>
-                    </ContentHolder>
-                  </Col>
-                  <Col md={8} sm={8} xs={24} style={colStyle}>
-                    <ContentHolder>
-                      <Card
-                        loading={false}
-                        // title=""
-                        style={{ width: '100%', border: "0", boxShadow: "0 0 0 0", padding: "0" }}
-                      >
-                        <CardContent1
-                          text={<div><h3>Multiplataforma</h3><span>Accedé a reservar salas desde tu dispositivo favorito</span></div>}
-                          image={ResponsiveIcon}
-                        />
-                      </Card>
-                    </ContentHolder>
-                  </Col>
-                </Row>
-              </Box1>
-          </Col>
+            <Col md={8} sm={8} xs={24} style={colStyle}>
+              <img src={SaxImg} />
+            </Col>
+            <Col md={8} sm={8} xs={24} style={colStyle}>
+              <img src={AmpliImg} />
+            </Col>
+            <Col md={8} sm={8} xs={24} style={colStyle}>
+              <img src={GuitarImg} />
+            </Col>
         </Row>
+      // <Row style={rowStyle} gutter={gutter} justify="start">
+      //   <Col md={24} sm={24} xs={24} style={colStyle}>
+      //     <Box1>
+      //       <Row style={rowStyle} gutter={gutter} justify="start">
+      //         <Col md={8} sm={8} xs={24} style={colStyle}>
+      //           <ContentHolder>
+      //             <Card
+      //               loading={false}
+      //               // title=""
+      //               style={{ width: '100%', border: "0", boxShadow: "0 0 0 0" }}
+      //             >
+      //               <CardContent1
+      //                 text={<div><h3>Elegante y funcional</h3><span>Una plataforma pensada por músicos, para músicos</span></div>}
+      //                 image={MusicIcon}
+
+      //               />
+      //             </Card>
+      //           </ContentHolder>
+      //         </Col>
+      //         <Col md={8} sm={8} xs={24} style={colStyle}>
+      //           <ContentHolder>
+      //             <Card
+      //               loading={false}
+      //               // title=""
+      //               style={{ width: '100%', border: "0", boxShadow: "0 0 0 0" }}
+      //             >
+      //               <CardContent1
+      //                 text={<div><h3>Búsqueda exacta</h3><span>Filtrá por ubicación, nombre y precio</span></div>}
+      //                 image={SearchIcon}
+      //               />
+      //             </Card>
+      //           </ContentHolder>
+      //         </Col>
+      //         <Col md={8} sm={8} xs={24} style={colStyle}>
+      //           <ContentHolder>
+      //             <Card
+      //               loading={false}
+      //               // title=""
+      //               style={{ width: '100%', border: "0", boxShadow: "0 0 0 0", padding: "0" }}
+      //             >
+      //               <CardContent1
+      //                 text={<div><h3>Multiplataforma</h3><span>Accedé a reservar salas desde tu dispositivo favorito</span></div>}
+      //                 image={ResponsiveIcon}
+      //               />
+      //             </Card>
+      //           </ContentHolder>
+      //         </Col>
+      //       </Row>
+      //     </Box1>
+      //   </Col>
+      // </Row>
     )
   }
 

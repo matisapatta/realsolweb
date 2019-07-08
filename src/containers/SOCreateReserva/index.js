@@ -295,8 +295,8 @@ class CreateReserva extends Component {
 
 
     handlePayment = () => {
-        this.setState({payModalVisible:false}); 
-        window.location.href = this.state.init_point; 
+        this.setState({ payModalVisible: false });
+        window.location.href = this.state.init_point;
     }
 
 
@@ -390,7 +390,7 @@ class CreateReserva extends Component {
         const sala = this.props.salas.currentSala;
         const numberDay = moment(this.state.calendarDate).day();
         let open = sala.days.find((element) => {
-            return parseInt(element, 10) === moment(this.state.calendarDate).day();
+            return (parseInt(element, 10) === moment(this.state.calendarDate).day() && this.compareDays(moment(this.state.calendarDate)));
         })
 
         return (
@@ -410,6 +410,19 @@ class CreateReserva extends Component {
         )
     }
 
+    compareDays = (today) => {
+        let isValid = true;
+        if (this.props.salas.currentSala.specialClose) {
+            if (this.props.salas.currentSala.specialClose.length > 0) {
+                this.props.salas.currentSala.specialClose.map((item, i) => {
+                    if (moment(today).format("YYYY-MM-DDTHH:mm:ss.SSSZ") === moment(item).format("YYYY-MM-DDTHH:mm:ss.SSSZ"))
+                        isValid = false
+                })
+            }
+        }
+        return isValid;
+    }
+
 
     render() {
         // console.log(this.state.calendarDate)
@@ -424,6 +437,7 @@ class CreateReserva extends Component {
         })
         const showingDate = moment(this.state.calendarDate).format('dddd D [de] MMMM [de] YYYY')
         const days = this.props.salas.currentSala.days;
+        const specialClose = this.props.salas.currentSala.specialClose;
         const titleStyle = {
             "fontSize": "35px",
             "textAlign": "center",
@@ -441,6 +455,7 @@ class CreateReserva extends Component {
                                     setCalendarDate={this.setCalendarDate}
                                     validDays={days}
                                     vendor={false}
+                                    specialClose={specialClose}
                                 />
                             </CalendarStyleWrapper>
                         </Col>

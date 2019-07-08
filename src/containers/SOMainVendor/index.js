@@ -195,8 +195,8 @@ class MainVendor extends Component {
                 // a must be equal to b
                 return 0;
             });
-            console.log(data)
-            console.log(data7)
+            // console.log(data)
+            // console.log(data7)
             // console.log(i)
             return (
                 data.map((item, i) => (
@@ -265,9 +265,9 @@ class MainVendor extends Component {
                 // a must be equal to b
                 return 0;
             });
-            console.log(data)
-            console.log(data7)
-            console.log(i)
+            // console.log(data)
+            // console.log(data7)
+            // console.log(i)
             return (
                 <Row style={rowStyle} gutter={0} justify="center" >
                     <Col md={12} sm={24} xs={24} style={colStyle}>

@@ -28,7 +28,7 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
         <Route
           exact
           path={'/'}
-          component={asyncComponent(() => import('./containers/Page/signin'))}
+          component={asyncComponent(() => import('./containers/Page/landing'))}
         />
         <Route
           exact
@@ -59,7 +59,12 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
         <Route
           exact
           path={'/search'}
-          component={asyncComponent(() => import('./containers/SOBusqueda/index'))}
+          component={asyncComponent(() => import('./containers/Page/search'))}
+        />
+        <Route
+          exact
+          path={'/sala/:id'}
+          component={asyncComponent(() => import('./containers/Page/sala'))}
         />
 
         <Route

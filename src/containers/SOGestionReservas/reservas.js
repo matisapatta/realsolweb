@@ -9,6 +9,7 @@ import LayoutWrapper from '../../components/utility/layoutWrapper';
 import Box from '../../components/utility/box';
 import { CellWrapper, CellHeaderWrapper, CellColumnWrapper } from './cell.style'
 import { getReservationsBySala, saveReservation, cancelReservation, closeReservation, getReservationById } from '../../redux/soreservations/actions'
+import { closeSpecial, openSpecial } from '../../redux/sosalas/actions'
 import Modal from '../../components/feedback/modal';
 import Button from '../../components/uielements/button';
 import Spins from '../../components/uielements/spin';
@@ -16,6 +17,7 @@ import { ModalDataWrapper } from './modal.style';
 import Select, { SelectOption } from '../../components/uielements/select';
 import notification from '../../components/notification';
 import { dailyhours } from '../../config';
+import Popconfirm from '../../components/feedback/popconfirm';
 
 const Cell = CellWrapper(Col);
 const CellHeader = CellHeaderWrapper(Col);
@@ -70,6 +72,28 @@ class ManageReserva extends Component {
 
             this.setState({ loading: false })
         }
+        if (prevProps.salas.currentSala) {
+            if (prevProps.salas.currentSala !== this.props.salas.currentSala) {
+                // let userReservations = this.props.user.users.reservations;
+                // userReservations.push(this.props.reservations.reservation._id);
+                // this.props.dispatch(updateUser({
+                //     _id: this.props.user.users.id,
+                //     reservations: userReservations
+                // }))
+
+                this.setState({ loading: false })
+            }
+        } else if (this.props.salas.currentSala) {
+            // let userReservations = this.props.user.users.reservations;
+            // userReservations.push(this.props.reservations.reservation._id);
+            // this.props.dispatch(updateUser({
+            //     _id: this.props.user.users.id,
+            //     reservations: userReservations
+            // }))
+
+            this.setState({ loading: false })
+        }
+
     }
 
     componentDidMount() {
@@ -132,12 +156,27 @@ class ManageReserva extends Component {
         )
     }
 
+    compareDays = (today) => {
+        let isValid = true;
+        if (this.props.salas.currentSala.specialClose) {
+            if (this.props.salas.currentSala.specialClose.length > 0) {
+                this.props.salas.currentSala.specialClose.map((item, i) => {
+                    if (moment(today).format("YYYY-MM-DDTHH:mm:ss.SSSZ") === moment(item).format("YYYY-MM-DDTHH:mm:ss.SSSZ"))
+                        isValid = false
+                })
+
+            }
+        }
+        return isValid;
+    }
+
     checkAvailability = (room, hour, roomiteration, open, price) => {
         const list = this.props.reservations.list;
         const day = moment(this.state.calendarDate.getTime()).format("YYYYMMDD");
         let free = true;
         let id = '';
         let closed = false;
+        let specialC = false;
         // console.log(open)
         // const past = moment().isAfter
         // console.log(past)
@@ -158,6 +197,7 @@ class ManageReserva extends Component {
                 }
             })
         }
+
         return (
             open ?
                 free ?
@@ -464,7 +504,7 @@ class ManageReserva extends Component {
         const sala = this.props.salas.currentSala;
         const numberDay = moment(this.state.calendarDate).day();
         let open = sala.days.find((element) => {
-            return parseInt(element, 10) === moment(this.state.calendarDate).day();
+            return (parseInt(element, 10) === moment(this.state.calendarDate).day() && this.compareDays(moment(this.state.calendarDate)));
         })
 
         return (
@@ -484,6 +524,27 @@ class ManageReserva extends Component {
         )
     }
 
+    specialClose = () => {
+        const sala = this.props.salas.currentSala;
+        const date = this.state.calendarDate;
+        const send = {
+            id: sala,
+            date: date
+        }
+        this.props.dispatch(closeSpecial(send))
+        this.setState({ loading: true })
+    }
+    specialOpen = () => {
+        const sala = this.props.salas.currentSala;
+        const date = this.state.calendarDate;
+        const send = {
+            id: sala,
+            date: date
+        }
+        this.props.dispatch(openSpecial(send))
+        this.setState({ loading: true })
+    }
+
 
     render() {
         // console.log(this.state.calendarDate)
@@ -498,6 +559,7 @@ class ManageReserva extends Component {
         })
         const showingDate = moment(this.state.calendarDate).format('dddd D [de] MMMM [de] YYYY')
         const days = this.props.salas.currentSala.days;
+        const specialClose = this.props.salas.currentSala.specialClose;
         const titleStyle = {
             "fontSize": "35px",
             "textAlign": "center",
@@ -519,8 +581,43 @@ class ManageReserva extends Component {
                                     setCalendarDate={this.setCalendarDate}
                                     validDays={days}
                                     vendor={true}
+                                    specialClose={specialClose}
                                 />
                             </CalendarStyleWrapper>
+                            {
+                                this.compareDays(this.state.calendarDate) ?
+                                    <CalendarStyleWrapper className="isomorphicCalendarWrapper">
+                                        <div style={{ paddingBottom: "10px", fontSize: "18px" }}>Si se desea cerrar por un día especial, como feriado, o vacaciones, seleccione el día correspondiente en el calendario y haga click en el botón y complete los datos</div>
+                                        <Popconfirm
+                                            title="¿Seguro que quiere cerrar la sala?"
+                                            okText="Cerrar"
+                                            cancelText="No"
+                                            onConfirm={() => {
+                                                notification('success', 'Sala cerrada', '');
+                                                this.specialClose();
+                                            }}
+                                        >
+                                            <Button  type="primary">Cerrar sala</Button>
+                                        </Popconfirm>
+                                    </CalendarStyleWrapper>
+                                    :
+                                    <CalendarStyleWrapper className="isomorphicCalendarWrapper">
+                                        <div style={{ paddingBottom: "10px", fontSize: "18px" }}>La sala fue cerrada por motivos excepcionales. Si desea abrirla, haga click en "Abrir Sala"</div>
+                                        <Popconfirm
+                                            title="¿Seguro que quiere volver a abrir la sala?"
+                                            okText="Abrir"
+                                            cancelText="No"
+                                            onConfirm={() => {
+                                                notification('success', 'Sala abierta', '');
+                                                this.specialOpen();
+                                            }}
+                                        >
+                                            <Button  type="primary">Abrir sala</Button>
+                                        </Popconfirm>
+                                    </CalendarStyleWrapper>
+                            }
+
+
                         </Col>
                         <Col xs={24} sm={24} md={16} lg={16}>
                             <LayoutWrapper>

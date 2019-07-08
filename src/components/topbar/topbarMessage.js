@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import IntlMessages from '../utility/intlMessages';
 import TopbarDropdownWrapper from './topbarDropdown.style';
 
-import Image from '../../image/user3.png';
+import Image from '../../image/avatar.png';
 
 const demoMassage = [
   {

@@ -35,7 +35,6 @@ class SignIn extends Component {
 
   }
 
-
   handleLogin = () => {
     this.props.dispatch(loginUser(this.state))
   };
@@ -86,7 +85,7 @@ class SignIn extends Component {
         <div className="isoLoginContentWrapper">
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
-              <Link to="/dashboard">
+              <Link to="/">
                 {siteTitle}
               </Link>
             </div>
