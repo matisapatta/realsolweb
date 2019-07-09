@@ -347,6 +347,7 @@ class CreateReserva extends Component {
                 reviewed: false,
                 numberDay: moment(this.state.calendarDate).day(),
                 location: this.props.salas.currentSala.location,
+                salaAddress: this.props.salas.currentSala.address.stringaddress,
             }
 
             const user = this.props.user.users

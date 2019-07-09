@@ -100,3 +100,55 @@ export function getAmountRes7(id) {
         })
     }
 }
+
+export function getNextReserv(id) {
+    const request = axios.get(`/api/nextreservation?id=${id}`)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let send;
+            if (data)
+                send = data;
+            else
+                send = null;
+            dispatch({
+                type: 'NEXT_RESERV',
+                payload: send
+            })
+        })
+    }
+}
+
+export function getLastReview() {
+    const request = axios.get(`/api/lastreview?`)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let send;
+            if (data)
+                send = data;
+            else
+                send = null;
+            dispatch({
+                type: 'LAST_REVIEW',
+                payload: send
+            })
+        })
+    }
+}
+
+export function getLastSala() {
+    const request = axios.get(`/api/latestsala?`)
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let send;
+            if (data)
+                send = data;
+            else
+                send = null;
+            dispatch({
+                type: 'LATEST_SALA',
+                payload: send
+            })
+        })
+    }
+}
+

@@ -10,7 +10,8 @@ import SignInStyleWrapper from './signin.style';
 import { siteTitle } from '../../config';
 import { loginUser } from '../../redux/sousers/actions'
 import { GoogleLogin } from 'react-google-login'
-import  FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import notification from '../../components/notification';
 
 // const { login } = authAction;
 
@@ -23,9 +24,23 @@ class SignIn extends Component {
     rememberMe: false,
     success: false
   };
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.user.users.isAuth)
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.user.users.isAuth)
+  //     this.setState({ redirectToReferrer: true });
+  //   else {
+  //     notification('error', nextProps.user.users.message)
+  //   }
+  // }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.user.users.isAuth)
       this.setState({ redirectToReferrer: true });
+    else {
+      if (prevProps.user.users !== this.props.user.users && this.props.user.users.isAuth === false) {
+        notification('error', this.props.user.users.message)
+      }
+    }
   }
 
   componentWillMount() {
@@ -72,9 +87,6 @@ class SignIn extends Component {
 
   render() {
     // const from = { pathname: '/dashboard' };
-
-
-
     const from = { pathname: '/dashboard' };
     const { redirectToReferrer } = this.state;
     if (redirectToReferrer) {
@@ -150,7 +162,7 @@ class SignIn extends Component {
                 <Link to="/signup">
                   Crear cuenta
                 </Link>
-                <br/>
+                <br />
                 <Link to="/vendorsignup">
                   ¿Tenés una sala de ensayo? Registrate acá como proveedor
                 </Link>

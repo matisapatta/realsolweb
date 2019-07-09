@@ -14,6 +14,12 @@ export default function reducers(state = {}, action) {
             return { ...state, amountRes: action.payload }
         case 'GET_RESERV_7':
             return { ...state, amountRes7: action.payload }
+        case 'NEXT_RESERV':
+            return { ...state, nextReserv: action.payload }
+        case 'LAST_REVIEW':
+            return { ...state, lastReview: action.payload }
+        case 'LATEST_SALA':
+            return { ...state, latestSala: action.payload }
         default:
             return state;
     }

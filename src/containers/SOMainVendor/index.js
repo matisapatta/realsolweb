@@ -58,8 +58,6 @@ class MainVendor extends Component {
         setTimeout(() => {
             props.dispatch(getAmountRes7(this.props.user.users.id))
         }, 1400)
-
-
     }
 
     componentDidMount() {
@@ -90,8 +88,8 @@ class MainVendor extends Component {
             return 0;
         });
 
-        console.log(money)
-        console.log(money7)
+        // console.log(money)
+        // console.log(money7)
         let totalRes = 0;
         this.props.reports.amountRes.map((item, i) => {
             totalRes += item.total;
@@ -305,88 +303,6 @@ class MainVendor extends Component {
                         Reportes Generales
                     </div>
                     {this.showSalaRes()}
-
-                    {/* <IsoWidgetsWrapper>
-                        
-                        <ReportsWidget
-                            label="% de ocupación por día"
-                        // details={<IntlMessages id="widget.reportswidget.details" />}
-                        >
-                            <SingleProgressWidget
-                                label="Domingo"
-                                percent={70}
-                                barHeight={7}
-                                status="active"
-                                info={true} // Boolean: true, false
-                            />
-                            <SingleProgressWidget
-                                label="Lunes"
-                                percent={80}
-                                barHeight={7}
-                                status="active"
-                                info={true} // Boolean: true, false
-                            />
-                            <SingleProgressWidget
-                                label="Martes"
-                                percent={40}
-                                barHeight={7}
-                                status="active"
-                                info={true} // Boolean: true, false
-                            />
-                            <SingleProgressWidget
-                                label="Miércoles"
-                                percent={60}
-                                barHeight={7}
-                                status="active"
-                                info={true} // Boolean: true, false
-                            />
-                            <SingleProgressWidget
-                                label="Jueves"
-                                percent={60}
-                                barHeight={7}
-                                status="active"
-                                info={true} // Boolean: true, false
-                            />
-                            <SingleProgressWidget
-                                label="Viernes"
-                                percent={60}
-                                barHeight={7}
-                                status="active"
-                                info={true} // Boolean: true, false
-                            />
-                            <SingleProgressWidget
-                                label="Sábado"
-                                percent={60}
-                                barHeight={7}
-                                status="active"
-                                info={true} // Boolean: true, false
-                            />
-                        </ReportsWidget>
-                    </IsoWidgetsWrapper>
-
-                    <IsoWidgetsWrapper>
-                       
-                        <StickerWidget
-                            number="200"
-                            text="texto"
-                            icon="ion-email-unread"
-                            fontColor="#ffffff"
-                            bgColor="#7266BA"
-                        />
-                    </IsoWidgetsWrapper>
-
-                    <IsoWidgetsWrapper>
-                       
-                        <SaleWidget
-                            label="Pepito"
-                            price="15000"
-                            details="detalles"
-                            fontColor="#F75D81"
-                        />
-                    </IsoWidgetsWrapper> */}
-
-
-
                 </div>
             </Spins>
         );

@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import LayoutWrapper from '../../components/utility/layoutWrapper';
 // import StyledInput from '../../components/uielements/input';
 import Box from '../../components/utility/box';
-import Box1 from '../../components/utility/box1';
 import ContentHolder from '../../components/utility/contentHolder';
 import {
   Col,
@@ -25,7 +24,6 @@ import { testSala } from '../../testData';
 // import { ButtonWrapper } from './busqueda.style'
 import notification from '../../components/notification';
 import CardContent from '../../components/cardcontent/cardContent';
-import CardContent1 from '../../components/cardcontent/cardContent1';
 import Modal from '../../components/feedback/modal';
 import GoogleMapReact from 'google-map-react';
 import markerImg from '../../image/marker.png'
@@ -34,9 +32,6 @@ import StepWizard from 'react-step-wizard';
 import Name from './wizard/name'
 import Location from './wizard/location'
 import Price from './wizard/price'
-// import SearchIcon from '../../image/icons/searchicon.png'
-// import ResponsiveIcon from '../../image/icons/responsiveicon.png'
-// import MusicIcon from '../../image/icons/musicicon.png'
 import Rate from '../../components/uielements/rate';
 import SaxImg from '../../image/sax1.png'
 import AmpliImg from '../../image/ampli2.png'
