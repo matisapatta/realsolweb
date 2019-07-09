@@ -661,6 +661,7 @@ class FormSala extends Component {
                 maxFiles={1}
                 action={this.uploadProfile}
                 customRequest={this.dummyRequest}
+                logo={null}
               />
               <div className="isoContactCardInfos">
                 <p className="isoInfoLabel">Imágenes</p>
@@ -669,6 +670,7 @@ class FormSala extends Component {
                 maxFiles={6}
                 action={this.uploadPic}
                 customRequest={this.dummyRequest}
+                logo={null}
               />
               <ButtonWrapper>
                 <div className="isoContainer">

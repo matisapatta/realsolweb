@@ -5,7 +5,8 @@ import Input from '../../components/uielements/input';
 import Checkbox from '../../components/uielements/checkbox';
 import Button from '../../components/uielements/button';
 import authAction from '../../redux/auth/actions';
-import { userRegister, 
+import {
+  userRegister,
   // getUsers 
 } from '../../redux/sousers/actions';
 import Auth0 from '../../helpers/auth0/index';
@@ -13,7 +14,8 @@ import IntlMessages from '../../components/utility/intlMessages';
 import SignUpStyleWrapper from './vendorsignup.style';
 import { siteTitle } from '../../config';
 import { GoogleLogin } from 'react-google-login'
-import  FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import notification from '../../components/notification';
 
 const { login } = authAction;
 
@@ -25,12 +27,21 @@ class SignUp extends React.Component {
     email: '',
     phone: '',
     password: '',
-    error: ''
+    cpassword: '',
+    error: '',
+    accepted: false,
+    passOk: true,
+    emailOk: true,
+    nameOk: true,
+    lastNameOk: true,
+    phoneOk: true,
+    passMatch: true,
+    acceptedOk: true,
   };
 
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
+
     if (
       this.props.isLoggedIn !== nextProps.isLoggedIn &&
       nextProps.isLoggedIn === true
@@ -53,45 +64,128 @@ class SignUp extends React.Component {
   };
 
   handleInputEmail = (event) => {
-    this.setState({ email: event.target.value })
+    if (event.target.value.length <= 50)
+      this.setState({ email: event.target.value, emailOk: true })
   }
   handleInputPassword = (event) => {
-    this.setState({ password: event.target.value })
+    if (event.target.value.length <= 30)
+      this.setState({ password: event.target.value, passOk: true, passMatch: false })
   }
   handleInputName = (event) => {
-    this.setState({ name: event.target.value })
+    if (event.target.value.length <= 20)
+      this.setState({ name: event.target.value, nameOk: true })
   }
   handleInputLastname = (event) => {
-    this.setState({ lastname: event.target.value })
+    if (event.target.value.length <= 20)
+      this.setState({ lastname: event.target.value, lastNameOk: true })
   }
   handleInputPhone = (event) => {
-    this.setState({ phone: event.target.value })
+    if (event.target.value.length <= 15)
+      this.setState({ phone: event.target.value, phoneOk: true })
+  }
+
+  toggleAccepted = () => {
+    this.setState({ accepted: !this.state.accepted, acceptedOk: true })
+  }
+
+  validateInputPassword = (event) => {
+    this.setState({ cpassword: event.target.value })
+    if (event.target.value !== this.state.password)
+      this.setState({ passMatch: false })
+    else
+      this.setState({ passMatch: true })
+  }
+
+  validateEmail = (email) => {
+    var re = new RegExp(/\S+@\S+\.\S+/);
+    return re.test(email);
   }
 
   handleRegister = () => {
-    this.props.dispatch(userRegister({
-      email: this.state.email,
-      name: this.state.name,
-      lastname: this.state.lastname,
-      password: this.state.password,
-      phone: this.state.phone,
-      role: 1
-    }))
-
+    if (this.validateForm()) {
+      this.props.dispatch(userRegister({
+        email: this.state.email,
+        name: this.state.name,
+        lastname: this.state.lastname,
+        password: this.state.password,
+        phone: this.state.phone,
+        role: 1,
+      }))
+    } else {
+      notification('error', "Hay errores en el formulario, por favor corregirlos.")
+    }
   }
 
 
-  submitForm = (e) => {
-    e.preventDefault()
-    this.setState({ error: '' });
-    this.props.dispatch(userRegister({
-      email: this.state.email,
-      name: this.state.name,
-      lastname: this.state.lastname,
-      password: this.state.password,
-      role: 1
-    }, this.props.user.users))
+  validateForm = () => {
+    let isValid = false;
+    let nameOk = false;
+    let lastNameOk = false;
+    let phoneOk = false;
+    let emailOk = false;
+    let passOk = false;
+    let acceptedOk = false
+    if (this.state.name === '') {
+      this.setState({ nameOk: false })
+    } else {
+      nameOk = true;
+    }
+    if (this.state.lastname === '') {
+      this.setState({ lastNameOk: false })
+    } else {
+      lastNameOk = true;
+    }
+    if (this.state.password === '') {
+      this.setState({ passOk: false, passMessage: "Campo obligatorio" })
+    } else if (this.state.password.length < 6) {
+      this.setState({ passOk: false, passMessage: "La contraseña debe tener un mínimo de 6 caracteres" })
+    } else {
+      passOk = true;
+    }
+    if (this.state.email === '') {
+      this.setState({ emailOk: false, emailMessage: "Campo obligatorio" })
+    } else if (!this.validateEmail(this.state.email)) {
+      this.setState({ emailOk: false, emailMessage: "Formato de email incorrecto" })
+    } else {
+      emailOk = true;
+    }
+    if (this.state.phone === '') {
+      this.setState({ phoneOk: false })
+    } else {
+      phoneOk = true;
+    }
+    if (!this.state.accepted) {
+      this.setState({ acceptedOk: false })
+    } else {
+      acceptedOk = true;
+    }
+
+    if (acceptedOk
+      && nameOk
+      && lastNameOk
+      && phoneOk
+      && emailOk
+      && passOk
+      && this.state.passMatch
+    ) {
+      isValid = true;
+    }
+
+    return isValid;
   }
+
+
+  // submitForm = (e) => {
+  //   e.preventDefault()
+  //   this.setState({ error: '' });
+  //   this.props.dispatch(userRegister({
+  //     email: this.state.email,
+  //     name: this.state.name,
+  //     lastname: this.state.lastname,
+  //     password: this.state.password,
+  //     role: 1
+  //   }, this.props.user.users))
+  // }
 
   responseFacebook = (response) => {
     let fullName = response.name.split(" ")
@@ -106,7 +200,7 @@ class SignUp extends React.Component {
       role: 1,
     }))
   }
-  
+
   responseGoogle = (response) => {
     this.props.dispatch(userRegister({
       email: response.profileObj.email,
@@ -129,41 +223,52 @@ class SignUp extends React.Component {
             <div className="isoLogoWrapper">
               <Link to="/">
                 <div>{siteTitle}</div>
-                <br/>
+                <br />
                 <div>Registro como Proveedor</div>
               </Link>
             </div>
             <div className="isoSignUpForm">
-              <div className="isoInputWrapper isoLeftRightComponent">
+              <div className="isoInputWrapper">
                 <Input size="large" placeholder="Nombre" value={this.state.name} onChange={this.handleInputName} />
+                <div style={{ color: "red" }}>{this.state.nameOk ? "" : "Campo obligatorio"}</div>
+              </div>
+              <div className="isoInputWrapper">
                 <Input size="large" placeholder="Apellido" value={this.state.lastname} onChange={this.handleInputLastname} />
+                <div style={{ color: "red" }}>{this.state.lastNameOk ? "" : "Campo obligatorio"}</div>
               </div>
               <div className="isoInputWrapper">
                 <Input size="large" type="number" placeholder="Teléfono" value={this.state.phone} onChange={this.handleInputPhone} />
+                <div style={{ color: "red" }}>{this.state.phoneOk ? "" : "Campo obligatorio"}</div>
               </div>
 
               <div className="isoInputWrapper">
                 <Input size="large" type="email" placeholder="Email" value={this.state.email} onChange={this.handleInputEmail} />
+                <div style={{ color: "red" }}>{this.state.emailOk ? "" : this.state.emailMessage}</div>
               </div>
 
               <div className="isoInputWrapper">
                 <Input size="large" type="password" placeholder="Contraseña" value={this.state.password} onChange={this.handleInputPassword} />
+                <div style={{ color: "red" }}>{this.state.passOk ? "" : this.state.passMessage}</div>
               </div>
+
 
               <div className="isoInputWrapper">
                 <Input
                   size="large"
                   type="password"
                   placeholder="Confirmar Contraseña"
-                  value={this.state.password}
-                  onChange={this.handleInputPassword}
+                  value={this.state.cpassword}
+                  onChange={this.validateInputPassword}
                 />
+                <div style={{ color: "red" }}>{this.state.passMatch ? "" : "Las contraseñas no coinciden"}</div>
               </div>
 
-              <div className="isoInputWrapper" style={{ marginBottom: '50px' }}>
-                <Checkbox>
+
+              <div className="isoInputWrapper" style={{ marginBottom: '50px', paddingTop: '30px', }}>
+                <Checkbox checked={this.state.accepted} onChange={this.toggleAccepted} >
                   <IntlMessages id="page.signUpTermsConditions" />
                 </Checkbox>
+                <div style={{ color: "red" }}>{this.state.acceptedOk ? "" : "Campo obligatorio"}</div>
               </div>
 
               <div className="isoInputWrapper">
@@ -172,7 +277,7 @@ class SignUp extends React.Component {
                 </Button>
               </div>
               <div className="isoInputWrapper isoOtherLogin">
-              <FacebookLogin
+                <FacebookLogin
                   appId="490249245131473"
                   // autoLoad
                   fields="name,email,picture"

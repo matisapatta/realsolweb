@@ -9,10 +9,9 @@ import { DatosWrapper } from './datos.style';
 
 const { Content } = Layout;
 
-const otherAttributes = [
-  { title: 'Teléfono', value: 'phone', type: 'phoneNumber' },
-  { title: 'Notas', value: 'note', type: 'paragraph' }
-];
+// const otherAttributes = [
+//   { title: 'Teléfono', value: 'phone', type: 'phoneNumber' },
+// ];
 
 class Datos extends Component {
 
@@ -43,7 +42,7 @@ class Datos extends Component {
             <EditDatosView
               // user={selectedUser}
               editDatos={updateUser}
-              otherAttributes={otherAttributes}
+              // otherAttributes={otherAttributes}
               viewMode={!this.state.editView}
             />
           </Content>

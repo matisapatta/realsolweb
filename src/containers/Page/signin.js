@@ -21,7 +21,7 @@ class SignIn extends Component {
     email: '',
     password: '',
     error: '',
-    rememberMe: false,
+    rememberMe: true,
     success: false
   };
 
@@ -34,6 +34,7 @@ class SignIn extends Component {
   // }
 
   componentDidUpdate(prevProps, prevState) {
+    // console.log(this.props.user.users.isAuth)
     if (this.props.user.users.isAuth)
       this.setState({ redirectToReferrer: true });
     else {
@@ -43,15 +44,15 @@ class SignIn extends Component {
     }
   }
 
-  componentWillMount() {
+  constructor(props){
+    super(props)
     this.props.dispatch(auth());
   }
-  componentDidMount() {
 
-  }
 
   handleLogin = () => {
     this.props.dispatch(loginUser(this.state))
+
   };
 
   handleInputEmail = (event) => {
@@ -123,7 +124,8 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper isoLeftRightComponent">
-                <Checkbox value={this.state.rememberMe} onChange={this.toggleCheckboxValue}>
+                {/* <Checkbox value={this.state.rememberMe} onChange={this.toggleCheckboxValue}> */}
+                <Checkbox>
                   Recordarme
                 </Checkbox>
                 <Button type="primary" onClick={this.handleLogin}>
@@ -179,6 +181,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     user: state.User,
     isLoggedIn: state.Auth.get('idToken') !== null ? true : false
+    // isLoggedIn: state.Auth.get('idToken') || state.Auth.get('hasToken')
   }
 }
 

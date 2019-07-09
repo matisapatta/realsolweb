@@ -75,7 +75,7 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
         />
         <Route
           exact
-          path={'/resetpassword'}
+          path={'/resetpassword/:id'}
           component={asyncComponent(() =>
             import('./containers/Page/resetPassword'))}
         />
@@ -90,6 +90,12 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
           path={'/paymentko/:id'}
           component={asyncComponent(() =>
             import('./containers/SOPagoError/index'))}
+        />
+        <Route
+          exact
+          path={'/activateuser/:id'}
+          component={asyncComponent(() =>
+            import('./containers/SOActivateUser/index'))}
         />
 
         {/* <Route

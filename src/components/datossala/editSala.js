@@ -42,38 +42,7 @@ let hoursOptions = [];
 
 class FormEditSala extends Component {
 
-    state = {
-        editedSala: {
-            _id: this.props.salas.currentSala._id,
-            name: this.props.salas.currentSala.name,
-            location: this.props.salas.currentSala.location,
-            mainimage: this.props.salas.currentSala.mainimage,
-            images: this.props.salas.currentSala.images,
-            description: this.props.salas.currentSala.description,
-            rooms: this.props.salas.currentSala.rooms,
-            days: this.props.salas.currentSala.days,
-            open: this.props.salas.currentSala.open,
-            ownerId: this.props.user.users.id,
-            address: this.props.salas.currentSala.address,
-            phoneNumber: this.props.salas.currentSala.phoneNumber,
-            pricefrom: this.props.salas.currentSala.pricefrom,
-            priceto: this.props.salas.currentSala.priceto,
-            // viewMode: false,
-        },
-        modalVisible: false,
-        editModalVisible: false,
-        deleteModalVisible: false,
-        tempRoom: {
-            capacity: '',
-            guitar: '',
-            bass: '',
-            drums: '',
-            price: '',
-        },
-        loading: this.props.loading,
-        edited: false
 
-    }
 
     constructor(props) {
         super(props)
@@ -97,11 +66,82 @@ class FormEditSala extends Component {
                 hoursOptions.push(<SelectOption key={element}>{element}</SelectOption>);
             })
             : this.dummy()
-        this.dummyRequest();
+        // this.dummyRequest();
+        let salaImg = [];
+        this.props.salas.currentSala.images.map((item, i) => {
+            const tmp = {
+                uid: `rc-${i}`,
+                name: `image${i}.png`,
+                status: 'done',
+                url: item.original,
+            }
+            salaImg.push(tmp);
+        })
+        this.state = {
+            editedSala: {
+                _id: this.props.salas.currentSala._id,
+                name: this.props.salas.currentSala.name,
+                location: this.props.salas.currentSala.location,
+                mainimage: this.props.salas.currentSala.mainimage,
+                images: this.props.salas.currentSala.images,
+                description: this.props.salas.currentSala.description,
+                rooms: this.props.salas.currentSala.rooms,
+                days: this.props.salas.currentSala.days,
+                open: this.props.salas.currentSala.open,
+                ownerId: this.props.user.users.id,
+                address: this.props.salas.currentSala.address,
+                phoneNumber: this.props.salas.currentSala.phoneNumber,
+                pricefrom: this.props.salas.currentSala.pricefrom,
+                priceto: this.props.salas.currentSala.priceto,
+                logo: [{
+                    uid: '-1',
+                    name: 'xxx.png',
+                    status: 'done',
+                    url: this.props.salas.currentSala.mainimage,
+                }],
+                salaImg: salaImg,
+                // viewMode: false,
+            },
+            modalVisible: false,
+            editModalVisible: false,
+            deleteModalVisible: false,
+            tempRoom: {
+                capacity: '',
+                guitar: '',
+                bass: '',
+                drums: '',
+                price: '',
+            },
+            loading: this.props.loading,
+            edited: false
+    
+        }
+        this.removeSpins();
+
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.salas.currentSala !== prevProps.salas.currentSala) {
+
+            let salaImg = [];
+            let logo = [];
+            const temp = {
+                uid: '-1',
+                name: 'xxx.png',
+                status: 'done',
+                url: this.props.salas.currentSala.mainimage,
+            }
+            logo.push(temp);
+            this.props.salas.currentSala.images.map((item, i) => {
+                const tmp = {
+                    uid: `rc-${i}`,
+                    name: `image${i}.png`,
+                    status: 'done',
+                    url: item.original,
+                }
+                salaImg.push(tmp);
+            })
+
             this.setState({
                 editedSala: {
                     _id: this.props.salas.currentSala._id,
@@ -118,6 +158,8 @@ class FormEditSala extends Component {
                     phoneNumber: this.props.salas.currentSala.phoneNumber,
                     pricefrom: this.props.salas.currentSala.pricefrom,
                     priceto: this.props.salas.currentSala.priceto,
+                    salaImg,
+                    logo,
                     // viewMode: false,
                 },
                 loading: false,
@@ -150,11 +192,11 @@ class FormEditSala extends Component {
 
     }
 
-    dummyRequest = ({ file, onSuccess }) => {
+    removeSpins = () => {
         setTimeout(() => {
             this.setState({ loading: false })
         }, 200);
-    };
+    }
 
 
     handleInput = (type, event, i) => {
@@ -609,15 +651,14 @@ class FormEditSala extends Component {
         })
     }
 
-    dummyRequest = () => {
+    dummyRequest = ({ file, onSuccess }) => {
         setTimeout(() => {
-            this.setState({ loading: false })
-        }, 200);
+            onSuccess("ok");
+        }, 0);
     };
 
 
     render() {
-        // console.log(this.props)
         const viewMode = this.props.viewMode
         this.toggleAndSave(viewMode)
         return (
@@ -696,19 +737,24 @@ class FormEditSala extends Component {
                             <div className="isoContactCardInfos">
                                 <p className="isoInfoLabel">Logo</p>
                             </div>
-                            {/* <GalleryUploader
-                maxFiles={1}
-                action={this.uploadProfile}
-                customRequest={this.dummyRequest}
-              />
-              <div className="isoContactCardInfos">
-                <p className="isoInfoLabel">Imágenes</p>
-              </div>
-              <GalleryUploader
-                maxFiles={6}
-                action={this.uploadPic}
-                customRequest={this.dummyRequest}
-              /> */}
+                            <GalleryUploader
+                                maxFiles={1}
+                                action={this.uploadProfile}
+                                customRequest={this.dummyRequest}
+                                // img={this.props.salas.currentSala ? logo : null}
+                                img={this.state.editedSala.logo}
+                            />
+
+                            <div className="isoContactCardInfos">
+                                <p className="isoInfoLabel">Imágenes</p>
+                            </div>
+                            <GalleryUploader
+                                maxFiles={6}
+                                action={this.uploadPic}
+                                customRequest={this.dummyRequest}
+                                // img={this.props.salas.currentSala ? salaImg : null}
+                                img={this.state.editedSala.salaImg}
+                            />
                             <ButtonWrapper>
                                 <div className="isoContainer">
                                     <div className="isoControlBtnGroup">

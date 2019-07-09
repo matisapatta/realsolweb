@@ -19,6 +19,24 @@ class GalleryUploader extends Component {
         ],
     };
 
+    constructor(props) {
+        super(props)
+        if (props.img) {
+            this.state = {
+                ...this.state,
+                fileList: props.img,
+            }
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.img !== this.props.img) {
+            this.setState({
+                fileList: this.props.img,
+            })
+        }
+    }
+
     handleCancel = () => {
         this.setState({ previewVisible: false });
     }
@@ -45,7 +63,7 @@ class GalleryUploader extends Component {
         this.setState({
             fileSend: file.preview
         })
-        return true; 
+        return true;
     }
 
     // handleChange = ({ fileList }) => {
@@ -55,14 +73,20 @@ class GalleryUploader extends Component {
 
     handleChange = (info) => {
         if (info.file.status === "done") {
-            this.props.action(info.file.originFileObj.preview,info.file.name)
+            this.props.action(info.file.originFileObj.preview, info.file.name)
         }
-            
+
         this.setState({ fileList: info.fileList })
     }
 
     handleSuccess = (response, file) => {
         this.props.action(file);
+    }
+    alertI = (file) => {
+        alert("removed")
+    }
+    alertM = (file) => {
+        alert("removed Manuial")
     }
 
     render() {
@@ -84,9 +108,11 @@ class GalleryUploader extends Component {
                     fileList={fileList}
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
-                    customRequest = {this.props.customRequest}
-                    beforeUpload = {this.getImgString}
-                    // onSuccess={this.handleSuccess}
+                    customRequest={this.props.customRequest}
+                    beforeUpload={this.getImgString}
+                    handleRemove={this.alertI}
+                    handleManualRemove={this.alertM}
+                // onSuccess={this.handleSuccess}
                 >
                     {fileList.length >= this.props.maxFiles ? null : uploadButton}
                 </Upload>

@@ -121,7 +121,7 @@ class MainUser extends Component {
     }
 
     render() {
-        console.log(this.props)
+        // console.log(this.props)
         return (
             <Spins spinning={this.state.loading}>
 

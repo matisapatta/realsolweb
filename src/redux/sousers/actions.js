@@ -4,7 +4,7 @@ export function userRegister(user) {
     const request = axios.post(`/api/register`, user)
     return (dispatch) => {
         request.then(({ data }) => {
-            let users = data.success ? data.user : null;
+            let users = data.success ? data.user : data.err;
             let response = {
                 success: data.success,
                 users
@@ -55,6 +55,19 @@ export function auth() {
 
 export function updateUser(data) {
     const request = axios.post(`/api/userupdate`, data);
+    return (dispatch) => {
+        request.then(({ data }) => {
+            let response = data;
+            dispatch({
+                type: 'UPDATE_USER',
+                payload: response
+            })
+        })
+    }
+}
+
+export function activateUser(data) {
+    const request = axios.post(`/api/activateuser`, data);
     return (dispatch) => {
         request.then(({ data }) => {
             let response = data;

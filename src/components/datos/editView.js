@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Icon } from 'antd';
-import Input, { Textarea } from '../uielements/input';
+import Input from '../uielements/input';
 import Upload from '../uielements/upload';
 import { DatosCardWrapper } from './datosCard.style';
 import { updateUser } from '../../redux/sousers/actions'
 import axios from 'axios'
 import { getBase64 } from '../../helpers/utility';
 import './upload.css';
+import Button from '../../components/uielements/button';
+import notification from '../../components/notification';
 
 // function beforeUpload(file) {
 //   const isJPG = file.type === 'image/jpeg';
@@ -37,7 +39,11 @@ class editDatosView extends Component {
     phone: '',
     note: '',
     avatar: '',
-    viewMode: false
+    password:'',
+    cpassword:'',
+    viewMode: false,
+    passMatch: true,
+    passOk: true,
   }
 
   constructor(props) {
@@ -51,7 +57,7 @@ class editDatosView extends Component {
       firstName: user.name,
       lastName: user.lastname,
       phone: user.phone,
-      note: 'Pepito nota',
+      email: user.email,
       avatar: user.avatar,
       viewMode: this.props.viewMode
     })
@@ -88,8 +94,8 @@ class editDatosView extends Component {
       case 'phone':
         this.setState({ phone: event.target.value });
         break;
-      case 'note':
-        this.setState({ note: event.target.value });
+      case 'email':
+        this.setState({ email: event.target.value });
         break;
       default: this.dummy();
         break;
@@ -99,6 +105,7 @@ class editDatosView extends Component {
 
   saveUser = (user) => {
     this.props.dispatch(updateUser(user));
+    notification('success', "Perfil modificado")
   }
 
   toggleAndSave = (viewMode) => {
@@ -116,6 +123,64 @@ class editDatosView extends Component {
       }
       this.saveUser(data);
     }
+  }
+
+
+  validateForm = () => {
+    let isValid = false;
+    let passOk = false;
+    if (this.state.password === '') {
+      this.setState({ passOk: false, passMessage: "Campo obligatorio" })
+      notification('error', "Debe completar el campo contraseña")
+    } else if (this.state.password.length < 6) {
+      this.setState({ passOk: false, passMessage: "La contraseña debe tener un mínimo de 6 caracteres" })
+      notification('error', "La contraseña debe tener un mínimo de 6 caracteres")
+    } else {
+      passOk = true;
+    }
+    if (passOk && this.state.passMatch) {
+      isValid = true;
+    }
+    return isValid;
+  }
+
+  handleInputPassword = (event) => {
+    if (event.target.value.length <= 30)
+      this.setState({ password: event.target.value, passOk: true, passMatch: false })
+  }
+
+  validateInputPassword = (event) => {
+    this.setState({ cpassword: event.target.value })
+    if (event.target.value !== this.state.password)
+      this.setState({ passMatch: false })
+    else
+      this.setState({ passMatch: true })
+  }
+
+
+
+  handleChangePassword = () => {
+    if (this.validateForm()) {
+      let sendData = {
+        _id: this.props.user.users.id,
+        password: this.state.password
+      }
+      axios.post('/api/changepassword', sendData).then(response => {
+        if (response.data.success) {
+          notification('success', "Contraseña actualizada con éxito")
+        }
+        else {
+          if (response.data.msg)
+            notification('error', response.data.msg)
+          else
+            notification('error', "Error al actualizar contraseña")
+        }
+
+      })
+    } else {
+      notification('error', "Hay errores en el formulario, por favor corregirlos.")
+    }
+    this.setState({ password: '', cpassword: '' });
   }
 
   uploadProfile = (file) => {
@@ -201,6 +266,15 @@ class editDatosView extends Component {
               disabled={viewMode}
             />
           </div>
+          <div className="isoContactCardInfos">
+            <p className="isoInfoLabel">Email</p>
+            <Input
+              placeholder="Email"
+              value={this.state.email}
+              onChange={event => this.handleInput('email', event)}
+              disabled={viewMode}
+            />
+          </div>
 
           <div className="isoContactCardInfos">
             <p className="isoInfoLabel">Teléfono</p>
@@ -212,19 +286,38 @@ class editDatosView extends Component {
               disabled={viewMode}
             />
           </div>
-          
+          {
+            !viewMode ?
+              <div>
+                <div className="isoContactCardInfos">
+                  <p className="isoInfoLabel">Contraseña</p>
+                  <Input
+                    type="password"
+                    placeholder="Contraseña"
+                    value={this.state.password}
+                    onChange={event => this.handleInputPassword(event)}
+                    disabled={viewMode}
+                  />
+                </div>
+                <div className="isoContactCardInfos">
+                  <p className="isoInfoLabel">Confirmar</p>
+                  <Input
+                    type="password"
+                    placeholder="Confirmar contraseña"
+                    value={this.state.cpassword}
+                    onChange={event => this.validateInputPassword(event)}
+                    disabled={viewMode}
+                  />
+                </div>
+                <div style={{ color: "red" }}>{this.state.passMatch ? "" : "Las contraseñas no coinciden"}</div>
+                <div className="isoContactCardInfos">
+                  <Button onClick={this.handleChangePassword}>Cambiar Contraseña</Button>
+                </div>
+              </div>
+              : <div></div>
+          }
 
-          <div className="isoContactCardInfos">
-            <p className="isoInfoLabel">Notas</p>
-            <Textarea
-              placeholder="Notas"
-              value={this.state.note}
-              type="textarea"
-              rows={5}
-              onChange={event => this.handleInput('note', event)}
-              disabled={viewMode}
-            />
-          </div>
+
         </div>
 
       </DatosCardWrapper>
