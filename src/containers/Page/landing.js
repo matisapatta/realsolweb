@@ -11,9 +11,9 @@ import { auth } from '../../redux/auth/actions';
 
 
 class Landing extends Component {
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
 
     goToSearch = () => {
         this.props.history.push('/search');

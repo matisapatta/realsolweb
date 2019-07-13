@@ -176,7 +176,7 @@ class ManageReserva extends Component {
         let free = true;
         let id = '';
         let closed = false;
-        let specialC = false;
+        // let specialC = false;
         // console.log(open)
         // const past = moment().isAfter
         // console.log(past)

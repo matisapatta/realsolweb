@@ -13,7 +13,7 @@ import { rtl } from '../../config/withDirection';
 
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+// const MenuItemGroup = Menu.ItemGroup;
 
 const {
   toggleOpenDrawer,

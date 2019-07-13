@@ -245,13 +245,13 @@ class Busqueda extends Component {
         :
         <Row style={rowStyle} gutter={gutter} justify="start">
             <Col md={8} sm={8} xs={24} style={colStyle}>
-              <img src={SaxImg} />
+              <img src={SaxImg} alt="#" />
             </Col>
             <Col md={8} sm={8} xs={24} style={colStyle}>
-              <img src={AmpliImg} />
+              <img src={AmpliImg} alt="#" />
             </Col>
             <Col md={8} sm={8} xs={24} style={colStyle}>
-              <img src={GuitarImg} />
+              <img src={GuitarImg} alt="#"  />
             </Col>
         </Row>
       // <Row style={rowStyle} gutter={gutter} justify="start">
