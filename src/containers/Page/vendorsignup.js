@@ -276,7 +276,8 @@ class SignUp extends React.Component {
                   Registrarse
                 </Button>
               </div>
-              <div className="isoInputWrapper isoOtherLogin">
+              
+              {/* <div className="isoInputWrapper isoOtherLogin">
                 <FacebookLogin
                   appId="490249245131473"
                   // autoLoad
@@ -307,7 +308,8 @@ class SignUp extends React.Component {
                   >
                     <IntlMessages id="page.signUpAuth0" />
                   </Button>}
-              </div>
+              </div> */}
+
               <div className="isoInputWrapper isoCenterComponent isoHelperWrapper">
                 <Link to="/signin">
                   ¿Ya tenés una cuenta? Iniciá sesión

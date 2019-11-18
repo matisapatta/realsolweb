@@ -7,6 +7,7 @@ import { CalendarModalBody } from './calendar.style';
 import Button from '../../components/uielements/button';
 import Popconfirm from '../../components/feedback/popconfirm';
 import { notification } from '../../components/';
+import QRCode from 'qrcode.react';
 
 const RangePicker = DateRangepicker;
 
@@ -78,11 +79,13 @@ export default class ModalEvent extends Component {
     this.props.setModalData('delete', this.props.selectedData);
   };
   render() {
+    
     const { modalVisible, selectedData, setModalData } = this.props;
     const visible = modalVisible ? true : false;
     if (!visible) {
       return <div />;
     }
+    const URL = `http://localhost:3000/reservas/${selectedData.id}`
     const title = selectedData && selectedData.title ? selectedData.title : '';
     const desc = selectedData && selectedData.desc ? selectedData.desc : '';
     const start =
@@ -149,7 +152,8 @@ export default class ModalEvent extends Component {
 
             </div>
             <div className="isoCalendarInputWrapper" style={{ textAlign: "center" }}>
-              <img src={process.env.PUBLIC_URL + "/images/qr.png"} alt="img" />
+              {/* <img src={process.env.PUBLIC_URL + "/images/qr.png"} alt="img" /> */}
+              <QRCode value={URL}  />
             </div>
             <div className="isoCalendarInputWrapper" style={{ textAlign: "center" }}>
               <CancelButton handleDelete={this.handleDelete}/>
