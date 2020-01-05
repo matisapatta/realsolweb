@@ -196,9 +196,10 @@ class MainVendor extends Component {
             // console.log(data)
             // console.log(data7)
             // console.log(i)
+            if(data && data7) {
             return (
-                data.map((item, i) => (
-                    <div style={wisgetPageStyle} key={i}>
+                data.map((item, j) => (
+                    <div style={wisgetPageStyle} key={j}>
                         <Row style={rowStyle} gutter={0} justify="center" >
                             <Col md={24} sm={24} xs={24} style={{ marginBottom: '16px', display: "flex", paddingLeft: "10px", fontSize: "20px" }}>
                                 <h3>
@@ -221,7 +222,7 @@ class MainVendor extends Component {
                             <Col md={12} sm={24} xs={24} style={colStyle}>
                                 <IsoWidgetsWrapper>
                                     <StickerWidget
-                                        number={data7[i].total}
+                                        number={data7[j].total}
                                         text="Reservas en la última semana"
                                         icon="ion-ios-paper"
                                         fontColor="#ffffff"
@@ -230,14 +231,19 @@ class MainVendor extends Component {
                                 </IsoWidgetsWrapper>
                             </Col>
                         </Row>
-                        {this.showSalaMoney(i)}
+                        {this.showSalaMoney(j)}
                         <Row style={rowStyle} gutter={0} justify="start">
                             {this.showOcupacionByDay(item,false)}
-                            {this.showOcupacionByDay(data7[i],true)}
+                            {this.showOcupacionByDay(data7[j],true)}
                         </Row>
                     </div>
                 ))
             )
+        } else {
+            return(
+                <div></div>
+            )
+        }
         }
     }
 
@@ -266,6 +272,7 @@ class MainVendor extends Component {
             // console.log(data)
             // console.log(data7)
             // console.log(i)
+            if(data && data7){
             return (
                 <Row style={rowStyle} gutter={0} justify="center" >
                     <Col md={12} sm={24} xs={24} style={colStyle}>
@@ -290,6 +297,11 @@ class MainVendor extends Component {
                     </Col>
                 </Row>
             )
+        } else {
+            return(
+                <div></div>
+            )
+        }
         }
     }
 
